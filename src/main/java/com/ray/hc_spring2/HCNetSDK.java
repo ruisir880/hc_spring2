@@ -11,6 +11,7 @@
 
 package com.ray.hc_spring2;
 
+import com.ray.hc_spring2.utils.CommonKit;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
@@ -30,8 +31,7 @@ import java.util.List;
 //SDK接口说明,HCNetSDK.dll
 public interface HCNetSDK extends StdCallLibrary {
 
-    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary("D:\\workspace_private\\hc\\target\\classes\\HCNetSDK",
-            HCNetSDK.class);
+    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary(CommonKit.getWebPath()+"\\HCNetSDK", HCNetSDK.class);
     /***宏定义***/
     //常量
 
@@ -7208,8 +7208,7 @@ public static class NET_DVR_GPS_DATA extends Structure {
 //播放库函数声明,PlayCtrl.dll
 interface PlayCtrl extends StdCallLibrary
 {
-    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary("../lib/PlayCtrl",
-            PlayCtrl.class);
+    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary(CommonKit.getWebPath()+"\\PlayCtrl.dll",PlayCtrl.class);
 
     public static final int STREAME_REALTIME = 0;
     public static final int STREAME_FILE = 1;

@@ -8,7 +8,9 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -64,8 +66,14 @@ public class CommonKit {
      * 获取项目webapp目录
      * @return
      */
-    public static String getWebPath(){
-        String path = Thread.currentThread().getContextClassLoader().getResource("hclib").getPath();
+    public static String getWebPath() {
+        String path = null;
+        try {
+            path =  Paths.get(Thread.currentThread().getContextClassLoader().getResource("hclib").toURI()).toString();
+            path.replaceAll("/","\\");
+        } catch (URISyntaxException e) {
+            logger.error("Error occurs when get hclib path",e);
+        }
         logger.info(path+"\\HCNetSDK");
         return path;
     }
