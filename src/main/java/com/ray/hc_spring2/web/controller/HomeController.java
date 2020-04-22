@@ -28,6 +28,15 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value ="/manager")
+    public ModelAndView manager() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("result","");
+        modelAndView.addObject("username","test");
+        modelAndView.setViewName("manager");
+        return modelAndView;
+    }
+
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {
         ModelAndView modelAndView = new ModelAndView();
