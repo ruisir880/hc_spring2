@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>电力测温智能化管理</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/area.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/user.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /*
+             * 提交
+             */
+            $("#submitbutton").click(function() {
+                if(validateForm()){
+                    checkFyFhSubmit();
+                }
+            });
+
+            /*
+             * 取消
+             */
+            $("#cancelbutton").click(function() {
+                $('#password').val('');
+                $("#realName").val('');
+                $("#mobile").val('');
+                $("#address").val('');
+                $("#email").val('');
+            });
+
+            var result = 'null';
+            if(result =='success'){
+                /**  关闭弹出iframe  **/
+                window.parent.$.fancybox.close();
+            }
+        });
+
+        function checkFyFhSubmit(){
+            var userId = $('#userId').val();
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var realName = $("#realName").val();
+            var mobile = $("#mobile").val();
+            var address = $("#address").val();
+            var email = $("#email").val();
+            var role = $("#role").val();
+            var areaId
+            if($('#district').val()){
+                areaId = $('#district').val()
+            }else {
+                areaId = $('#city').val()
+            }
+            if(realName!="" && mobile!="" && email!=""){
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/updateUser",
+                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile,
+                        "address":address, "email":email,"areaId":areaId,"role":role},
+                    dataType : "text",
+                    success:function(data){
+                       if(data=="0"){
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'修改成功', ok:true,});
+                        }
+                    }
+                });
+            }
+            return true;
+        }
+
+    </script>
+</head>
+<body>
+<form id="submitForm" name="submitForm" method="post">
+    <div id="container">
+        <div id="nav_links">
+            当前位置：基础数据&nbsp;>&nbsp;<span style="color: #1A5CC6;">用户编辑</span>
+            <div id="page_close">
+                <a href="javascript:parent.$.fancybox.close();">
+                    <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+                </a>
+            </div>
+        </div>
+        <td class="ui_content">
+            <form id="addUser" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                    <p hidden><input value="${userInfo.uid}" id="userId" name="userId"></p>
+                <tr>
+                    <td class="ui_text_lt" width="80">用户名</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="username" name="username"  class="ui_input_txt02" value="${userInfo.username}"  disabled="disabled"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">密码</td>
+                    <td class="ui_text_lt">
+                        <input type="password" id="password" name="password" value="${userInfo.password}"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">真实姓名</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="realName" name="realName"  class="ui_input_txt02" value="${userInfo.realName}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt" width="80">电话号码</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="mobile" name="mobile" value="${userInfo.mobile}" class="ui_input_txt02"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt" width="80">邮件地址</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="email" name="email" value="${userInfo.email}"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt">所属区域</td>
+                    <td class="ui_text_lt">
+                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,'city')">
+                            @if(!isEmpty(provinces)){
+                            @for(province in provinces){
+                            <option value=${province.id}
+                                    @if(!isEmpty(provinceId) && province.id == provinceId){
+                                    selected="true"
+                                    @}
+                            >${province.name}</option>
+                            @}
+                            @}
+                        </select>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,'district')">
+                            <option value="">--请选择--</option>
+                            @if(!isEmpty(cities)){
+                            @for(city in cities){
+                            <option value=${city.id}
+                                    @if(!isEmpty(cityId) && city.id == cityId){
+                                    selected="true"
+                                    @}
+                            >${city.name}</option>
+                            @}
+                            @}
+                        </select>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="district" id="district" class="ui_select01">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt">用户角色</td>
+                    <td class="ui_text_lt">
+                        <select name="role" id="role" class="ui_select01">
+                            <option value="">--请选择--</option>
+                            <option value="admin"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="admin"){
+                                    selected="true"
+                                    @}
+                            >管理员</option>
+                            <option value="projectManager"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="projectManager"){
+                                    selected="true"
+                                    @}
+                            >项目负责人</option>
+                            <option value="cooperation"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="cooperation"){
+                                    selected="true"
+                                    @}
+                            >协作单位</option>
+                            <option value="technician"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="technician"){
+                                    selected="true"
+                                    @}
+                            >技术专家</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

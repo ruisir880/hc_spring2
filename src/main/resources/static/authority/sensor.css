@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+.hoverButton {
+    width: 60px;
+    height: 100px;
+    display: none;
+    position: absolute;
+}
