@@ -2,7 +2,7 @@ package com.ray.hc_spring2.utils;
 
 import cc.eguid.commandManager.CommandManager;
 import cc.eguid.commandManager.CommandManagerImpl;
-import com.ray.hc_spring2.model.Device;
+import com.ray.hc_spring2.model.HcDevice;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -15,29 +15,34 @@ public class VideoUtil {
     private HCNetTools hcTool = new HCNetTools();
 
     /**
+     * The port of device can ignore, In HCNetTools, the default is 8000
      * 开始推流并获取推流进程名称
-     * @param device 设备信息
+     * @param hcDevice 设备信息
      * @param appName 进程名命名
      * @return 返回结果集{msg:"",tasker:""}
      */
-    public Map<String,String> startTranscodeAndGetTasker(Device device, String appName){
-        Map<String,String> result = new HashMap<>();
+    public Map<String,String> startTranscodeAndGetTasker(HcDevice hcDevice, String appName) {
+        Map<String, String> result = new HashMap<>();
         int code = 0;
-        String[] resultNames = {"成功","初始化失败","注册前请关闭预览","注册失败","通道获取失败"};
-        if(device.getType() == 1){//海康设备
-            if(hcTool.initDevices() == 1) code = 1;//初始化失败
-            int regSuc = hcTool.deviceRegist(device.getAccount(),device.getPassword(),device.getIp(),device.getPort());
-            if(regSuc != 0) code = regSuc;//注册失败
-            int channelNumber = hcTool.getChannelNumber();
-            if(channelNumber == -1) code = 4;
-            if(code == 0) {
-                String tasker = VideoUtil.startTranscoding(appName,device.getAccount(),device.getPassword(),device.getIp(),channelNumber);
-                result.put("tasker", (StringUtils.isNotEmpty(tasker)) ? tasker : appName);
-            }else{
-                result.put("msg",resultNames[code]);
-            }
-            hcTool.shutDownDev();
+        String[] resultNames = {"成功", "初始化失败", "注册前请关闭预览", "注册失败", "通道获取失败"};
+        if (hcTool.initDevices() == 1) {
+            code = 1;//初始化失败
         }
+        int regSuc = hcTool.deviceRegist(hcDevice.getAccount(), hcDevice.getPassword(), hcDevice.getIp(), hcDevice.getPort());
+        if (regSuc != 0) {
+            code = regSuc;//注册失败
+        }
+        int channelNumber = hcTool.getChannelNumber();
+        if (channelNumber == -1) {
+            code = 4;
+        }
+        if (code == 0) {
+            String tasker = VideoUtil.startTranscoding(appName, hcDevice.getAccount(), hcDevice.getPassword(), hcDevice.getIp(), channelNumber);
+            result.put("tasker", (StringUtils.isNotEmpty(tasker)) ? tasker : appName);
+        } else {
+            result.put("msg", resultNames[code]);
+        }
+        hcTool.shutDownDev();
         return result;
     }
     /**
@@ -75,7 +80,9 @@ public class VideoUtil {
      * @return
      */
     public static boolean stopTranscoding(String tasker){
-        if(!VideoUtil.taskerIsRun(tasker)) return true;
+        if(!VideoUtil.taskerIsRun(tasker)) {
+            return true;
+        }
         return manager.stop(tasker);
     }
 

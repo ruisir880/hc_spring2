@@ -69,7 +69,7 @@ public class HCNetTools {
         //注册(既登录设备)开始
         m_sDeviceIP = ip;
         m_strDeviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V30();//获取设备参数结构
-        lUserID = hCNetSDK.NET_DVR_Login_V30(m_sDeviceIP,(short)Integer.parseInt("8000"),name,password, m_strDeviceInfo);//登录设备
+        lUserID = hCNetSDK.NET_DVR_Login_V30(m_sDeviceIP,(short)Integer.parseInt(port),name,password, m_strDeviceInfo);//登录设备
         if (lUserID == -1){
             m_sDeviceIP = "";//登录未成功,IP置为空
             return 3;//"注册失败";

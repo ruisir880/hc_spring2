@@ -4,13 +4,11 @@
     <title>监控系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
-    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
-    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
-    <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
-    <script type="text/javascript"  src="${ctxPath}/scripts/area.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/user.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -135,46 +133,7 @@
                         <!--&nbsp;添加用户<input type="checkbox" value=""/>-->
                     <!--</td>-->
                 <!--</tr>-->
-                <tr>
-                    <td class="ui_text_lt">所属区域</td>
-                    <td class="ui_text_lt">
-                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,'city')">
-                            @if(!isEmpty(provinces)){
-                            @for(province in provinces){
-                            <option value=${province.id}>${province.name}</option>
-                            @}
-                            @}
-                        </select>
-                    </td>
-                    <td class="ui_text_lt">
-                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,'district')">
-                            <option value="">--请选择--</option>
-                        @if(!isEmpty(cities)){
-                        @for(city in cities){
-                        <option value=${city.id}>${city.name}</option>
-                        @}
-                        @}
-                        </select>
-                    </td>
-                    <td class="ui_text_lt">
-                        <select name="district" id="district" class="ui_select01">
-                            <option value="">--请选择--</option>
-                        </select>
-                    </td>
-                </tr>
 
-                <tr>
-                    <td class="ui_text_lt">用户角色</td>
-                    <td class="ui_text_lt">
-                        <select name="role" id="role" class="ui_select01">
-                            <option value="">--请选择--</option>
-                            <option value="admin">管理员</option>
-                            <option value="projectManager">项目负责人</option>
-                            <option value="cooperation">协作单位</option>
-                            <option value="technician">技术专家</option>
-                        </select>
-                    </td>
-                </tr>
 
                 <tr>
                     <td>&nbsp;</td>

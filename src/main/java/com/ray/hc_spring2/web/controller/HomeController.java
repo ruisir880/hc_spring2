@@ -37,6 +37,21 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value ="/userAdd")
+    public ModelAndView userAdd() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("userAdd");
+        return modelAndView;
+    }
+
+    @RequestMapping(value ="/userList")
+    public ModelAndView userList() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("userList");
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {
         ModelAndView modelAndView = new ModelAndView();
