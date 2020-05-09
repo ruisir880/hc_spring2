@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.model.HcDevice;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.slf4j.Logger;
@@ -20,11 +21,18 @@ import java.util.Map;
 public class HomeController {
     private static Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @RequestMapping(value = { "/", "index"})
+    @RequestMapping(value = { "/"})
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("result","");
         modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"index"})
+    public ModelAndView indexPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 
@@ -51,6 +59,19 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value ="/main")
+    public ModelAndView mainHtml() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("main");
+        return modelAndView;
+    }
+
+    @RequestMapping(value ="/vod")
+    public ModelAndView vod() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("vod");
+        return modelAndView;
+    }
 
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {

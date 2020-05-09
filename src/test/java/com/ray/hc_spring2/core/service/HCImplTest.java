@@ -2,6 +2,7 @@ package com.ray.hc_spring2.core.service;
 
 import com.ray.hc_spring2.HcSpring2Application;
 import com.ray.hc_spring2.model.HcDevice;
+import com.ray.hc_spring2.web.controller.HCController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class HCImplTest {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private HCController hcController;
 
 
     @Test
@@ -42,5 +46,10 @@ public class HCImplTest {
     public void deviceFindTest() {
         List<HcDevice> devices = deviceService.findByArea("1");
         System.out.println(devices.size());
+    }
+
+    @Test
+    public void testAlarm(){
+        hcController.startAlarmHandler();
     }
 }

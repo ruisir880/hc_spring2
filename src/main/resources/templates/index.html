@@ -7,7 +7,7 @@
     <link href="${ctxPath}/style/authority/zTreeStyle.css" rel="stylesheet" type="text/css">
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/zTree/jquery.ztree.core-3.2.js"></script>
-    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
     <script type="text/javascript">
         /**退出系统**/
         function logout(){
@@ -139,10 +139,12 @@
         /* 上方菜单 */
         function switchTab(tabpage,tabid){
             var oItem = document.getElementById(tabpage).getElementsByTagName("li");
+            var selectedItem = document.getElementById(tabid);
             for(var i=0; i<oItem.length; i++){
                 var x = oItem[i];
                 x.className = "";
             }
+            selectedItem.className = "selected";
             if('left_tab1' == tabid){
                 $(document).ajaxStart(onStart).ajaxSuccess(onStop);
                 // 异步加载"系统管理"下的菜单
@@ -151,10 +153,17 @@
                 $(document).ajaxStart(onStart).ajaxSuccess(onStop);
                 // 异步加载"业务模块"下的菜单
                 loadMenu('SYSTEMMOULE', 'dleft_tab1');
-            }else  if('left_tab3' == tabid){
-                $(document).ajaxStart(onStart).ajaxSuccess(onStop);
-                // 异步加载"其他"下的菜单
-                loadMenu('CONFERENCEGROUP', 'dleft_tab1');
+            }else  if('left_tab7' == tabid){
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/startAlarm",
+                    dataType : "text",
+                    success:function(data){
+                        if(data=="0"){
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'修改成功', ok:true,});
+                        }
+                    }
+                });
             }
         }
 
@@ -186,74 +195,24 @@
 
             var data =new Array();
             if(resourceType=='SYSTEM'){
-                $.getJSON("${ctxPath}/getPrivilege",function(result){
 
-                    if(result.privilegeNameList.indexOf('权限管理')!=-1) {
-                        data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"权限管理","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"${ctxPath}/privilegeList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"权限列表","resourceOrder":0,"resourceType":""})
-                    }
+
+                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"权限管理","resourceOrder":0,"resourceType":""})
+                    data.push({"accessPath":"${ctxPath}/privilegeList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"权限列表","resourceOrder":0,"resourceType":""})
+
+
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":3,"resourceName":"用户管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('用户查询')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/userList","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":6,"resourceName":"用户列表","resourceOrder":0,"resourceType":""})
-                    }
-                    if(result.privilegeNameList.indexOf('用户编辑')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/userAdd","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":7,"resourceName":"用户添加","resourceOrder":0,"resourceType":""})
-                    }
+                    data.push({"accessPath":"${ctxPath}/userList","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":6,"resourceName":"用户列表","resourceOrder":0,"resourceType":""})
+                    data.push({"accessPath":"${ctxPath}/userAdd","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":7,"resourceName":"用户添加","resourceOrder":0,"resourceType":""})
 
-                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":8,"resourceName":"监测点管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('监测点查询')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/monitorPointList","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":81,"resourceName":"监测点查询","resourceOrder":0,"resourceType":""})
-                    }
-                    if(result.privilegeNameList.indexOf('监测点查询')!=-1){
-                        data.push({"accessPath":"${ctxPath}/monitorPointAdd","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":82,"resourceName":"监测点添加","resourceOrder":0,"resourceType":""})
-                    }
 
-                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":9,"resourceName":"终端管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('终端查询')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/terminalList","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":91,"resourceName":"终端查询","resourceOrder":0,"resourceType":""})
-                    }
-                    if(result.privilegeNameList.indexOf('终端编辑')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/terminalAdd","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":92,"resourceName":"终端添加","resourceOrder":0,"resourceType":""})
-                    }
+                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"设备管理","resourceOrder":0,"resourceType":""})
+                    data.push({"accessPath":"${ctxPath}/deviceList","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":8,"resourceName":"设备查询","resourceOrder":0,"resourceType":""})
+                    data.push({"accessPath":"${ctxPath}/deviceEdit","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":9,"resourceName":"设备编辑","resourceOrder":0,"resourceType":""})
 
                     loadTree(data,treeObj);
 
-                });
 
-            }else if(resourceType=='SYSTEMMOULE'){
-
-                $.getJSON("${ctxPath}/getPrivilege",function(result){
-                    if(result.privilegeNameList.indexOf('地图查看')!=-1 || result.privilegeNameList.indexOf('地图监测点定位')!=-1) {
-                        data.push({"accessPath":"${ctxPath}/siteMap","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":10,"resourceName":"高德地图显示","resourceOrder":0,"resourceType":""})
-                    }
-                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"测温信息管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('温度信息查询')!=-1) {
-                        data.push({"accessPath":"${ctxPath}/currentTemp","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":11,"resourceName":"当前温度状态","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"${ctxPath}/tempInfoList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":12,"resourceName":"温度信息查询","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"${ctxPath}/tempInfoChart","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":14,"resourceName":"温度信息图表","resourceOrder":0,"resourceType":""})
-                    }
-                    if(result.privilegeNameList.indexOf('温度信息编辑')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/tempInfoListDel","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":13,"resourceName":"温度信息删除","resourceOrder":0,"resourceType":""})
-                    }
-
-                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":3,"resourceName":"传感信息管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('传感器查询')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/transducerInfoChart","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":20,"resourceName":"传感配置信息","resourceOrder":0,"resourceType":""})
-                    }
-                    if(result.privilegeNameList.indexOf('传感器编辑')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/sensorInfoSet","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":21,"resourceName":"传感配置管理","resourceOrder":0,"resourceType":""})
-                    }
-
-                    data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"传感告警管理","resourceOrder":0,"resourceType":""})
-                    if(result.privilegeNameList.indexOf('传感器阈值设置')!=-1 ) {
-                        data.push({"accessPath":"${ctxPath}/sensorThresholdSet","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":31,"resourceName":"告警阈值设置","resourceOrder":0,"resourceType":""})
-                    }
-
-                    data.push({"accessPath":"${ctxPath}/warnMailSet","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":32,"resourceName":"告警异常处理","resourceOrder":0,"resourceType":""})
-
-                    loadTree(data,treeObj);
-                });
-            }else if(resourceType=='CONFERENCEGROUP'){
 
             }
             // 如果返回数据不为空，加载"业务模块"目录
@@ -280,7 +239,7 @@
             <ul>
                 <li >
                     <img alt="当前用户"  src="${ctxPath}/images/common/user.jpg" >：
-                    <span>${username}</span>
+
                 </li>
             </ul>
         </div>
@@ -296,17 +255,29 @@
     <div id="left_menu">
         <ul id="TabPage2" style="height:200px; margin-top:50px;">
 
-            <li id="left_tab1" class="selected" onClick="javascript:switchTab('TabPage2','left_tab2');" title="系统模块">
-                <img alt="系统模块" title="系统模块"  src="${ctxPath}/images/common/1_hover.jpg" width="33" height="31">
+            <li id="left_tab1" class="selected" onClick="javascript:switchTab('TabPage2','left_tab1');" title="系统设置">
+                <img alt="系统模块" title="系统设置"  src="${ctxPath}/images/common/system.jpg" width="33" height="31">
             </li>
 
-            <li id="left_tab2" onClick="javascript:switchTab('TabPage2','left_tab1');" title="温测系统管理">
-                <img alt="温测系统管理" title="温测系统管理"  src="${ctxPath}/images/common/2.jpg" width="33" height="31">
+            <li id="left_tab2"  onClick="javascript:switchTab('TabPage2','left_tab2');" title="防区设置">
+                <img alt="温测系统管理" title="防区设置"  src="${ctxPath}/images/common/defenceArea.jpg" width="33" height="31">
             </li>
 
 
-            <li id="left_tab5" onClick="javascript:switchTab('TabPage2','left_tab5');" title="讨论组管理">
-                <img alt="讨论组管理" title="讨论组管理"  src="${ctxPath}/images/common/3.jpg" width="33" height="31">
+            <li id="left_tab3" onClick="javascript:switchTab('TabPage2','left_tab3');" title="视频设置">
+                <img alt="讨论组管理" title="视频设置"  src="${ctxPath}/images/common/cam.jpg" width="33" height="31">
+            </li>
+            <li id="left_tab4" onClick="javascript:switchTab('TabPage2','left_tab4');" title="报警日志">
+                <img alt="讨论组管理" title="报警日志"  src="${ctxPath}/images/common/alarm.jpg" width="33" height="31">
+            </li>
+            <li id="left_tab5" onClick="javascript:switchTab('TabPage2','left_tab5');" title="操作日志">
+                <img alt="讨论组管理" title="操作日志"  src="${ctxPath}/images/common/log.jpg" width="33" height="31">
+            </li>
+            <li id="left_tab6" onClick="javascript:switchTab('TabPage2','left_tab6');" title="关于/帮助">
+                <img alt="讨论组管理" title="关于/帮助"  src="${ctxPath}/images/common/help.jpg" width="33" height="31">
+            </li>
+            <li id="left_tab7" onClick="javascript:switchTab('TabPage2','left_tab7');" title="一键布撤防">
+                <img alt="讨论组管理" title="一键布撤防"  src="${ctxPath}/images/common/oneTouch.jpg" width="33" height="31">
             </li>
         </ul>
 
@@ -330,15 +301,9 @@
     $(function(){
         $('#TabPage2 li').click(function(){
             var index = $(this).index();
-            $(this).find('img').attr('src', '${ctxPath}/images/common/'+ (manager+1) +'_hover.jpg');
-            $(this).css({background:'#fff'});
-            $('#nav_module').find('img').attr('src', '${ctxPath}/images/common/module_'+ (manager+1) +'.png');
-            $('#TabPage2 li').each(function(i, ele){
-                if( i!=manager ){
-                    $(ele).find('img').attr('src', '${ctxPath}/images/common/'+ (i+1) +'.jpg');
-                    $(ele).css({background:'#044599'});
-                }
-            });
+            if(index==1) {
+                $('#nav_module').find('img').attr('src', '${ctxPath}/images/common/module_2.png');
+            }
             // 显示侧边栏
             switchSysBar(true);
         });
@@ -380,7 +345,7 @@
     <span id="here_area">当前位置：系统&nbsp;>&nbsp;系统介绍</span>
 </div>
 <div id="main">
-    <iframe name="right" id="rightMain"  src="${ctxPath}/introduce.html" frameborder="no" scrolling="auto" width="100%" height="100%" allowtransparency="true"/>
+    <iframe name="right" id="rightMain"  src="${ctxPath}/main.html" frameborder="no" scrolling="auto" width="100%" height="100%" allowtransparency="true"/>
 </div>
 
 </body>

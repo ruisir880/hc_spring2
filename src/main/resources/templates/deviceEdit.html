@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>监控系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/device.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /*
+             * 提交
+             */
+            $("#submitbutton").click(function() {
+                if(validateForm()){
+                    checkFyFhSubmit();
+                }
+            });
+
+            /*
+             * 取消
+             */
+            $("#cancelbutton").click(function() {
+                $('#deviceIp').val('');
+                $("#account").val('');
+                $("#password").val('');
+                $("#port").val('');
+                $("#defenseArea").val('');
+            });
+
+            var result = 'null';
+            if(result =='success'){
+                /**  关闭弹出iframe  **/
+                window.parent.$.fancybox.close();
+            }
+        });
+
+        function checkFyFhSubmit(){
+            var deviceId = $('#deviceId').val();
+            var deviceIp = $('#deviceIp').val();
+            var account = $('#account').val();
+            var password = $('#password').val();
+            var port = $("#port").val();
+            var defenseArea = $("#defenseArea").val();
+
+            if(deviceIp!="" && account!="" && password!=""&& port!=""&& defenseArea!=""){
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/editDevice",
+                    data:{"id":deviceId,"ip":deviceIp,"account":account, "password":password,
+                        "port":port, "defenseArea":defenseArea},
+                    dataType : "text",
+                    success:function(data){
+                       if(data=="0"){
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'编辑成功', ok:true,});
+                        }else if(data=="-1"){
+                           art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'该IP设备已经存在', ok:true,});
+                       }else{
+                           art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'连接设备失败，请检查！', ok:true,});
+                       }
+                    }
+                });
+            }
+            return true;
+        }
+
+    </script>
+</head>
+<body>
+<form id="submitForm" name="submitForm" method="post">
+    <div id="container">
+        <div id="nav_links">
+            当前位置：系统管理&nbsp;>&nbsp;<span style="color: #1A5CC6;">设备编辑</span>
+            <div id="page_close">
+                <a href="javascript:parent.$.fancybox.close();">
+                    <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+                </a>
+            </div>
+        </div>
+        <td class="ui_content">
+            <form id="editDevice" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                    <p hidden><input value="${device.id}" id="deviceId" name="deviceId"></p>
+                <tr>
+                    <td class="ui_text_lt" width="80">IP地址</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="deviceIp" name="deviceIp"  class="ui_input_txt02" value="${device.ip}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">管理员账户</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="account" name="account" value="${device.account}"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">管理员密码</td>
+                    <td class="ui_text_lt">
+                        <input type="password" id="password" name="password"  class="ui_input_txt02" value="${device.password}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt" width="6">端口</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="port" name="port" value="${device.port}" class="ui_input_txt02"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt">防区</td>
+                    <td class="ui_text_lt">
+                        <select name="defenseArea" id="defenseArea" class="ui_select01">
+                            <option value="">--请选择--</option>
+                            <option value="1">防区1</option>
+                            <option value="2">防区2</option>
+                            <option value="3">防区3</option>
+                            <option value="4">防区4</option>
+
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

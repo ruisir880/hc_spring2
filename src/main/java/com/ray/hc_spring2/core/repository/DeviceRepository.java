@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DeviceRepository extends CrudRepository<HcDevice, Long> {
     List<HcDevice> findDevicesByDefenseArea(String defenseArea);
+    List<HcDevice> findAll();
+    HcDevice findByIp(String ip);
 }

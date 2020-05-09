@@ -9,29 +9,28 @@
  * Created on 2009-9-14, 19:31:34
  */
 
+/**
+ *
+ * @author Xubinfeng
+ */
+
 package com.ray.hc_spring2;
 
-import com.ray.hc_spring2.utils.CommonKit;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.Union;
+import com.sun.jna.*;
 import com.sun.jna.examples.win32.GDI32.RECT;
 import com.sun.jna.examples.win32.W32API;
 import com.sun.jna.examples.win32.W32API.HWND;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.NativeLongByReference;
 import com.sun.jna.ptr.ShortByReference;
 import com.sun.jna.win32.StdCallLibrary;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 //SDK接口说明,HCNetSDK.dll
 public interface HCNetSDK extends StdCallLibrary {
 
-    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary(CommonKit.getWebPath()+"\\HCNetSDK", HCNetSDK.class);
+    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary("D:\\workspace\\hc_spring2\\hc_spring2\\target\\classes\\hclib\\HCNetSDK",
+            HCNetSDK.class);
     /***宏定义***/
     //常量
 
@@ -107,11 +106,6 @@ public interface HCNetSDK extends StdCallLibrary {
     public static final int MAX_ANALOG_CHANNUM = 32;    //最大32个模拟通道
     public static final int MAX_ANALOG_ALARMOUT = 32;    //最大32路模拟报警输出
     public static final int MAX_ANALOG_ALARMIN = 32;    //最大32路模拟报警输入
-    public static final int MAX_IP_ALARMIN_V40 = 4096;    //允许加入的最多报警输入数
-    public static final int MAX_IP_ALARMOUT_V40 = 4096;    //允许加入的最多报警输出数
-    public static final int MAX_ALARMOUT_V40 =  (MAX_IP_ALARMOUT_V40 + MAX_ANALOG_ALARMOUT); //4128
-    public static final int MAX_ALARMIN_V40 = (MAX_IP_ALARMIN_V40 +MAX_ANALOG_ALARMOUT); //4128
-    public static final int MAX_CHANNUM_V40 = 512; 
     public static final int MAX_IP_DEVICE = 32;    //允许接入的最大IP设备数
     public static final int MAX_IP_CHANNEL = 32;   //允许加入的最多IP通道数
     public static final int MAX_IP_ALARMIN = 128;   //允许加入的最多报警输入数
@@ -121,71 +115,6 @@ public interface HCNetSDK extends StdCallLibrary {
     public static final int MAX_CHANNUM_V30 = (MAX_ANALOG_CHANNUM + MAX_IP_CHANNEL);//64
     public static final int MAX_ALARMOUT_V30 = (MAX_ANALOG_ALARMOUT + MAX_IP_ALARMOUT);//96
     public static final int MAX_ALARMIN_V30 = (MAX_ANALOG_ALARMIN + MAX_IP_ALARMIN);//160
-    public static final int MAX_IP_DEVICE_V40 = 64;
-    public static final int STREAM_ID_LEN = 32;
-
-    public static final int MAX_LICENSE_LEN = 16;
-    public static final int MAX_LICENSE_LEN_EX = 32; //车牌号最大长度
-    public static final int MAX_CARDNO_LEN = 48;     //卡号最大长度 
-    public static final int VCA_MAX_POLYGON_POINT_NUM = 10;
-
-    public static final int MAX_ID_NUM_LEN                =  32;  //最大身份证号长度
-    public static final int MAX_ID_NAME_LEN               = 128;   //最大姓名长度
-    public static final int MAX_ID_ADDR_LEN               = 280;   //最大住址长度
-    public static final int MAX_ID_ISSUING_AUTHORITY_LEN  = 128; //最大签发机关长度
-    public static final int MAX_CARD_READER_NUM_512       = 512;  //最大读卡器数
-    public static final int ERROR_MSG_LEN                 = 32;   //下发错误信息
-    public static final int MAX_FACE_NUM                  = 2;    //最大人脸数
-    public static final int MAX_FINGER_PRINT_LEN          = 768;  //最大指纹长度   
-
-    public static final int DEV_TYPE_NAME_LEN = 24;      //设备类型名称长度
-    public static final int MAX_FACE_PIC_NUM = 30;      /*人脸子图个数*/
-    public static final int CARDNUM_LEN_V30 = 40;
-    
-    public static final int MAX_NOTICE_NUMBER_LEN  =  32;   //公告编号最大长度
-    public static final int MAX_NOTICE_THEME_LEN   =   64;   //公告主题最大长度
-    public static final int MAX_NOTICE_DETAIL_LEN  =  1024; //公告详情最大长度
-    public static final int MAX_NOTICE_PIC_NUM     =   6;    //公告信息最大图片数量
-    public static final int MAX_DEV_NUMBER_LEN = 32;   //设备编号最大长度
-    public static final int LOCK_NAME_LEN = 32;  //锁名称
-    
-    public static final int MAX_INQUEST_CDRW_NUM = 4;     //最大刻录机数目
-    public static final int SUPPORT_PD_NUM = 16;
-    public static final int SUPPORT_ARRAY_NUM = 8;
-    public static final int SUPPORT_VD_NUM = 128;
-    public static final int SUPPORT_PD_NUM_ = 16;
-    public static final int SUPPORT_PD_NUM_PARTTWO = 8;
-   
-    public static final int CARDNUM_LEN_OUT = 32; //外部结构体卡号长度
-    public static final int GUID_LEN = 16;        //GUID长度
-    
-    public static final int MAX_ROIDETECT_NUM        =  8;    //支持的ROI区域数
-    public static final int MAX_LANERECT_NUM          =  5;    //最大车牌识别区域数
-    public static final int MAX_FORTIFY_NUM           =  10;   //最大布防个数
-    public static final int  MAX_INTERVAL_NUM         =   4;    //最大时间间隔个数
-    public static final int MAX_CHJC_NUM              =  3;    //最大车辆省份简称字符个数
-    public static final int MAX_VL_NUM                = 5;    //最大虚拟线圈个数
-    public static final int MAX_DRIVECHAN_NUM         = 16;  //最大车道数
-    public static final int MAX_COIL_NUM              = 3;    //最大线圈个数
-    public static final int MAX_SIGNALLIGHT_NUM       = 6;   //最大信号灯个数
-    public static final int MAX_IOSPEED_GROUP_NUM     = 4; //IO测速组个数
-    public static final int MAX_IOOUT_NUM             = 4;  //最大IO输出口个数
-    public static final int MAX_IOIN_NUM              = 8;  //最大IO输入口个数
-    public static final int MAX_RELAY_NUM             = 12; //继电器控制设备最大数 2013-11-04
-    public static final int MAX_VEHICLE_TYPE_NUM      = 8;  //车辆信息管控最大数2013-11-04
-    public static final int MAX_IOIN_NUMEX            = 10; //最大IO输入口个数(扩展)
-    public static final int MAX_ITC_LANE_NUM          = 6;  //最大车道个数
-    public static final int MAX_LANEAREA_NUM          = 2;  //单车道最大区域个数
-    public static final int ITC_MAX_POLYGON_POINT_NUM = 20;    //检测区域最多支持20个点的多边形
-    public static final int MAX_ITC_SERIALCHECK_NUM   = 8; //串口校验类型个数
-    public static final int MAX_LIGHT_NUM             = 6; //最大交通灯数
-    public static final int MAX_VIDEO_INTERVAL_NUM    = 2;  //最大抓拍间隔数
-    public static final int MAX_VIDEO_DETECT_LIGHT_NUM = 12;  //视频检测的最大检测区域
-    public static final int MAX_CALIB_RECOG_NUM       = 2;  //标定区域个数
-    public static final int MAX_RS485_NUM             = 12; //485口最大支持数
-    public static final int MAX_MOBILE_POLYGON_NUM    = 3; //移动布控支持最大牌识区域个数
-    public static final int MAX_MOBILE_DETECTLINE_NUM = 3; //移动布控支持最大违规检测线个数
-    public static final int MAX_IOOUT_K_NUM           = 8;  //K系列最大IO输出口个数
 
     /*******************全局错误码 begin**********************/
     public static final int NET_DVR_NOERROR = 0;	//没有错误
@@ -381,8 +310,6 @@ public interface HCNetSDK extends StdCallLibrary {
     public static final int NET_DVR_THROWBFRAME = 20;//丢B帧
     public static final int NET_DVR_SETSPEED = 24;//设置码流速度
     public static final int NET_DVR_KEEPALIVE = 25;//保持与设备的心跳(如果回调阻塞，建议2秒发送一次)
-    public static final int NET_DVR_SET_TRANS_TYPE = 32; //设置转码格式
-     
 //远程按键定义如下：
 /* key value send to CONFIG program */
     public static final int KEY_CODE_1 = 1;
@@ -446,8 +373,6 @@ public interface HCNetSDK extends StdCallLibrary {
 //用于NET_DVR_SetDVRConfig和NET_DVR_GetDVRConfig,注意其对应的配置结构
     public static final int NET_DVR_GET_DEVICECFG = 100;	//获取设备参数
     public static final int NET_DVR_SET_DEVICECFG = 101;	//设置设备参数
-    public static final int NET_DVR_GET_DEVICECFG_V40 = 1100; //获取扩展设备参数 
-    public static final int NET_DVR_SET_DEVICECFG_V40 = 1101; //设置扩展设备参数   
     public static final int NET_DVR_GET_NETCFG = 102;	//获取网络参数
     public static final int NET_DVR_SET_NETCFG = 103;	//设置网络参数
     public static final int NET_DVR_GET_PICCFG = 104;	//获取图象参数
@@ -520,8 +445,6 @@ public interface HCNetSDK extends StdCallLibrary {
 //图象(NET_DVR_PICCFG_V30结构)
     public static final int NET_DVR_GET_PICCFG_V30 = 1002;	//获取图象参数
     public static final int NET_DVR_SET_PICCFG_V30 = 1003;	//设置图象参数
-    public static final int NET_DVR_GET_PICCFG_V40 = 6179;   //获取图象参数
-    public static final int NET_DVR_SET_PICCFG_V40 = 6180;   //设置图象参数
 //录像时间(NET_DVR_RECORD_V30结构)
     public static final int NET_DVR_GET_RECORDCFG_V30 = 1004;	//获取录像参数
     public static final int NET_DVR_SET_RECORDCFG_V30 = 1005;	//设置录像参数
@@ -570,9 +493,6 @@ public interface HCNetSDK extends StdCallLibrary {
 //IP接入配置参数 （NET_DVR_IPPARACFG结构）
     public static final int NET_DVR_GET_IPPARACFG = 1048;    //获取IP接入配置信息
     public static final int NET_DVR_SET_IPPARACFG = 1049;    //设置IP接入配置信息
-//IP接入配置参数V40 （NET_DVR_IPPARACFG_V40结构）
-    public static final int NET_DVR_GET_IPPARACFG_V40 = 1062;    //获取IP接入配置信息
-    public static final int NET_DVR_SET_IPPARACFG_V40 = 1063;    //设置IP接入配置信息    
 //IP报警输入接入配置参数 （NET_DVR_IPALARMINCFG结构）
     public static final int NET_DVR_GET_IPALARMINCFG = 1050;    //获取IP报警输入接入配置信息
     public static final int NET_DVR_SET_IPALARMINCFG = 1051;   //设置IP报警输入接入配置信息
@@ -588,122 +508,6 @@ public interface HCNetSDK extends StdCallLibrary {
 //设备编码类型配置(NET_DVR_COMPRESSION_AUDIO结构)
     public static final int NET_DVR_GET_COMPRESSCFG_AUD = 1058;     //获取设备语音对讲编码参数
     public static final int NET_DVR_SET_COMPRESSCFG_AUD = 1059;     //设置设备语音对讲编码参数
-    
-    public static final int NET_DVR_GET_VW_SCENE_PARAM = 1746;//获取电视墙场景模式参数
-    public static final int NET_DVR_SET_VW_SCENE_PARAM = 1747;//设置电视墙场景模式参数
-    
-    public static final int NET_SDK_FINDMEDICALFILE =  3954;    //慧影科技智慧医疗查找录像文件
-    public static final int NET_SDK_FINDMEDICALPICTURE = 3955;    //慧影科技智慧医疗查找图片文件
-    
-    public static final int NET_DVR_GET_RAPIDMOVE_DETECTION  = 3539;    //获取快速运动侦测配置
-    public static final int NET_DVR_SET_RAPIDMOVE_DETECTION  = 3540;    //设置快速运动侦测配置
-    
-    public static final int NET_DVR_GET_RAPIDMOVE_TRIGGER  = 3543;    //获取快速运动联动配置
-    public static final int NET_DVR_SET_RAPIDMOVE_TRIGGER = 3544;    //设置快速运动联动配置
-    public static final int NET_DVR_GET_RAPIDMOVE_SCHEDULE = 3545;    //获取快速运动的布防时间配置
-    public static final int NET_DVR_SET_RAPIDMOVE_SCHEDULE = 3546;    //设置快速运动的布防时间配置
-    
-    public static final int NET_DVR_GET_PRESET_NAME = 3383; //获取预置点名称
-    public static final int NET_DVR_SET_PRESET_NAME = 3382; //设置预置点名称
-    public static final int NET_DVR_GET_RULECFG_V42 = 5049;  //获取行为分析参数(支持16条规则扩展)
-    public static final int NET_DVR_SET_RULECFG_V42 = 5050;  //设置行为分析参数(支持16条规则扩展)
-    
-    //车牌识别（NET_VCA_PLATE_CFG）;
-    public static final int NET_DVR_SET_PLATECFG = 150 ;//设置车牌识别参数
-
-    public static final int NET_DVR_GET_PLATECFG = 151;	//获取车牌识别参数
-     //行为对应（NET_VCA_RULECFG）
-    public static final int NET_DVR_SET_RULECFG = 152;	//设置行为分析规则
-    public static final int NET_DVR_GET_RULECFG = 153;//获取行为分析规则
-    //双摄像机标定参数（NET_DVR_LF_CFG）
-    public static final int NET_DVR_SET_LF_CFG = 160;//设置双摄像机的配置参数
-    public static final int NET_DVR_GET_LF_CFG = 161;//获取双摄像机的配置参数
-    //智能分析仪取流配置结构
-    public static final int NET_DVR_SET_IVMS_STREAMCFG = 162;	//设置智能分析仪取流参数
-    public static final int NET_DVR_GET_IVMS_STREAMCFG = 163;	//获取智能分析仪取流参数
-    //智能控制参数结构
-    public static final int NET_DVR_SET_VCA_CTRLCFG = 164; //设置智能控制参数
-    public static final int NET_DVR_GET_VCA_CTRLCFG = 165;	 //获取智能控制参数
-    //屏蔽区域NET_VCA_MASK_REGION_LIST
-    public static final int NET_DVR_SET_VCA_MASK_REGION = 166;	 //设置屏蔽区域参数
-    public static final int NET_DVR_GET_VCA_MASK_REGION = 167;	 //获取屏蔽区域参数
-     //ATM进入区域 NET_VCA_ENTER_REGION
-    public static final int NET_DVR_SET_VCA_ENTER_REGION = 168; //设置进入区域参数
-    public static final int NET_DVR_GET_VCA_ENTER_REGION = 169;	 //获取进入区域参数
-     //标定线配置NET_VCA_LINE_SEGMENT_LIST
-    public static final int NET_DVR_SET_VCA_LINE_SEGMENT = 170;	 //设置标定线
-    public static final int NET_DVR_GET_VCA_LINE_SEGMENT = 171;	 //获取标定线
-     // ivms屏蔽区域NET_IVMS_MASK_REGION_LIST
-    public static final int NET_DVR_SET_IVMS_MASK_REGION = 172;	 //设置IVMS屏蔽区域参数
-    public static final int NET_DVR_GET_IVMS_MASK_REGION = 173;	 //获取IVMS屏蔽区域参数
-    // ivms进入检测区域NET_IVMS_ENTER_REGION
-    public static final int NET_DVR_SET_IVMS_ENTER_REGION = 174; //设置IVMS进入区域参数
-    public static final int NET_DVR_GET_IVMS_ENTER_REGION = 175; //获取IVMS进入区域参数
-    public static final int NET_DVR_SET_IVMS_BEHAVIORCFG = 176;//设置智能分析仪行为规则参数
-    public static final int NET_DVR_GET_IVMS_BEHAVIORCFG = 177;	//获取智能分析仪行为规则参数
-    public static final int NET_DVR_GET_TRAVERSE_PLANE_DETECTION = 3360; //获取越界侦测配置
-    public static final int NET_DVR_SET_TRAVERSE_PLANE_DETECTION = 3361;
-    public static final int NET_DVR_GET_FIELD_DETECTION = 3362; //获取区域侦测配置
-    public static final int NET_DVR_SET_FIELD_DETECTION = 3363; //设置区域侦测配置
-
-    public static final int NET_DVR_GET_STREAM_INFO = 6023; //获取已添加流ID信息
-    public static final int NET_DVR_GET_STREAM_RECORD_STATUS = 6021; //获取流状态信息
-
-    public static final int NET_DVR_GET_ALL_VEHICLE_CONTROL_LIST = 3124; //获取所有车辆黑白名单信息
-    public static final int NET_DVR_VEHICLELIST_CTRL_START = 3133; //设置车辆黑白名单信息(批量)
-    public static final int ENUM_SENDDATA = 0x0; //发送车辆黑白名单数据
-
-    public static final int NET_DVR_GET_LEDDISPLAY_CFG = 3673;
-    public static final int NET_DVR_SET_LEDDISPLAY_CFG = 3672;
-    public static final int NET_DVR_SET_VOICEBROADCAST_CFG = 3675;
-    public static final int NET_DVR_SET_CHARGE_ACCOUNTINFO = 3662;
-
-    public static final int NET_DVR_GET_TRAFFIC_DATA = 3141;   //长连接获取交通数据
-    public static final int NET_DVR_GET_TRAFFIC_FLOW = 3142;   //长连接获取交通流量
-
-    public static final int NET_DVR_GET_CARD_CFG = 2116; //获取卡参数
-    public static final int NET_DVR_SET_CARD_CFG = 2117; //设置卡参数
-    public static final int NET_DVR_GET_CARD_CFG_V50 = 2178;    //获取新卡参数(V50)
-    public static final int NET_DVR_SET_CARD_CFG_V50 = 2179;    //设置新卡参数(V50)
-    public static final int NET_DVR_GET_FACE_PARAM_CFG = 2507;    //获取人脸参数
-    public static final int NET_DVR_SET_FACE_PARAM_CFG = 2508;    //设置人脸参数
-    public static final int NET_DVR_DEL_FACE_PARAM_CFG = 2509;    //删除人脸参数
-    public static final int NET_DVR_GET_FINGERPRINT_CFG_V50 = 2183;    //获取指纹参数V50
-    public static final int NET_DVR_SET_FINGERPRINT_CFG_V50 = 2184;   //设置指纹参数V50
-    public static final int NET_DVR_DEL_FINGERPRINT_CFG_V50 = 2517;    //删除指纹参数V50
-    public static final int NET_DVR_GET_CARD_RIGHT_WEEK_PLAN_V50 = 2304;  //获取卡权限周计划参数V50
-    public static final int NET_DVR_SET_CARD_RIGHT_WEEK_PLAN_V50 = 2305;  //设置卡权限周计划参数V50
-    public static final int NET_DVR_GET_DOOR_CFG = 2108;    //获取门参数
-    public static final int NET_DVR_SET_DOOR_CFG = 2109;    //设置门参数
-    public static final int NET_DVR_GET_DOOR_STATUS_PLAN = 2110; //获取门状态计划参数
-    public static final int NET_DVR_SET_DOOR_STATUS_PLAN = 2111; //设置门状态计划参数
-    public static final int NET_DVR_GET_EVENT_CARD_LINKAGE_CFG_V50 = 2181;    //获取事件卡号联动配置参数(V50)
-    public static final int NET_DVR_SET_EVENT_CARD_LINKAGE_CFG_V50 = 2182;    //设置事件卡号联动配置参数(V50)
-    public static final int NET_DVR_CAPTURE_FACE_INFO = 2510;    //采集人脸信息
-    public static final int NET_DVR_GET_ACS_EVENT = 2514 ;//设备事件获取
-
-    public static final int NET_DVR_GET_SUPPLEMENTLIGHT = 3728;  //获取内置补光灯配置协议
-    public static final int NET_DVR_SET_SUPPLEMENTLIGHT = 3729;  //设置内置补光灯配置协议
-    
-    public static final int NET_DVR_GET_FACECONTRAST_TRIGGER = 3965;//获取人脸比对联动配置
-    public static final int NET_DVR_SET_FACECONTRAST_TRIGGER = 3966;//设置人脸比对联动配置
-  
-    public static final int NET_DVR_GET_FACECONTRAST_SCHEDULE = 3968;//获取人脸比对布防时间配置
-    public static final int NET_DVR_SET_FACECONTRAST_SCHEDULE = 3969;//设置人脸比对布防时间配置
-    
-    public static final int NET_DVR_INQUEST_GET_CDW_STATUS = 6350;  //获取审讯机刻录状态-长连接
-    
-    public static final int NET_DVR_GET_REALTIME_THERMOMETRY = 3629; //实时温度检测
-    public static final int NET_DVR_GET_MANUALTHERM_INFO = 6706;     //手动测温实时获取
-    
-    public static final int NET_DVR_GET_PHY_DISK_INFO = 6306;   //获取物理磁盘信息
-    public static final int NET_DVR_GET_WORK_STATUS = 6189;   //获取设备工作状态
-    
-    public static final int NET_DVR_GET_CURTRIGGERMODE  =  3130;   //获取设备当前触发模式
-    public static final int NET_ITC_GET_TRIGGERCFG                 = 3003;  //获取触发参数
-    public static final int NET_ITC_SET_TRIGGERCFG                 = 3004;  //设置触发参数
-    public static final int NET_ITC_GET_VIDEO_TRIGGERCFG           = 3017;  //获取视频电警触发参数
-    public static final int NET_ITC_SET_VIDEO_TRIGGERCFG           = 3018;  //设置视频电警触发参数
     /***************************DS9000新增命令(_V30) end *****************************/
     /*************************参数配置命令 end*******************************/
     /*******************查找文件和日志函数返回值*************************/
@@ -716,33 +520,7 @@ public interface HCNetSDK extends StdCallLibrary {
     public static final int COMM_ALARM = 0x1100;	//8000报警信息主动上传
     public static final int COMM_TRADEINFO = 0x1500;  //ATMDVR主动上传交易信息
     public static final int COMM_ALARM_V30 = 0x4000;//9000报警信息主动上传
-    public static final int COMM_ALARM_V40 = 0x4007;
-    public static final int COMM_ALARM_RULE = 0x1102;//行为分析信息上传
-    public static final int COMM_ALARM_PDC = 0x1103;//客流量统计报警上传
-    public static final int COMM_UPLOAD_PLATE_RESULT = 0x2800;//交通抓拍结果上传
-    public static final int COMM_ITS_PLATE_RESULT = 0x3050;//交通抓拍的终端图片上传
     public static final int COMM_IPCCFG = 0x4001;//9000设备IPC接入配置改变报警信息主动上传
-    public static final int COMM_ITS_PARK_VEHICLE = 0x3056;//停车场数据上传
-    public static final int COMM_VEHICLE_CONTROL_ALARM = 0x3059;//黑白名单车辆报警上传
-    public static final int COMM_ALARM_TFS = 0x1113; //交通取证报警信息
-    public static final int COMM_ALARM_TPS_V41 = 0x1114; //交通事件报警信息扩展
-    public static final int COMM_ALARM_AID_V41 = 0x1115; //交通事件报警信息扩展
-    public static final int COMM_UPLOAD_FACESNAP_RESULT = 0x1112;  //人脸识别结果上传
-    public static final int COMM_SNAP_MATCH_ALARM = 0x2902;  //黑名单比对结果上传
-    public static final int COMM_ALARM_ACS = 0x5002; //门禁主机报警信息
-    public static final int COMM_ID_INFO_ALARM = 0x5200; //门禁身份证刷卡信息
-    public static final int COMM_VCA_ALARM = 0x4993; //智能检测通用报警
-    public static final int COMM_ISAPI_ALARM = 0x6009;//ISAPI协议报警信息
-    public static final int COMM_ALARM_TPS_STATISTICS = 0x3082; //TPS统计过车数据上传
-    public static final int COMM_ALARMHOST_CID_ALARM = 0x1127;  //报告报警上传
-    public static final int COMM_UPLOAD_VIDEO_INTERCOM_EVENT = 0x1132;  //可视对讲事件记录上传
-    public static final int COMM_ALARM_VIDEO_INTERCOM = 0x1133;  //可视对讲报警上传
-    
-    public static final int COMM_UPLOAD_AIOP_VIDEO           =    0x4021; //设备支持AI开放平台接入，上传视频检测数据
-    public static final int COMM_UPLOAD_AIOP_PICTURE         =    0x4022; //设备支持AI开放平台接入，上传图片检测数据
-    public static final int COMM_UPLOAD_AIOP_POLLING_SNAP    =    0x4023; //设备支持AI开放平台接入，上传轮巡抓图图片检测数据 对应的结构体(NET_AIOP_POLLING_PICTURE_HEAD)
-    public static final int COMM_UPLOAD_AIOP_POLLING_VIDEO   =    0x4024; //设备支持AI开放平台接入，上传轮巡视频检测数据 对应的结构体(NET_AIOP_POLLING_VIDEO_HEAD)
-
     /*************操作异常类型(消息方式, 回调方式(保留))****************/
     public static final int EXCEPTION_EXCHANGE = 0x8000;//用户交互时异常
     public static final int EXCEPTION_AUDIOEXCHANGE = 0x8001;//语音对讲异常
@@ -894,8 +672,8 @@ public interface HCNetSDK extends StdCallLibrary {
     public static final int MINOR_REC_START = 0xa3;   /*开始录像*/
     public static final int MINOR_REC_STOP = 0xa4;/*停止录像*/
     public static final int MINOR_REC_OVERDUE = 0xa5;/*过期录像删除*/
-    public static final int MINOR_LINK_START = 0xa6; // ivms多路解码器等连接前端设备
-    public static final int MINOR_LINK_STOP = 0xa7;// ivms多路解码器等断开前端设备　
+    public static final int MINOR_LINK_START = 0xa6; // ivms，多路解码器等连接前端设备
+    public static final int MINOR_LINK_STOP = 0xa7;// ivms，多路解码器等断开前端设备　
 //当日志的主类型为MAJOR_OPERATION=03，次类型为MINOR_LOCAL_CFG_PARM=0x52或者MINOR_REMOTE_GET_PARM=0x76或者MINOR_REMOTE_CFG_PARM=0x77时，dwParaType:参数类型有效，其含义如下：
     public static final int PARA_VIDEOOUT = 0x1;
     public static final int PARA_IMAGE = 0x2;
@@ -923,7 +701,43 @@ public interface HCNetSDK extends StdCallLibrary {
 //能力获取命令
     public static final int VCA_DEV_ABILITY = 0x100;//设备智能分析的总能力
     public static final int VCA_CHAN_ABILITY = 0x110;//行为分析能力
-    public static final int DEVICE_ABILITY_INFO = 0x011; //设备通用能力类型，具体能力根据发送的能力节点来区分
+//获取/设置大接口参数配置命令
+//车牌识别（NET_VCA_PLATE_CFG）;
+    public static final int NET_DVR_SET_PLATECFG = 150 ;//设置车牌识别参数
+
+    public static final int NET_DVR_GET_PLATECFG = 151;	//获取车牌识别参数
+//行为对应（NET_VCA_RULECFG）
+    public static final int NET_DVR_SET_RULECFG = 152;	//设置行为分析规则
+    public static final int NET_DVR_GET_RULECFG = 153;//获取行为分析规则,
+//双摄像机标定参数（NET_DVR_LF_CFG）
+    public static final int NET_DVR_SET_LF_CFG = 160;//设置双摄像机的配置参数
+    public static final int NET_DVR_GET_LF_CFG = 161;//获取双摄像机的配置参数
+//智能分析仪取流配置结构
+    public static final int NET_DVR_SET_IVMS_STREAMCFG = 162;	//设置智能分析仪取流参数
+    public static final int NET_DVR_GET_IVMS_STREAMCFG = 163;	//获取智能分析仪取流参数
+//智能控制参数结构
+    public static final int NET_DVR_SET_VCA_CTRLCFG = 164; //设置智能控制参数
+    public static final int NET_DVR_GET_VCA_CTRLCFG = 165;	 //获取智能控制参数
+//屏蔽区域NET_VCA_MASK_REGION_LIST
+    public static final int NET_DVR_SET_VCA_MASK_REGION = 166;	 //设置屏蔽区域参数
+    public static final int NET_DVR_GET_VCA_MASK_REGION = 167;	 //获取屏蔽区域参数
+//ATM进入区域 NET_VCA_ENTER_REGION
+    public static final int NET_DVR_SET_VCA_ENTER_REGION = 168; //设置进入区域参数
+    public static final int NET_DVR_GET_VCA_ENTER_REGION = 169;	 //获取进入区域参数
+//标定线配置NET_VCA_LINE_SEGMENT_LIST
+    public static final int NET_DVR_SET_VCA_LINE_SEGMENT = 170;	 //设置标定线
+    public static final int NET_DVR_GET_VCA_LINE_SEGMENT = 171;	 //获取标定线
+// ivms屏蔽区域NET_IVMS_MASK_REGION_LIST
+    public static final int NET_DVR_SET_IVMS_MASK_REGION = 172;	 //设置IVMS屏蔽区域参数
+    public static final int NET_DVR_GET_IVMS_MASK_REGION = 173;	 //获取IVMS屏蔽区域参数
+// ivms进入检测区域NET_IVMS_ENTER_REGION
+    public static final int NET_DVR_SET_IVMS_ENTER_REGION = 174; //设置IVMS进入区域参数
+    public static final int NET_DVR_GET_IVMS_ENTER_REGION = 175; //获取IVMS进入区域参数
+    public static final int NET_DVR_SET_IVMS_BEHAVIORCFG = 176;//设置智能分析仪行为规则参数
+    public static final int NET_DVR_GET_IVMS_BEHAVIORCFG = 177;	//获取智能分析仪行为规则参数
+
+
+
     /**********************设备类型 end***********************/
 
 /*************************************************
@@ -1006,57 +820,6 @@ public interface HCNetSDK extends StdCallLibrary {
         public byte byAudioNum;			        //语音口的个数
         public byte byIPChanNum;			//最大数字通道数
     }
-    
-    //DVR设备参数
-  public static class NET_DVR_DEVICECFG_V40 extends Structure {
-        public int dwSize;
-        public byte[] sDVRName = new byte[NAME_LEN];     //DVR名称
-        public int dwDVRID;                //DVR ID,用于遥控器 //V1.4(0-99), V1.5(0-255)
-        public int dwRecycleRecord;        //是否循环录像,0:不是; 1:是
-        //以下不可更改
-        public byte[] sSerialNumber = new byte[SERIALNO_LEN];  //序列号
-        public int dwSoftwareVersion;            //软件版本号,高16位是主版本,低16位是次版本
-        public int dwSoftwareBuildDate;            //软件生成日期,0xYYYYMMDD
-        public int dwDSPSoftwareVersion;            //DSP软件版本,高16位是主版本,低16位是次版本
-        public int dwDSPSoftwareBuildDate;        // DSP软件生成日期,0xYYYYMMDD
-        public int dwPanelVersion;                // 前面板版本,高16位是主版本,低16位是次版本
-        public int dwHardwareVersion;    // 硬件版本,高16位是主版本,低16位是次版本
-        public byte byAlarmInPortNum;        //DVR报警输入个数
-        public byte byAlarmOutPortNum;        //DVR报警输出个数
-        public byte byRS232Num;            //DVR 232串口个数
-        public byte byRS485Num;            //DVR 485串口个数 
-        public byte byNetworkPortNum;        //网络口个数
-        public byte byDiskCtrlNum;            //DVR 硬盘控制器个数
-        public byte byDiskNum;                //DVR 硬盘个数
-        public byte byDVRType;                //DVR类型, 1:DVR 2:ATM DVR 3:DVS ......
-        public byte byChanNum;                //DVR 通道个数
-        public byte byStartChan;            //起始通道号,例如DVS-1,DVR - 1
-        public byte byDecordChans;            //DVR 解码路数
-        public byte byVGANum;                //VGA口的个数 
-        public byte byUSBNum;                //USB口的个数
-        public byte byAuxoutNum;            //辅口的个数
-        public byte byAudioNum;            //语音口的个数
-        public byte byIPChanNum;            //最大数字通道数 低8位，高8位见byHighIPChanNum 
-        public byte byZeroChanNum;            //零通道编码个数
-        public byte bySupport;        //能力，位与结果为0表示不支持，1表示支持，
-        public byte byEsataUseage;        //Esata的默认用途，0-默认备份，1-默认录像
-        public byte byIPCPlug;            //0-关闭即插即用，1-打开即插即用
-        public byte byStorageMode;        //0-盘组模式,1-磁盘配额, 2抽帧模式, 3-自动
-        public byte bySupport1;        //能力，位与结果为0表示不支持，1表示支持 
-        public short wDevType;//设备型号
-        public byte[] byDevTypeName = new byte[DEV_TYPE_NAME_LEN];//设备型号名称 
-        public byte bySupport2; //能力集扩展，位与结果为0表示不支持，1表示支持
-        //bySupport2 & 0x1, 表示是否支持扩展的OSD字符叠加(终端和抓拍机扩展区分)
-        public byte byAnalogAlarmInPortNum; //模拟报警输入个数
-        public byte byStartAlarmInNo;    //模拟报警输入起始号
-        public byte byStartAlarmOutNo;  //模拟报警输出起始号
-        public byte byStartIPAlarmInNo;  //IP报警输入起始号
-        public byte byStartIPAlarmOutNo; //IP报警输出起始号
-        public byte byHighIPChanNum;      //数字通道个数，高8位 
-        public byte byEnableRemotePowerOn;//是否启用在设备休眠的状态下远程开机功能，0-不启用，1-启用
-        public short wDevClass; //设备大类备是属于哪个产品线，0 保留，1-50 DVR，51-100 DVS，101-150 NVR，151-200 IPC，65534 其他，具体分类方法见《设备类型对应序列号和类型值.docx》
-        public byte[] byRes2 = new byte[6];    //保留
-}
 
 public static class NET_DVR_IPADDR extends Structure {
         public byte[] sIpV4 = new byte[16];
@@ -1214,176 +977,7 @@ public static class NET_DVR_VILOST extends Structure {    //信号丢失报警(�
     public static class NET_DVR_VICOLOR extends Structure {
         public NET_DVR_COLOR[] struColor = new NET_DVR_COLOR[MAX_TIMESEGMENT_V30];/*图象参数(第一个有效，其他三个保留)*/
         public NET_DVR_SCHEDTIME[] struHandleTime = new NET_DVR_SCHEDTIME[MAX_TIMESEGMENT_V30];/*处理时间段(保留)*/
-    }
-    
-    //信号丢失
-    public static class NET_DVR_VILOST_V40 extends Structure {
-    	public int dwEnableVILostAlarm;                /* 是否启动信号丢失报警 ,0-否,1-是*/
-        /* 信号丢失触发报警输出 */    
-    	public int dwHandleType;        //异常处理,异常处理方式的"或"结果   
-        /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
-        /*0x02: 声音警告*/
-        /*0x04: 上传中心*/
-        /*0x08: 触发报警输出*/
-        /*0x10: 触发JPRG抓图并上传Email*/
-        /*0x20: 无线声光报警器联动*/
-        /*0x40: 联动电子地图(目前只有PCNVR支持)*/
-        /*0x200: 抓图并上传FTP*/ 
-        /*0x1000:抓图上传到云*/
-    	public int dwMaxRelAlarmOutChanNum ; //触发的报警输出通道数（只读）最大支持数量
-    	public int[] dwRelAlarmOut = new int[MAX_ALARMOUT_V40]; /*触发报警输出号，按值表示,采用紧凑型排列，从下标0 - dwRelAlarmOut -1有效，如果中间遇到0xffffffff,则后续无效*/
-    	public NET_DVR_SCHEDTIMEWEEK[] struAlarmTime = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS]; /*布防时间*/
-        public byte byVILostAlarmThreshold;    /*信号丢失报警阈值，当值低于阈值，认为信号丢失，取值0-99*/
-        public byte[] byRes = new byte[63]; //保留
-    } 
-    
-    public static class NET_DVR_DNMODE extends Structure {
-        public byte byObjectSize;//占比参数(0~100)
-        public byte byMotionSensitive; /*移动侦测灵敏度, 0 - 5,越高越灵敏,0xff关闭*/
-        public byte[] byRes = new byte[6];
-    }
-    
-    public static class NET_DVR_MOTION_MULTI_AREAPARAM extends Structure {  
-        public byte byAreaNo;//区域编号(IPC- 1~8)
-        public byte[] byRes = new byte[3];
-        public NET_VCA_RECT struRect = new NET_VCA_RECT();//单个区域的坐标信息(矩形) size = 16;
-        public NET_DVR_DNMODE struDayNightDisable = new NET_DVR_DNMODE();//关闭模式
-        public NET_DVR_DNMODE struDayModeParam = new NET_DVR_DNMODE();//白天模式
-        public NET_DVR_DNMODE struNightModeParam = new NET_DVR_DNMODE();//夜晚模式
-        public byte[] byRes1 = new byte[8];
-    }
-
-    public static final int MAX_MULTI_AREA_NUM = 24;
-    public static class NET_DVR_MOTION_MULTI_AREA extends Structure {  
-        public byte byDayNightCtrl;//日夜控制 0~关闭,1~自动切换,2~定时切换(默认关闭)
-        public byte byAllMotionSensitive; /*移动侦测灵敏度, 0 - 5,越高越灵敏,0xff关闭，全部区域的灵敏度范围*/ 
-        public byte[] byRes = new byte[2];//
-        public NET_DVR_SCHEDULE_DAYTIME struScheduleTime = new NET_DVR_SCHEDULE_DAYTIME();//切换时间  16
-        public NET_DVR_MOTION_MULTI_AREAPARAM[] struMotionMultiAreaParam = new NET_DVR_MOTION_MULTI_AREAPARAM[MAX_MULTI_AREA_NUM];//最大支持24个区域
-        public byte[] byRes1 = new byte[60];
-    }
-    
-    public static class NET_DVR_MOTION_SINGLE_AREA extends Structure {  
-        public byte[] byMotionScope = new byte[64*96];        /*侦测区域,0-96位,表示64行,共有96*64个小宏块,目前有效的是22*18,为1表示是移动侦测区域,0-表示不是*/
-        public byte byMotionSensitive;            /*移动侦测灵敏度, 0 - 5,越高越灵敏,0xff关闭*/
-        public byte[] byRes = new byte[3];
-    }
-
-    public static class NET_DVR_MOTION_MODE_PARAM extends Structure {  
-        public NET_DVR_MOTION_SINGLE_AREA  struMotionSingleArea = new NET_DVR_MOTION_SINGLE_AREA(); //普通模式下的单区域设
-        public NET_DVR_MOTION_MULTI_AREA struMotionMultiArea = new NET_DVR_MOTION_MULTI_AREA(); //专家模式下的多区域设置    
-    }
-    
-    public static class NET_DVR_MOTION_V40 extends Structure {   
-        public NET_DVR_MOTION_MODE_PARAM  struMotionMode = new NET_DVR_MOTION_MODE_PARAM(); //(5.1.0新增)
-        public byte byEnableHandleMotion;        /* 是否处理移动侦测 0－否 1－是*/ 
-        public byte byEnableDisplay;    /*启用移动侦测高亮显示，0-否，1-是*/
-        public byte byConfigurationMode; //0~普通,1~专家(5.1.0新增)
-        public byte byKeyingEnable; //启用键控移动侦测 0-不启用，1-启用
-        /* 异常处理方式 */
-    	public int dwHandleType;        //异常处理,异常处理方式的"或"结果   
-        /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
-        /*0x02: 声音警告*/
-        /*0x04: 上传中心*/
-        /*0x08: 触发报警输出*/
-        /*0x10: 触发JPRG抓图并上传Email*/
-        /*0x20: 无线声光报警器联动*/
-        /*0x40: 联动电子地图(目前只有PCNVR支持)*/
-        /*0x200: 抓图并上传FTP*/ 
-        /*0x1000: 抓图上传到云*/
-    	public int dwMaxRelAlarmOutChanNum ; //触发的报警输出通道数（只读）最大支持数量
-    	public int[] dwRelAlarmOut = new int[MAX_ALARMOUT_V40]; //实际触发的报警输出号，按值表示,采用紧凑型排列，从下标0 - dwRelAlarmOut -1有效，如果中间遇到0xffffffff,则后续无效
-    	public NET_DVR_SCHEDTIMEWEEK[] struAlarmTime = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS]; /*布防时间*/
-        /*触发的录像通道*/
-    	public int dwMaxRecordChanNum;   //设备支持的最大关联录像通道数-只读
-    	public int[] dwRelRecordChan = new int[MAX_CHANNUM_V40];     /* 实际触发录像通道，按值表示,采用紧凑型排列，从下标0 - dwRelRecordChan -1有效，如果中间遇到0xffffffff,则后续无效*/  
-        public byte byDiscardFalseAlarm; //启用去误报 0-无效，1-不启用，2-启用
-        public byte[] byRes = new byte[127]; //保留字节
-    }
-    
-    public static class NET_DVR_RGB_COLOR extends Structure {  
-        public byte byRed;      //RGB颜色三分量中的红色
-        public byte byGreen;    //RGB颜色三分量中的绿色
-        public byte byBlue;     //RGB颜色三分量中的蓝色
-        public byte byRes;       //保留
-    }
-    
-    public static class NET_DVR_HIDEALARM_V40 extends Structure {  
-    	public int dwEnableHideAlarm;                /* 是否启动遮挡报警，0-否，1-低灵敏度，2-中灵敏度，3-高灵敏度*/
-        public short wHideAlarmAreaTopLeftX;            /* 遮挡区域的x坐标 */
-        public short wHideAlarmAreaTopLeftY;            /* 遮挡区域的y坐标 */
-        public short wHideAlarmAreaWidth;                /* 遮挡区域的宽 */
-        public short wHideAlarmAreaHeight;                /*遮挡区域的高*/ 
-        /* 信号丢失触发报警输出 */    
-    	public int dwHandleType;        //异常处理,异常处理方式的"或"结果   
-        /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
-        /*0x02: 声音警告*/
-        /*0x04: 上传中心*/
-        /*0x08: 触发报警输出*/
-        /*0x10: 触发JPRG抓图并上传Email*/
-        /*0x20: 无线声光报警器联动*/
-        /*0x40: 联动电子地图(目前只有PCNVR支持)*/
-        /*0x200: 抓图并上传FTP*/ 
-        /*0x1000:抓图上传到云*/
-    	public int dwMaxRelAlarmOutChanNum ; //触发的报警输出通道数（只读）最大支持数量
-    	public int[] dwRelAlarmOut = new int[MAX_ALARMOUT_V40]; /*触发报警输出号，按值表示,采用紧凑型排列，从下标0 - dwRelAlarmOut -1有效，如果中间遇到0xffffffff,则后续无效*/  
-    	public NET_DVR_SCHEDTIMEWEEK[] struAlarmTime = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS]; /*布防时间*/
-        public byte[] byRes = new byte[64]; //保留
-    }//遮挡报警
-    
-    public static class NET_DVR_PICCFG_V40 extends Structure {
-    	public int dwSize;
-        public byte[] sChanName = new byte[NAME_LEN]; 
-    	public int dwVideoFormat;    /* 只读 视频制式 1-NTSC 2-PAL  */
-    	public NET_DVR_VICOLOR struViColor = new NET_DVR_VICOLOR();//    图像参数按时间段设置
-        //显示通道名
-    	public int dwShowChanName; // 预览的图象上是否显示通道名称,0-不显示,1-显示
-        public short wShowNameTopLeftX;                /* 通道名称显示位置的x坐标 */
-        public short wShowNameTopLeftY;                /* 通道名称显示位置的y坐标 */
-        //隐私遮挡
-    	public int dwEnableHide;        /* 是否启动遮挡 ,0-否,1-是*/
-    	public NET_DVR_SHELTER[] struShelter = new NET_DVR_SHELTER[MAX_SHELTERNUM];
-        //OSD
-    	public int dwShowOsd;// 预览的图象上是否显示OSD,0-不显示,1-显示
-        public short wOSDTopLeftX;                /* OSD的x坐标 */
-        public short wOSDTopLeftY;                /* OSD的y坐标 */
-        public byte byOSDType;                    /* OSD类型(主要是年月日格式) */
-        /* 0: XXXX-XX-XX 年月日 */
-        /* 1: XX-XX-XXXX 月日年 */
-        /* 2: XXXX年XX月XX日 */
-        /* 3: XX月XX日XXXX年 */
-        /* 4: XX-XX-XXXX 日月年*/
-        /* 5: XX日XX月XXXX年 */
-        /*6: xx/xx/xxxx(月/日/年) */
-        /*7: xxxx/xx/xx(年/月/日) */
-        /*8: xx/xx/xxxx(日/月/年)*/
-        public byte byDispWeek;                /* 是否显示星期 */
-        public byte byOSDAttrib;                /* OSD属性:透明，闪烁 */
-        /* 0: 不显示OSD */
-        /* 1: 透明，闪烁 */
-        /* 2: 透明，不闪烁 */
-        /* 3: 不透明，闪烁 */
-        /* 4: 不透明，不闪烁 */    
-        public byte byHourOSDType;                /* OSD小时制:0-24小时制,1-12小时制 */
-        public byte byFontSize;      //16*16(中)/8*16(英)，1-32*32(中)/16*32(英)，2-64*64(中)/32*64(英)  3-48*48(中)/24*48(英) 4-24*24(中)/12*24(英) 5-96*96(中)/48*96(英) 6-128*128(中)/64*128(英) 7-80*80(中)/40*80(英) 8-112*112(中)/56*112(英) 0xff-自适应(adaptive)
-        public byte byOSDColorType;     //0-默认（黑白）；1-自定义
-        public byte byAlignment;//对齐方式 0-自适应，1-右对齐, 2-左对齐，3-国标模式，4-全部右对齐(包含叠加字符、时间以及标题等所有OSD字符)，5-全部左对齐(包含叠加字符、时间以及标题等所有OSD字符)
-        public byte byOSDMilliSecondEnable;//视频叠加时间支持毫秒；0~不叠加, 1-叠加
-        public NET_DVR_VILOST_V40 struVILost = new NET_DVR_VILOST_V40();  //视频信号丢失报警（支持组）
-        public NET_DVR_VILOST_V40 struAULost = new NET_DVR_VILOST_V40();  /*音频信号丢失报警（支持组）*/
-        public NET_DVR_MOTION_V40 struMotion = new NET_DVR_MOTION_V40();  //移动侦测报警（支持组）
-        public NET_DVR_HIDEALARM_V40 struHideAlarm = new NET_DVR_HIDEALARM_V40();  //遮挡报警（支持组）
-        public NET_DVR_RGB_COLOR    struOsdColor = new NET_DVR_RGB_COLOR();//OSD颜色
-    	public int dwBoundary; //边界值，左对齐，右对齐以及国标模式的边界值，0-表示默认值，单位：像素;在国标模式下，单位修改为字符个数（范围是，0,1,2）
-        public NET_DVR_RGB_COLOR struOsdBkColor = new NET_DVR_RGB_COLOR(); //自定义OSD背景色
-        public byte byOSDBkColorMode; //OSD背景色模式，0-默认，1-自定义OSD背景色
-        public byte byUpDownBoundary; //上下最小边界值选项，单位为字符个数（范围是，0,1,2）,国标模式下无效。byAlignment=3该字段无效，通过dwBoundary进行边界配置，.byAlignment不等于3的情况下， byUpDownBoundary/byLeftRightBoundary配置成功后，dwBoundary值将不生效
-        public byte byLeftRightBoundary; //左右最小边界值选项，单位为字符个数（范围是，0,1,2）, 国标模式下无效。byAlignment=3该字段无效，通过dwBoundary进行边界配置，.byAlignment不等于3的情况下， byUpDownBoundary/byLeftRightBoundary配置成功后，dwBoundary值将不生效
-        public byte[] byRes = new byte[113];
-    }
+    };
 
     public static class NET_DVR_PICCFG_V30 extends Structure {
         public int dwSize;
@@ -1554,7 +1148,18 @@ public static class NET_DVR_VILOST extends Structure {    //信号丢失报警(�
 	//2006-08-11 增加单P帧的配置接口，可以改善实时流延时问题
 	public byte  byIntervalBPFrame;//0-BBP帧; 1-BP帧; 2-单P帧
 	public byte  byENumber;//E帧数量
-	}
+}
+
+    public static class NET_DVR_COMPRESSIONCFG_EX extends Structure {//通道压缩参数(扩展)
+	public int dwSize;
+	public NET_DVR_COMPRESSION_INFO_EX struRecordPara; //录像
+	public NET_DVR_COMPRESSION_INFO_EX struNetPara;	//网传
+}
+
+    public static class NET_DVR_RECCOMPRESSIONCFG_EX extends Structure {//录象时间段压缩参数配置(GE定制)2006-09-18
+	int dwSize;
+	NET_DVR_COMPRESSION_INFO_EX[][]  struRecTimePara = new NET_DVR_COMPRESSION_INFO_EX[MAX_DAYS][MAX_TIMESEGMENT]; //录像时间段
+}
 
     public static class NET_DVR_RECORDSCHED extends Structure //时间段录像参数配置(子结构)
     {
@@ -1595,63 +1200,6 @@ public static class NET_DVR_VILOST extends Structure {    //信号丢失报警(�
          public NET_DVR_RECORDSCHEDWEEK[] struRecordSched = new NET_DVR_RECORDSCHEDWEEK[MAX_DAYS];
 	 public int dwRecordTime;	/* 录象时间长度 0-5秒， 1-20秒， 2-30秒， 3-1分钟， 4-2分钟， 5-5分钟， 6-10分钟*/
 	 public int dwPreRecordTime;	/* 预录时间 0-不预录 1-5秒 2-10秒 3-15秒 4-20秒 5-25秒 6-30秒 7-0xffffffff(尽可能预录) */
-}
-
-public static class NET_DVR_STATFRAME extends Structure { //单帧统计参数
-	 public int dwRelativeTime;
-	 public int dwAbsTime;  /*统计绝对时标*/
-         public byte[] byRes = new byte[92];
-}
-
-public static class NET_DVR_STATTIME extends Structure { //单帧统计参数
-	 public NET_DVR_TIME  tmStart;  //统计开始时间
-	 public NET_DVR_TIME  tmEnd;    //统计结束时间
-         public byte[] byRes = new byte[92];
-}
-
- public static class UNION_PDC_STATPARAM extends Union
-{
-   // public byte[] byLen = new byte[140];
-    public NET_DVR_STATFRAME struStatFrame;
-    public NET_DVR_STATTIME  struStatTime;
-}
-
-public static class NET_DVR_PDC_ALRAM_INFO extends Structure { //通道录像参数配置
-	 public int dwSize;
-	 public byte byMode;  /*0-单帧统计结果，1-最小时间段统计结果*/
-         public byte byChannel;
-         public byte bySmart;         //专业智能返回0，Smart 返回 1
-         public byte byRes1;          // 保留字节
-         public NET_VCA_DEV_INFO  struDevInfo = new NET_VCA_DEV_INFO();		     //前端设备信息
-         public UNION_PDC_STATPARAM uStatModeParam = new UNION_PDC_STATPARAM();
-	 public int dwLeaveNum;	/* 离开人数 */
-	 public int dwEnterNum;	/* 进入人数 */
-         public byte byBrokenNetHttp;     //断网续传标志位，0-不是重传数据，1-重传数据
-         public byte byRes3;
-         public short wDevInfoIvmsChannelEx;     //与NET_VCA_DEV_INFO里的byIvmsChannel含义相同，能表示更大的值。老客户端用byIvmsChannel能继续兼容，但是最大到255。新客户端版本请使用wDevInfoIvmsChannelEx
-         public int dwPassingNum;        // 经过人数（进入区域后徘徊没有触发进入、离开的人数）
-         public byte[] byRes2 = new byte[32];
-         public void read()
-         {
-             super.read();
-             switch(byMode)
-             {
-                 case 0:
-                     uStatModeParam.setType(NET_DVR_STATFRAME.class);
-                     break;
-                 case 1:
-                     uStatModeParam.setType(NET_DVR_STATTIME.class);
-                     break;
-                 default:
-                     break;
-             }
-             uStatModeParam.read();
-         }
-         public void write()
-         {
-             super.write();
-             uStatModeParam.write();
-         }
 }
 
 //云台协议表结构配置
@@ -1796,56 +1344,6 @@ public static class NET_DVR_ADDIT_POSITION extends Structure {//车载GPS信息�
 	public byte[]  res = new byte[2];              /* 保留位 */
 }
 
-public static class  struRecordingHost extends Structure{
-		public byte bySubAlarmType;
-		public byte[] byRes1 = new byte[3];
-		public NET_DVR_TIME_EX struRecordEndTime = new NET_DVR_TIME_EX();
-		public byte[] byRes = new byte[116];
-}
-
-public static class struAlarmHardDisk extends Structure{
-	public int dwAlarmHardDiskNum;
-}
-
-public static class struAlarmChannel extends Structure{
-	public int dwAlarmChanNum;
-}
-
-public static class struIOAlarm extends Structure{
-		public int dwAlarmInputNo;
-		public int dwTrigerAlarmOutNum;
-		public int dwTrigerRecordChanNum;
- }
-
-public static class NET_DVR_TIME_EX extends Structure{
-		public short wYear;
-		public byte byMonth;
-		public byte byDay;
-		public byte byHour;
-		public byte byMinute;
-		public byte bySecond;
-		public byte byRes;
-}
-
-public static class uStruAlarm extends Union
-{
-		public byte[] byUnionLen = new byte[128];
-		public struIOAlarm struioAlarm = new struIOAlarm();
-		public struAlarmHardDisk strualarmHardDisk = new struAlarmHardDisk();
-		public struAlarmChannel sstrualarmChannel = new struAlarmChannel();
-		public struRecordingHost strurecordingHost = new struRecordingHost();
-}
-
-public static class NET_DVR_ALRAM_FIXED_HEADER extends Structure{
-	 public int dwAlarmType;
-	 public NET_DVR_TIME_EX  struAlarmTime = new NET_DVR_TIME_EX();
-	 public uStruAlarm ustruAlarm = new uStruAlarm();
-}
-
-public static class NET_DVR_ALARMINFO_V40 extends Structure {
-	public NET_DVR_ALRAM_FIXED_HEADER struAlarmFixedHeader = new NET_DVR_ALRAM_FIXED_HEADER();
-	public Pointer pAlarmData;
-}
 public static class NET_DVR_ALARMINFO_V30 extends Structure {//上传报警信息(9000扩展)
 	public int dwAlarmType;/*0-信号量报警,1-硬盘满,2-信号丢失,3－移动侦测,4－硬盘未格式化,5-读写硬盘出错,6-遮挡报警,7-制式不匹配, 8-非法访问, 0xa-GPS定位信息(车载定制)*/
 	public int dwAlarmInputNumber;/*报警输入端口*/
@@ -1898,178 +1396,6 @@ public static class NET_DVR_IPPARACFG extends Structure {/* IP接入配置结构
        public  NET_DVR_IPDEVINFO[]  struIPDevInfo = new NET_DVR_IPDEVINFO[MAX_IP_DEVICE];    /* IP设备 */
        public   byte[] byAnalogChanEnable = new byte[MAX_ANALOG_CHANNUM];        /* 模拟通道是否启用，从低到高表示1-32通道，0表示无效 1有效 */
        public NET_DVR_IPCHANINFO[] struIPChanInfo = new NET_DVR_IPCHANINFO[MAX_IP_CHANNEL];	/* IP通道 */
-}
-
-public class NET_DVR_IPDEVINFO_V31 extends Structure {
-	public byte byEnable;/* 该通道是否启用 */
-	public byte byProType;//协议类型(默认为私有协议)，0- 私有协议，1- 松下协议，2- 索尼，更多协议通过NET_DVR_GetIPCProtoList获取。
-	public byte byEnableQuickAdd;//0-不支持快速添加；1-使用快速添加
-	public byte byRes1;//保留，置为0
-	public byte[] sUserName =new byte[HCNetSDK.NAME_LEN];//用户名
-	public byte[] sPassword = new byte[HCNetSDK.PASSWD_LEN];//密码
-	public byte[] byDomain = new byte[HCNetSDK.MAX_DOMAIN_NAME];//设备域名
-	public NET_DVR_IPADDR struIP = new NET_DVR_IPADDR();//IP地址
-	public short wDVRPort;//端口号
-	public byte[] szDeviceID= new byte[32];
-	public byte[] byRes2 = new byte[2];//保留，置为0
-
-/*	protected List<?> getFieldOrder() {
-		return Arrays.asList("byEnable","byProType","byEnableQuickAdd","byRes1","sUserName","sPassword","byDomain","struIP","wDVRPort","szDeviceID","byRes2");
-	}*/
-}
-
-public class NET_DVR_STREAM_MODE extends Structure {
-
-     public byte  byGetStreamType;//取流方式：0- 直接从设备取流；1- 从流媒体取流；2- 通过IPServer获得IP地址后取流；
-     //3- 通过IPServer找到设备，再通过流媒体取设备的流； 4- 通过流媒体由URL去取流；5- 通过hiDDNS域名连接设备然后从设备取流
-     public byte[] byRes= new byte[3];//保留，置为0
-     public NET_DVR_GET_STREAM_UNION  uGetStream =new NET_DVR_GET_STREAM_UNION();//不同取流方式联合体
-
-     public void read(){
-         super.read();
-         switch(byGetStreamType)
-         {
-             case 0:
-                 uGetStream.setType(NET_DVR_IPCHANINFO.class);
-                 break;
-             case 6:
-                 uGetStream.setType(NET_DVR_IPCHANINFO_V40.class);
-                 break;
-             default:
-                 break;
-         }
-     }
-}
-
-public class NET_DVR_IPSERVER_STREAM extends Structure{
-	  public byte  byEnable;
-	  public byte[] byRes=new byte[3];
-	  public NET_DVR_IPADDR struIPServer=new NET_DVR_IPADDR();
-	  public short wPort;
-	  public short wDvrNameLen;
-	  public byte[] byDVRName=new byte[HCNetSDK.NAME_LEN];
-	  public short  wDVRSerialLen;
-	  public short[]  byRes1=new short[2];
-	  public byte[]  byDVRSerialNumber=new byte[HCNetSDK.SERIALNO_LEN];
-	  public byte[]  byUserName=new byte[HCNetSDK.NAME_LEN];
-	  public byte[]  byPassWord=new byte[HCNetSDK.PASSWD_LEN];
-	  public byte  byChannel;
-	  public byte[] byRes2=new byte[11];
-}
-
-public class NET_DVR_STREAM_MEDIA_SERVER_CFG extends Structure{
-
-	  public byte byValid;//是否启用流媒体服务器取流：0-不启用，非0-启用
-	  public byte[] byRes1=new byte[3];//保留，置为0
-	  public NET_DVR_IPADDR   struDevIP=new NET_DVR_IPADDR();//流媒体服务器的IP地址
-	  public short wDevPort;//流媒体服务器端口
-	  public byte byTransmitType;//传输协议类型：0-TCP，1-UDP
-	  public byte[] byRes2=new byte[69];
-}
-
-public class NET_DVR_DEV_CHAN_INFO extends Structure{
-	 public NET_DVR_IPADDR   struIP =new NET_DVR_IPADDR();//设备IP地址
-	 public short  wDVRPort;//设备端口号
-	 public byte byChannel;//通道号,目前设备的模拟通道号是从1开始的，对于9000等设备的IPC接入，数字通道号从33开始
-	 public byte byTransProtocol;//传输协议类型：0-TCP，1-UDP，2-多播方式，3-RTP
-	 public byte byTransMode;//传输码流模式：0－主码流，1－子码流
-	 public byte byFactoryType;//前端设备厂家类型， 通过接口NET_DVR_GetIPCProtoList获取
-	 public byte byDeviceType;//设备类型(视频综合平台使用)：1- IPC，2- ENCODER
-	 public byte byDispChan;//	显示通道号（智能配置使用），根据能力集决定使用解码通道还是显示通道
-	 public byte bySubDispChan;//显示通道子通道号（智能配置时使用）
-	 public byte byResolution;//分辨率：1- CIF，2- 4CIF，3- 720P，4- 1080P，5- 500W，用于多屏控制器，多屏控制器会根据该参数分配解码资源
-	 public byte[] byRes=new byte[2];//保留，置为0
-	 public byte[] byDomain =new byte[HCNetSDK.MAX_DOMAIN_NAME];//设备域名
-	 public byte[] sUserName=new byte[HCNetSDK.NAME_LEN];//设备登陆帐号
-	 public byte[] sPassword=new byte[HCNetSDK.PASSWD_LEN];//设备密码
-}
-
-public class NET_DVR_PU_STREAM_CFG extends Structure{
-    public  int  dwSize;//结构体大小
-    public NET_DVR_STREAM_MEDIA_SERVER_CFG struStreamMediaSvrCfg=new NET_DVR_STREAM_MEDIA_SERVER_CFG();
-    public NET_DVR_DEV_CHAN_INFO struDevChanInfo=new NET_DVR_DEV_CHAN_INFO();
-}
-
-public class NET_DVR_DDNS_STREAM_CFG extends Structure{
-	  public  byte byEnable;
-	  public  byte[] byRes1=new byte[3];
-	  public NET_DVR_IPADDR struStreamServer=new NET_DVR_IPADDR();
-	  public  short  wStreamServerPort;
-	  public  byte  byStreamServerTransmitType;
-	  public  byte  byRes2;
-	  public NET_DVR_IPADDR struIPServer=new NET_DVR_IPADDR();
-	  public  short  wIPServerPort;
-	  public  byte[]  byRes3=new byte[2];
-	  public  byte[]  sDVRName=new byte[HCNetSDK.NAME_LEN];
-	  public  short  wDVRNameLen;
-	  public  short  wDVRSerialLen;
-	  public  byte[] sDVRSerialNumber=new byte[HCNetSDK.SERIALNO_LEN];
-	  public  byte[] sUserName=new byte[HCNetSDK.NAME_LEN];
-	  public  byte[] sPassWord=new byte[HCNetSDK.PASSWD_LEN];
-	  public  short  wDVRPort;
-	  public  byte[]  byRes4=new byte[2];
-	  public  byte  byChannel;
-	  public  byte  byTransProtocol;
-	  public  byte  byTransMode;
-	  public  byte  byFactoryType;
-}
-
-public class NET_DVR_PU_STREAM_URL extends Structure{
-	public byte byEnable;//是否启用：0- 禁用，1- 启用
-	public byte[] strURL=new byte[240];//取流URL路径
-	public byte byTransPortocol;//传输协议类型：0-TCP，1-UDP
-	public short  wIPID;//设备ID号，wIPID = iDevInfoIndex + iGroupNO*64 +1
-	public byte byChannel;//设备通道号
-	public byte[] byRes=new byte[7];//保留，置为0 
-}
-
-public class NET_DVR_HKDDNS_STREAM extends Structure{
-	 public byte  byEnable;//是否启用
-	 public byte[] byRes=new byte[3];//保留
-	 public byte[] byDDNSDomain=new byte[64];//hiDDNS服务器地址
-	 public short wPort;//hiDDNS端口，默认：80
-	 public short wAliasLen;//别名长度
-	 public byte[]  byAlias=new byte[HCNetSDK.NAME_LEN];//别名
-	 public short  wDVRSerialLen;//序列号长度
-	 public byte[] byRes1=new byte[2];//保留
-	 public byte[] byDVRSerialNumber=new byte[HCNetSDK.SERIALNO_LEN];//设备序列号
-	 public byte[] byUserName=new byte[HCNetSDK.NAME_LEN];//设备登录用户名
-	 public byte[] byPassWord=new byte[HCNetSDK.PASSWD_LEN];//设备登录密码
-	 public byte   byChannel;//设备通道号
-	 public byte[] byRes2=new byte[11];//保留
-}
-
-public class NET_DVR_IPCHANINFO_V40 extends Structure {
-
-	public byte byEnable;//IP通道在线状态，是一个只读的属性；
-						//0表示HDVR或者NVR设备的数字通道连接对应的IP设备失败，该通道不在线；1表示连接成功，该通道在线
-	public byte byRes1;//保留，置为0
-	public short wIPID;//IP设备ID
-	public int dwChannel;//IP设备的通道号，例如设备A（HDVR或者NVR设备）的IP通道01，对应的是设备B（DVS）里的通道04，则byChannel=4，如果前端接的是IPC则byChannel=1。
-	public byte byTransProtocol;//传输协议类型：0- TCP，1- UDP，2- 多播，0xff- auto(自动)
-	public byte byTransMode;//传输码流模式：0- 主码流，1- 子码流
-	public byte byFactoryType;//前端设备厂家类型
-	public byte[] byRes = new byte[241];//保留，置为0
-}
-
-
-public static class NET_DVR_GET_STREAM_UNION extends Union
-{
-    public NET_DVR_IPCHANINFO struChanInfo = new NET_DVR_IPCHANINFO(); /*IP通道信息*/
-    public NET_DVR_IPCHANINFO_V40 struIPChan = new NET_DVR_IPCHANINFO_V40(); //直接从设备取流（扩展）
-    public byte[] byUnionLen = new byte[492]; //直接从设备取流（扩展）
-}
-
-public static class NET_DVR_IPPARACFG_V40 extends Structure {/* IP接入配置结构V40 */
-       public  int  dwSize;   /* 结构大小 */
-       public  int  dwGroupNum;//设备支持的总组数（只读）。
-       public  int  dwAChanNum;//最大模拟通道个数（只读）
-       public  int  dwDChanNum;//数字通道个数（只读）
-       public  int  dwStartDChan;//起始数字通道（只读）
-       public  byte[]  byAnalogChanEnable = new byte[MAX_CHANNUM_V30]; //模拟通道资源是否启用，从低到高表示1-64通道：0-禁用，1-启用。
-       public NET_DVR_IPDEVINFO_V31[] struIPDevInfo = new NET_DVR_IPDEVINFO_V31[MAX_IP_DEVICE_V40];//IP设备信息，下标0对应设备IP ID为1
-       public NET_DVR_STREAM_MODE[]  struStreamMode =new NET_DVR_STREAM_MODE[MAX_CHANNUM_V30];//取流模式
-       public byte[] byRes2=new byte[20];//保留，置为0
 }
 
 public static class NET_DVR_IPALARMOUTINFO extends Structure {/* 报警输出参数 */
@@ -2353,15 +1679,12 @@ public static class NET_DVR_CHANNELSTATE_V30 extends Structure {//通道状态(9
 	public byte byRecordStatic; //通道是否在录像,0-不录像,1-录像
 	public byte bySignalStatic; //连接的信号状态,0-正常,1-信号丢失
 	public byte byHardwareStatic;//通道硬件状态,0-正常,1-异常,例如DSP死掉
-	public byte byRes1;		//保留
+	public byte reservedData;		//保留
 	public int dwBitRate;//实际码率
 	public int dwLinkNum;//客户端连接的个数
 	public NET_DVR_IPADDR[] struClientIP = new NET_DVR_IPADDR[MAX_LINK];//客户端的IP地址
-    public int dwIPLinkNum;//如果该通道为IP接入，那么表示IP接入当前的连接数
-	public byte byExceedMaxLink;        // 是否超出了单路6路连接数 0 - 未超出, 1-超出
-    public byte[] byRes = new byte[3];        // 保留字节
-    public int dwAllBitRate;      //所有实际码率之和
-    public int dwChannelNo;    //当前的通道号，0xffffffff表示无效
+        public  int dwIPLinkNum;//如果该通道为IP接入，那么表示IP接入当前的连接数
+        public  byte[] byRes = new byte[12];
 }
 
 public static class NET_DVR_CHANNELSTATE extends Structure {//通道状态
@@ -2387,8 +1710,8 @@ public static class NET_DVR_WORKSTATE_V30 extends Structure {//DVR工作状态(9
 	public byte[]  byAlarmInStatic = new byte[MAX_ALARMIN_V30]; //报警端口的状态,0-没有报警,1-有报警
 	public byte[]  byAlarmOutStatic = new byte[MAX_ALARMOUT_V30]; //报警输出端口的状态,0-没有输出,1-有报警输出
 	public int  dwLocalDisplay;//本地显示状态,0-正常,1-不正常
-    public  byte [] byAudioChanStatus = new byte[MAX_AUDIO_V30];//表示语音通道的状态 0-未使用，1-使用中, 0xff无效
-    public  byte[]  byRes = new byte[10];
+        public  byte [] byAudioChanStatus = new byte[MAX_AUDIO_V30];//表示语音通道的状态 0-未使用，1-使用中, 0xff无效
+        public  byte[]  byRes = new byte[10];
 }
 
 public static class NET_DVR_WORKSTATE extends Structure {//DVR工作状态
@@ -2406,7 +1729,7 @@ public static class NET_DVR_LOG_V30 extends Structure {//日志信息(9000扩展
 	public int	dwMinorType;//次类型 0-全部;
 	public byte[]	sPanelUser = new byte[MAX_NAMELEN]; //操作面板的用户名
 	public byte[]	sNetUser = new byte[MAX_NAMELEN];//网络操作的用户名
-	public NET_DVR_IPADDR	struRemoteHostAddr;//¿程主机地址
+	public NET_DVR_IPADDR	struRemoteHostAddr;//远程主机地址
 	public int	dwParaType;//参数类型
 	public int	dwChannel;//通道号
 	public int	dwDiskNumber;//硬盘号
@@ -3092,10 +2415,10 @@ public static class NET_DVR_COMPRESSIONCFG_NEW extends Structure
 //球机位置信息
 public static class NET_DVR_PTZPOS extends Structure
 {
-   public  short wAction;//获取时该字段无效
+   public   short wAction;//获取时该字段无效
    public  short wPanPos;//水平参数
    public  short wTiltPos;//垂直参数
-   public  short wZoomPos;//变倍参数
+   public short wZoomPos;//变倍参数
 }
 
 //球机范围信息
@@ -3135,74 +2458,15 @@ public static class NET_DVR_DEVICEINFO extends Structure
 public static class NET_DVR_DEVICEINFO_V30 extends Structure
 {
    public  byte[] sSerialNumber = new byte[SERIALNO_LEN];  //序列号
-   public byte byAlarmInPortNum;    //报警输入个数
-   public byte byAlarmOutPortNum;   //报警输出个数
-   public byte byDiskNum;           //硬盘个数
-   public byte byDVRType;         //设备类型, 1:DVR 2:ATM DVR 3:DVS ......
-   public byte byChanNum;         //模拟通道个数
-   public byte byStartChan;      //起始通道号,例如DVS-1,DVR - 1
-   public byte byAudioChanNum;    //语音通道数
-   public byte byIPChanNum;     //最大数字通道个数，低位  
-   public byte byZeroChanNum;    //零通道编码个数 //2010-01-16
-   public byte byMainProto;      //主码流传输协议类型 0-private, 1-rtsp,2-同时支持private和rtsp
-   public byte bySubProto;        //子码流传输协议类型0-private, 1-rtsp,2-同时支持private和rtsp
-   public byte bySupport;        //能力，位与结果为0表示不支持，1表示支持，
-   public byte bySupport1;        // 能力集扩充，位与结果为0表示不支持，1表示支持
-   public byte bySupport2; /*能力*/
-   public short wDevType;              //设备型号
-   public byte bySupport3; //能力集扩展
-   public byte byMultiStreamProto;//是否支持多码流,按位表示,0-不支持,1-支持,bit1-码流3,bit2-码流4,bit7-主码流，bit-8子码流
-   public byte byStartDChan;        //起始数字通道号,0表示无效
-   public byte byStartDTalkChan;    //起始数字对讲通道号，区别于模拟对讲通道号，0表示无效
-   public byte byHighDChanNum;        //数字通道个数，高位
-   public byte bySupport4;        //能力集扩展
-   public byte byLanguageType;// 支持语种能力,按位表示,每一位0-不支持,1-支持  
-    //  byLanguageType 等于0 表示 老设备
-    //  byLanguageType & 0x1表示支持中文
-    //  byLanguageType & 0x2表示支持英文
-   public byte byVoiceInChanNum;   //音频输入通道数 
-   public byte byStartVoiceInChanNo; //音频输入起始通道号 0表示无效
-   public byte bySupport5;    
-   public byte bySupport6;   //能力
-   public byte byMirrorChanNum;    //镜像通道个数，<录播主机中用于表示导播通道>
-   public short wStartMirrorChanNo;  //起始镜像通道号
-   public byte bySupport7;   //能力
-   public byte byRes2;        //保留
-}
-
-public static final int NET_DVR_DEV_ADDRESS_MAX_LEN = 129;
-public static final int NET_DVR_LOGIN_USERNAME_MAX_LEN = 64;
-public static final int NET_DVR_LOGIN_PASSWD_MAX_LEN = 64;
-
- public static interface FLoginResultCallBack extends StdCallCallback{
-    	public int invoke(int lUserID, int dwResult, NET_DVR_DEVICEINFO_V30 lpDeviceinfo, Pointer pUser);
-}
-
-//NET_DVR_Login_V40()参数
-public static class NET_DVR_USER_LOGIN_INFO extends Structure
-{
-    public byte[] sDeviceAddress = new byte[NET_DVR_DEV_ADDRESS_MAX_LEN];
-    public byte byUseTransport;
-    public short wPort;
-    public byte[] sUserName = new byte[NET_DVR_LOGIN_USERNAME_MAX_LEN];
-    public byte[] sPassword = new byte[NET_DVR_LOGIN_PASSWD_MAX_LEN];
-    public FLoginResultCallBack cbLoginResult;
-    public Pointer pUser;
-    public boolean bUseAsynLogin;
-    public byte[] byRes2 = new byte[128];
-}
-
-//NET_DVR_Login_V40()参数
-public static class NET_DVR_DEVICEINFO_V40 extends Structure
-{
-    public NET_DVR_DEVICEINFO_V30 struDeviceV30 = new NET_DVR_DEVICEINFO_V30();
-    public byte bySupportLock;
-    public byte byRetryLoginTime;
-    public byte byPasswordLevel;
-    public byte byRes1;
-    public int dwSurplusLockTime;
-    public byte[] byRes2 = new byte[256];
-
+   public  byte byAlarmInPortNum;		        //报警输入个数
+   public  byte byAlarmOutPortNum;		        //报警输出个数
+   public  byte byDiskNum;				    //硬盘个数
+   public  byte byDVRType;				    //设备类型, 1:DVR 2:ATM DVR 3:DVS ......
+   public  byte byChanNum;				    //模拟通道个数
+   public  byte byStartChan;			        //起始通道号,例如DVS-1,DVR - 1
+   public  byte byAudioChanNum;                //语音通道数
+   public  byte byIPChanNum;					//最大数字通道个数
+   public  byte[] byRes1 = new byte[24];					//保留
 }
 
 //sdk网络环境枚举变量，用于远程升级
@@ -3245,48 +2509,12 @@ public static class NET_DVR_DEVICEINFO_V40 extends Structure
 };
 
 //软解码预览参数
-public static class NET_DVR_CLIENTINFO extends Structure {
-        public int lChannel;
-        public int lLinkMode;
+    public static class NET_DVR_CLIENTINFO extends Structure {
+        public NativeLong lChannel;
+        public NativeLong lLinkMode;
         public HWND hPlayWnd;
         public String sMultiCastIP;
-}
-
-//预览V40接口
-public static class NET_DVR_PREVIEWINFO extends Structure {
-        public int lChannel;//通道号
-        public int dwStreamType;    // 码流类型，0-主码流，1-子码流，2-码流3，3-码流4, 4-码流5,5-码流6,7-码流7,8-码流8,9-码流9,10-码流10
-        public int dwLinkMode;// 0：TCP方式,1：UDP方式,2：多播方式,3 - RTP方式，4-RTP/RTSP,5-RSTP/HTTP ,6- HRUDP（可靠传输） ,7-RTSP/HTTPS
-        public HWND hPlayWnd;//播放窗口的句柄,为NULL表示不播放图象
-        public int bBlocked;  //0-非阻塞取流, 1-阻塞取流, 如果阻塞SDK内部connect失败将会有5s的超时才能够返回,不适合于轮询取流操作.
-        public int bPassbackRecord; //0-不启用录像回传,1启用录像回传
-        public byte byPreviewMode;//预览模式，0-正常预览，1-延迟预览
-        public byte[] byStreamID = new byte[32];//流ID，lChannel为0xffffffff时启用此参数
-        public byte byProtoType; //应用层取流协议，0-私有协议，1-RTSP协议
-        public byte byRes1;
-        public byte byVideoCodingType; //码流数据编解码类型 0-通用编码数据 1-热成像探测器产生的原始数据（温度数据的加密信息，通过去加密运算，将原始数据算出真实的温度值）
-        public int dwDisplayBufNum; //播放库播放缓冲区最大缓冲帧数，范围1-50，置0时默认为1
-        public byte byNPQMode;	//NPQ是直连模式，还是过流媒体 0-直连 1-过流媒体
-        public byte[] byRes = new byte[215];
-}
-
-public static class NET_DVR_STREAM_INFO extends Structure
- {
-	   public int dwSize;
-	   public byte[] byID = new byte[32];
-           public int dwChannel;
-           public byte[] byRes = new byte[32];
-  }
-
- public static class NET_DVR_STREAM_RECORD_STATUS extends Structure
- {
-	   public int dwSize;
-           public byte byRecord;
-           public byte byOffLineRecord;
-	   public byte[] byRes1 = new byte[2];
-           public int dwRelatedHD;
-           public byte[] byRes2 = new byte[8];
-  }
+    }
 
 //SDK状态信息(9000新增)
 public static class NET_DVR_SDKSTATE extends Structure
@@ -3333,7 +2561,7 @@ public static class NET_DVR_ALARMER extends Structure
    public   byte byLinkPortValid;               /* login端口是否有效 0-无效，1-有效 */
    public    byte byDeviceIPValid;               /* 设备IP是否有效 0-无效，1-有效 */
    public   byte bySocketIPValid;               /* socket ip是否有效 0-无效，1-有效 */
-   public   int lUserID;                       /* NET_DVR_Login()返回值, 布防时有效 */
+   public NativeLong lUserID;                       /* NET_DVR_Login()返回值, 布防时有效 */
    public   byte[] sSerialNumber = new byte[SERIALNO_LEN];	/* 序列号 */
    public  int dwDeviceVersion;			    /* 版本信息 高16位表示主版本，低16位表示次版本*/
    public   byte[] sDeviceName = new byte[NAME_LEN];		    /* 设备名字 */
@@ -3348,20 +2576,20 @@ public static class NET_DVR_ALARMER extends Structure
 //硬解码显示区域参数(子结构)
 public static class NET_DVR_DISPLAY_PARA extends Structure
 {
-	public int bToScreen;
-	public int bToVideoOut;
-	public int nLeft;
-	public int nTop;
-	public int nWidth;
-	public int nHeight;
-	public int nReserved;
+	public NativeLong bToScreen;
+	public NativeLong bToVideoOut;
+	public NativeLong nLeft;
+	public NativeLong nTop;
+	public NativeLong nWidth;
+	public NativeLong nHeight;
+	public NativeLong nReserved;
 }
 
 //硬解码预览参数
 public static class NET_DVR_CARDINFO extends Structure
 {
-	public int lChannel;//通道号
-	public int lLinkMode; //最高位(31)为0表示主码流，为1表示子，0－30位表示码流连接方式:0：TCP方式,1：UDP方式,2：多播方式,3 - RTP方式，4-电话线，5－128k宽带，6－256k宽带，7－384k宽带，8－512k宽带；
+	public NativeLong lChannel;//通道号
+	public NativeLong lLinkMode; //最高位(31)为0表示主码流，为1表示子，0－30位表示码流连接方式:0：TCP方式,1：UDP方式,2：多播方式,3 - RTP方式，4-电话线，5－128k宽带，6－256k宽带，7－384k宽带，8－512k宽带；
 	public String sMultiCastIP;
 	public NET_DVR_DISPLAY_PARA struDisplayPara;
 }
@@ -3396,97 +2624,10 @@ public static class NET_DVR_FINDDATA_CARD extends Structure
 	public byte[] sCardNum = new byte[32];
 }
 
-public static class NET_DVR_FILECOND_V40 extends Structure
-{
-	public int lChannel;
-	public int dwFileType;
-	public int dwIsLocked;
-	public int dwUseCardNo;//是否带ATM信息进行查询：0-不带ATM信息，1-按交易卡号查询，2-按交易类型查询，3-按交易金额查询，4-按卡号、交易类型及交易金额的组合查询 5-按课程名称查找，此时卡号表示课程名称
-	public byte[] sCardNumber = new byte[CARDNUM_LEN_OUT];
-	public NET_DVR_TIME struStartTime = new NET_DVR_TIME();
-	public NET_DVR_TIME struStopTime = new NET_DVR_TIME();
-        public byte byDrawFrame; //0:不抽帧，1：抽帧
-        public byte byFindType; //0:查询普通卷，1：查询存档卷
-        public byte byQuickSearch; //0:普通查询，1：快速（日历）查询
-        public byte bySpecialFindInfoType ;    //专有查询条件类型 0-无效， 1-带ATM查询条件
-	public int dwVolumeNum;  //存档卷号
-	public byte[] byWorkingDeviceGUID = new byte[GUID_LEN];    //工作机GUID，通过获取N+1得到
-        public NET_DVR_SPECIAL_FINDINFO_UNION uSpecialFindInfo = new NET_DVR_SPECIAL_FINDINFO_UNION();   //专有查询条件
-        public byte byStreamType;    //0-同一个时间段只返回一种录像，优先级顺序为：主码流、子码流、三码流，1-子码流，2-三码流，3-主码流，254-双码流搜索(优先返回主码流录像，没有主码流录像时返回子码流录像)
-        public byte byAudioFile;                //音频文件 0-非音频文件，1-音频文件
-	public byte[] byRes2 = new byte[30];    //保留
-}
-
-public static class NET_DVR_SPECIAL_FINDINFO_UNION extends Union
-{
-	public byte[] byLenth = new byte[8] ;
-	public NET_DVR_ATMFINDINFO struATMFindInfo = new NET_DVR_ATMFINDINFO();           //ATM查询
-}
-
-public static class NET_DVR_ATMFINDINFO extends Structure
-{
-	public byte byTransactionType;       //交易类型 0-全部，1-查询， 2-取款， 3-存款， 4-修改密码，5-转账， 6-无卡查询 7-无卡存款， 8-吞钞 9-吞卡 10-自定义
-	public byte[] byRes = new byte[3] ;    //保留
-	public int dwTransationAmount ;     //交易金额 ;
-}
-
-public static class NET_DVR_FINDDATA_V40 extends Structure
-{
-	public byte[] sFileName = new byte[100];//文件名
-	public NET_DVR_TIME struStartTime = new NET_DVR_TIME();//文件的开始时间
-	public NET_DVR_TIME struStopTime = new NET_DVR_TIME();//文件的结束时间
-	public int dwFileSize;//文件的大小
-	public byte[] sCardNum = new byte[32];
-	public byte byLocked;//9000设备支持,1表示此文件已经被锁定,0表示正常的文件
-	public byte byFileType;  //文件类型:0－定时录像,1-移动侦测 ，2－报警触发，
-        //3-报警|移动侦测 4-报警&移动侦测 5-命令触发 6-手动录像,7－震动报警，8-环境报警，9-智能报警，10-PIR报警，11-无线报警，12-呼救报警,14-智能交通事件
-	public byte byQuickSearch; //0:普通查询结果，1：快速（日历）查询结果
-	public byte byRes;
-	public int dwFileIndex; //文件索引号
-	public byte byStreamType;
-	public byte[] byRes1 = new byte[127];
-}
-
-public static class NET_DVR_TIME_SEARCH extends Structure
-{
-        public short wYear;        //年，设备OSD时间
-	public byte byMonth;        //月，设备OSD时间
-	public byte byDay;        //日，设备OSD时间
-	public byte byHour;        //时，设备OSD时间
-	public byte byMinute;    //分，设备OSD时间
-	public byte bySecond;    //秒，设备OSD时间
-	public byte cTimeDifferenceH;        //与国际标准时间的时差（小时），-12 ... +14
-	public byte cTimeDifferenceM;        //与国际标准时间的时差（分钟），-30, 0, 30, 45
-	public byte byLocalOrUTC;      //0-时差无效，设备本地时间，即设备OSD时间  1-时差有效
-        public short wMillisecond;      //毫秒，精度不够，默认为0
-}
-
-public static class NET_DVR_ADDRESS extends Structure
-{
-	public NET_DVR_IPADDR struIP = new NET_DVR_IPADDR(); //IP地址
-        public short wPort;    //端口号
-	public byte[] byRes = new byte[2];
-}
-
-public static class NET_DVR_FINDDATA_V50 extends Structure
-{
-	public byte[] sFileName = new byte[100];
-	public NET_DVR_TIME_SEARCH struStartTime = new NET_DVR_TIME_SEARCH();
-	public NET_DVR_TIME_SEARCH struStopTime = new NET_DVR_TIME_SEARCH();
-	public NET_DVR_ADDRESS struAddr = new NET_DVR_ADDRESS(); //片段所在的地址信息，集群回放时用到
-	public int dwFileSize; //文件大小
-	public byte byLocked; //文件是否被锁定，1－文件已锁定；0－文件未锁定
-	public byte byFileType; //文件类型，与V40相同
-	public byte byQuickSearch; //0- 普通查询结果，1- 快速（日历）查询结果
-	public byte byStreamType; //码流类型：0- 主码流，1- 子码流，2- 码流三
-	public int dwFileIndex; //文件索引号
-	public byte[] sCardNum = new byte[32]; //卡号
-	public byte[] byRes = new byte[256];
-}
 
  public static class NET_DVR_FILECOND extends Structure //录象文件查找条件结构
     {
-        public int lChannel;//通道号
+        public NativeLong lChannel;//通道号
         public int dwFileType;//录象文件类型0xff－全部，0－定时录像,1-移动侦测 ，2－报警触发，3-报警|移动侦测 4-报警&移动侦测 5-命令触发 6-手动录像
         public int dwIsLocked;//是否锁定 0-正常文件,1-锁定文件, 0xff表示所有文件
         public int dwUseCardNo;//是否使用卡号
@@ -3495,103 +2636,6 @@ public static class NET_DVR_FINDDATA_V50 extends Structure
         public NET_DVR_TIME struStopTime;//结束时间
     }
 
- public static class NET_DVR_PLAYCOND extends Structure //回放或者下载信息结构体
-    {
-        public int dwChannel;//通道号
-        public NET_DVR_TIME struStartTime;
-        public NET_DVR_TIME struStopTime;
-        public byte byDrawFrame;  //0:不抽帧，1：抽帧
-        public byte byStreamType ; //码流类型，0-主码流 1-子码流 2-码流三
-        public byte[] byStreamID = new byte[STREAM_ID_LEN];
-        public byte[] byRes = new byte[30];//保留
-    }
-
- public static class NET_DVR_VOD_PARA extends Structure //回放或者下载信息结构体
-    {
-        public int dwSize;
-        public NET_DVR_STREAM_INFO struIDInfo;
-        public NET_DVR_TIME        struBeginTime;
-        public NET_DVR_TIME        struEndTime;
-        public HWND hWnd;
-        public byte byDrawFrame; //0:不抽帧，1：抽帧
-        public byte byVolumeType;  //0-普通录像卷  1-存档卷
-        public byte byVolumeNum;  //卷号，目前指存档卷号
-        public byte byStreamType;   //码流类型 0-主码流， 1-子码流，2-码流三
-        public int dwFileIndex;      //存档卷上的录像文件索引，搜索存档卷录像时返回的值
-        public byte byAudioFile;    //音频文件0-否，1-是
-        public byte byCourseFile;    //课程文件0-否，1-是
-        public byte byDownload;    //是否下载 0-否，1-是
-        public byte byOptimalStreamType;    //是否按最优码流类型回放 0-否，1-是（对于双码流设备，某一段时间内的录像文件与指定码流类型不同，则返回实际码流类型的录像）
-        public byte[] byRes2 = new byte[20];
-}
-
-//图片查找条件
-public static class NET_DVR_FIND_PICTURE_PARAM extends Structure
-{
-        public int dwSize;         // 结构体大小
-        public int lChannel;       // 通道号
-        public byte byFileType;   //图片查找类型
-        public byte byNeedCard;     // 是否需要卡号
-                           /*
-                           0-保留，1-澳，2-京，3-渝，4-闽，5-甘，6-粤，7-桂，
-                           8-贵，9-琼，10-冀，11-豫，12-黑，13-鄂，14-湘，
-                           15-吉，16-苏，17-赣，18-辽，19-蒙，20-宁，21-青，
-                           22-鲁，23-晋，24-陕，25-沪，26-川，27-台，28-津，
-                           29-藏，30-港，31-新，32-云，33-浙，34-皖，0xff-全部
-                           */
-        public byte byProvince;     //省份索引值
-        public byte byEventType;      // 事件类型：0保留，1-交通事件；2-违章取证；3-其他事件
-        public byte[] sCardNum = new byte[CARDNUM_LEN_V30];     // 卡号
-        public NET_DVR_TIME  struStartTime = new NET_DVR_TIME();//查找图片的开始时间
-        public NET_DVR_TIME  struStopTime = new NET_DVR_TIME();// 查找图片的结束时间
-        //ITC3.7 新增
-        public int dwTrafficType; //图片检索生效项 参考 VCA_OPERATE _TYPE
-        public int dwVehicleType; //车辆类型 参考 VCA_VEHICLE_TYPE
-        //违规检测类型参考 VCA_ILLEGAL_TYPE 当前不支持复选
-        public int dwIllegalType;
-        public byte byLaneNo;  //车道号(1~99)
-        public byte bySubHvtType ;//0-保留,1-机动车(机动车子类型中支持车牌检索，省份检索),2-非机动车,3-行人
-        public byte[] byRes2 = new byte[2];
-        public byte[] sLicense = new byte[MAX_LICENSE_LEN/*16*/];    //车牌号码
-        public byte byRegion;     // 区域索引值 0-保留，1-欧洲(Europe Region)，2-俄语区域(Russian Region)，3-欧洲&俄罗斯(EU&CIS), 4-中东(Middle East),0xff-所有
-        public byte byCountry;     // 国家索引值，参照：COUNTRY_INDEX
-        public byte byArea;  //地区
-        public byte byISO8601;  //是否是8601的时间格式，即时差字段是否有效0-时差无效，年月日时分秒为设备本地时间 1-时差有效
-        public byte cStartTimeDifferenceH;   //开始时间与UTC的时差（小时），-12 ... +14， 正数表示东时区
-        public byte cStartTimeDifferenceM;   //开始时间与UTC的时差（分钟），-30, 0, 30, 45，正数表示东时区
-        public byte cStopTimeDifferenceH;    //结束时间与UTC的时差（小时），-12 ... +14，正数表示东时区
-        public byte cStopTimeDifferenceM;    //结束时间与UTC的时差（分钟），-30, 0, 30, 45，正数表示东时区
-}
-
-//查找结果结构体
-public static class NET_DVR_FIND_PICTURE_V40 extends Structure
-{
-        public byte[] sFileName = new byte[PICTURE_NAME_LEN];//图片名
-        public NET_DVR_TIME struTime = new NET_DVR_TIME();//图片的时间
-        public int dwFileSize;//图片的大小
-        public byte[] sCardNum = new byte[CARDNUM_LEN_V30];    //卡号
-        public byte byPlateColor ;//参考结构 VCA_PLATE_COLOR
-        public byte byVehicleLogo;//参考结构 VLR_VEHICLE_CLASS
-        public byte byFileType ;  //文件类型， :0定时抓图1 移动侦测抓图 2 报警抓图3  报警 | 移动侦测抓图 4 报警 & 移动侦测抓图     6 手动抓图 ,9-智能图片,10- PIR报警，11- 无线报警，12- 呼救报警,    0xa 预览时截图，0xd 人脸侦测, 0xe 越界侦测，0xf 入侵区域侦测，0x10 场景变更侦测, 0x11-设备本地回放时截图, 0x12-智能侦测, 0x32-防区报警, 0x33-紧急求助, 0x34-业务咨询
-        public byte byRecogResult ;//识别结果参考结构VTR_RESULT
-        public byte[] sLicense = new byte[MAX_LICENSE_LEN/*16*/];    //车牌号码
-        public byte byEventSearchStatus; //连续图片表示同一查找结果的时候，0-表示后面没有图片信息，1-表示后面还有图片信息。总共图片信息包括最后一张状态为0的图片。
-        public byte[] byRes = new byte[75];        //  保留字节
-        public NET_DVR_PIC_EXTRA_INFO_UNION  uPicExtraInfo; //图片附件信息
-}
-
-public static class NET_DVR_FACE_EXTRA_INFO extends Union
-{
-    public NET_VCA_RECT[] struVcaRect = new NET_VCA_RECT[MAX_FACE_PIC_NUM];  //人脸子图坐标信息
-    public byte[] byRes = new byte[64];
-}
-
-//图片附件信息联合体
-public static class NET_DVR_PIC_EXTRA_INFO_UNION extends Union
-{
-        public byte[] byUnionLen = new byte[544];   //联合体长度，无实际意义
-        public NET_DVR_FACE_EXTRA_INFO struFaceExtraInfo;   //人脸侦测信息
-}
 
 //云台区域选择放大缩小(HIK 快球专用)
 public static class NET_DVR_POINT_FRAME extends Structure
@@ -3607,3138 +2651,70 @@ public static class NET_DVR_POINT_FRAME extends Structure
 public static class NET_DVR_COMPRESSION_AUDIO extends Structure
 {
 	public byte  byAudioEncType;   //音频编码类型 0-G722; 1-G711
-	public byte[] byres= new byte[7];//这里保留音频的压缩参数
+	public byte[] byres= new byte [7];//这里保留音频的压缩参数
 }
 
 //用于接收报警信息的缓存区
-public static class RECV_ALARM extends Structure{
-    public byte[] RecvBuffer = new byte[4000];//此处的400应不小于最大报警报文长度
-}
-
-//布防参数
-public static class NET_DVR_SETUPALARM_PARAM extends Structure
-{
-        public int dwSize;
-	public byte byLevel; //布防优先级，0-一等级（高），1-二等级（中），2-三等级（低）
-	public byte byAlarmInfoType; //上传报警信息类型（抓拍机支持），0-老报警信息（NET_DVR_PLATE_RESULT），1-新报警信息(NET_ITS_PLATE_RESULT)2012-9-28
-	public byte byRetAlarmTypeV40; //0--返回NET_DVR_ALARMINFO_V30或NET_DVR_ALARMINFO, 1--设备支持NET_DVR_ALARMINFO_V40则返回NET_DVR_ALARMINFO_V40，不支持则返回NET_DVR_ALARMINFO_V30或NET_DVR_ALARMINFO
-	public byte byRetDevInfoVersion; //CVR上传报警信息回调结构体版本号 0-COMM_ALARM_DEVICE， 1-COMM_ALARM_DEVICE_V40
-	public byte byRetVQDAlarmType; //VQD报警上传类型，0-上传报报警NET_DVR_VQD_DIAGNOSE_INFO，1-上传报警NET_DVR_VQD_ALARM
-        public byte byFaceAlarmDetection;
-        public byte bySupport;
-        public byte byBrokenNetHttp;
-        public short wTaskNo;    //任务处理号 和 (上传数据NET_DVR_VEHICLE_RECOG_RESULT中的字段dwTaskNo对应 同时 下发任务结构 NET_DVR_VEHICLE_RECOG_COND中的字段dwTaskNo对应)
-        public byte byDeployType;    //布防类型：0-客户端布防，1-实时布防
-	public byte[] byRes1 = new byte[3];
-        public byte byAlarmTypeURL;//bit0-表示人脸抓拍报警上传（INTER_FACESNAP_RESULT）；0-表示二进制传输，1-表示URL传输（设备支持的情况下，设备支持能力根据具体报警能力集判断,同时设备需要支持URL的相关服务，当前是”云存储“）
-        public byte byCustomCtrl;//Bit0- 表示支持副驾驶人脸子图上传: 0-不上传,1-上传,(注：只在公司内部8600/8200等平台开放)
-}
-
-
-//区域框参数
-public static class NET_VCA_RECT extends Structure
-{
-        public float fX;
-        public float fY;
-        public float fWidth;
-        public float fHeight;
-}
-
-//报警目标信息
-public static class NET_VCA_TARGET_INFO extends Structure
-{
-        public int dwID;
-	public NET_VCA_RECT struRect;
-	public byte[] byRes= new byte[4];
-}
-
-//前端设备信息
-public static class NET_VCA_DEV_INFO extends Structure
-{
-        public NET_DVR_IPADDR struDevIP;
-        public short wPort;
-	public byte byChannel;
-	public byte byIvmsChannel;
-}
-
-//事件规则信息
-public static class NET_VCA_RULE_INFO extends Structure
-{
-        public byte byRuleID;
-        public byte byRes;
-        public short wEventTypeEx;
-	public byte[] byRuleName= new byte[NAME_LEN];
-        public int dwEventType;
-	public NET_VCA_EVENT_UNION  uEventParam;
-        public void read() {
-            super.read();
-            switch (wEventTypeEx) {
-                case 1:
-                    uEventParam.setType(NET_VCA_TRAVERSE_PLANE.class);
-                    break;
-                case 2:
-                case 3:
-                    uEventParam.setType(NET_VCA_AREA.class);
-                    break;
-                default:
-                    break;
-            }
-            uEventParam.read();
-        }
-        public void write() {
-            super.write();
-            uEventParam.write();
-        }
-
-}
-
-//警戒规则参数联合体
-public static class NET_VCA_EVENT_UNION extends Union
-{
-    public int[] uLen = new int[23];
-    public NET_VCA_TRAVERSE_PLANE struTraversePlane;
-    public NET_VCA_AREA  struArea;
-}
-
-//穿越警戒面参数
-public static class NET_VCA_TRAVERSE_PLANE extends Structure
-{
-    public NET_VCA_LINE struPlaneBottom;
-    public int dwCrossDirection;
-    public byte bySensitivity;
-    public byte byPlaneHeight;
-    public byte byDetectionTarget;/*检测目标：0- 所有目标，1- 人，2- 车   */
-    public byte[] byRes2= new byte[37];
-}
-
- public static class NET_DVR_HANDLEEXCEPTION_V40 extends Structure
- {
-    public int    dwHandleType;/*处理方式，各种异常处理方式的"或"结果，异常处理方式：
-                                    0x00: 无响应    0x01: 监视器上警告  0x02: 声音警告  0x04: 上传中心
-                                    0x08: 触发报警输出  0x10: Jpeg抓图并上传EMail
-                                    0x20: 无线声光报警器联动    0x40: 联动电子地图(目前仅PCNVR支持)
-                                    0x200：抓图并上传ftp    0x400: 虚焦侦测联动聚焦
-                                    0x800: PTZ联动跟踪(球机跟踪目标)
-                                    E.g. dwHandleType==0x01|0x04 表示配置报警发生时联动监视器上警告并且将报警信息上传中心。 */
-    public int    dwMaxRelAlarmOutChanNum;/*设备最大支持的触发报警输出通道数（只读） */
-    public int    dwRelAlarmOutChanNum ;/*已配置的触发的报警输出通道个数，决定dwRelAlarmOut取前多少个数组下标 */
-    public int[]  dwRelAlarmOut = new int[MAX_CHANNUM_V30];/*触发报警输出通道，取数组前dwRelAlarmOutChanNum个值，
-                                        其值表示报警输出通道号(从1开始)，初始值是0xfffffffff(不关联通道)。
-                                        例如，dwRelAlarmOutChanNum=5，则可以配置触发报警输出通道dwRelAlarmOut[0]~dwRelAlarmOut[4]。 */
-    public byte[] byRes = new  byte[64]; /*保留，置为0 */
-}
-
-public static final int MAX_ALERTLINE_NUM = 8;
-public static class NET_VCA_TRAVERSE_PLANE_DETECTION extends Structure
-{
-    public int dwSize;
-    public byte byEnable;//使能
-    public byte byEnableDualVca;// 启用支持智能后检索 0-不启用，1-启用
-    public byte[] byRes1 = new byte[2];
-    public NET_VCA_TRAVERSE_PLANE[] struAlertParam = new NET_VCA_TRAVERSE_PLANE[MAX_ALERTLINE_NUM];  //警戒线参数
-    public NET_DVR_SCHEDTIMEWEEK[] struAlarmSched = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS];
-    public NET_DVR_HANDLEEXCEPTION_V40 struHandleException;  //异常处理方式
-    public int dwMaxRelRecordChanNum ;  //报警触发的录象通道 数（只读）最大支持数量
-    public int dwRelRecordChanNum ;     //报警触发的录象通道 数 实际支持的数量
-    public int[] byRelRecordChan = new int[MAX_CHANNUM_V30];//触发录像的通道号
-    public NET_DVR_SCHEDTIME[] struHolidayTime = new NET_DVR_SCHEDTIME[MAX_TIMESEGMENT_V30]; //假日布防时间
-    public byte[] byRes2 = new byte[100];
-}
-
-public static class NET_VCA_INTRUSION extends Structure
-{
-    public NET_VCA_POLYGON struRegion;//区域范围
-    public short wDuration;            //行为事件触发时间阈值: 1-120秒，建议5秒，判断是有效报警的时间  在ATM系统中触发文件阈值为 1-1000秒
-    public byte bySensitivity;        //灵敏度参数，范围[1-100]
-    public byte byRate;               //占比：区域内所有未报警目标尺寸目标占区域面积的比重，归一化为－；
-    /*
-    检测目标，可支持多选，具体定义为：
-    0~所有目标（表示不锁定检测目标，所有目标都将进行检测）
-    0x01 ~ 人，
-    0x02 ~ 车，
-    0x04 ~ 其他
-    */
-    public byte byDetectionTarget;
-    public byte byPriority;//优先级,0~低,1~中,2~高
-    public byte[] byRes = new byte[2];             //保留
-}
-
-public static final int MAX_INTRUSIONREGION_NUM = 8; //最大区域数数
-public static class NET_VCA_FIELDDETECION extends Structure
-{
-    public int dwSize;
-    public byte byEnable; //使能，是否开启
-    public byte byEnableDualVca;// 启用支持智能后检索 0-不启用，1-启用
-    public byte byEnableHumanMisinfoFilter;// 启用人体去误报 0-不启用，1-启用
-    public byte byEnableVehicleMisinfoFilter;// 启用车辆去误报 0-不启用，1-启用
-    public NET_VCA_INTRUSION[] struIntrusion = new NET_VCA_INTRUSION[MAX_INTRUSIONREGION_NUM];//每个区域的参数设置
-    public NET_DVR_SCHEDTIMEWEEK[] struAlarmSched = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS]; //布防时间
-    public NET_DVR_HANDLEEXCEPTION_V40 struHandleException;  //异常处理方式
-    public int dwMaxRelRecordChanNum ;  //报警触发的录象通道 数（只读）最大支持数量
-    public int dwRelRecordChanNum ;     //报警触发的录象通道 数 实际支持的数量
-    public int[] byRelRecordChan = new int[MAX_CHANNUM_V30];//触发录像通道
-    public NET_DVR_SCHEDTIME[] struHolidayTime= new NET_DVR_SCHEDTIME[MAX_TIMESEGMENT_V30]; //假日布防时间
-    public byte[] byRes2 = new byte[100];
-}
-
-public static class NET_DVR_CHANNEL_GROUP extends Structure
-{
-    public int dwSize;
-    public int dwChannel;
-    public int dwGroup;
-    public byte byID;
-    public byte[] byRes1 = new byte[3];
-    public int dwPositionNo;
-    public byte[] byRes = new byte[56];
-}
-
-//线结构参数
-public static class NET_VCA_LINE extends Structure
-{
-        public NET_VCA_POINT struStart;
-        public NET_VCA_POINT struEnd;
-}
-
-//点坐标参数
-public static class NET_VCA_POINT extends Structure
-{
-        public float fX;
-        public float fY;
-}
-
-//进入/离开区域参数
-public static class NET_VCA_AREA extends Structure
-{
-        public NET_VCA_POLYGON struRegion;
-	public byte[] byRes= new byte[8];
-}
-
-//多边形结构体
-public static class NET_VCA_POLYGON extends Structure
-{
-        public int dwPointNum;
-	public NET_VCA_POINT[] struPos= new NET_VCA_POINT[VCA_MAX_POLYGON_POINT_NUM];
-}
-
-public static class NET_VCA_SIZE_FILTER extends Structure {
-    public byte byActive;            //是否激活尺寸过滤器 0-否 非0-是
-    public byte byMode;         //过滤器模式SIZE_FILTER_MODE
-    public byte[] byRes = new byte[2];        //保留，置0
-    public NET_VCA_RECT struMiniRect;    //最小目标框,全0表示不设置
-    public NET_VCA_RECT struMaxRect;      //最大目标框,全0表示不设置
-}
-
-
-//尺寸过滤策略
-public static class NET_VCA_FILTER_STRATEGY extends Structure {
-  public byte byStrategy;      //尺寸过滤策略 0 - 不启用 1-高度和宽度过滤,2-面积过滤
-  public byte[] byRes = new byte[11];       //保留
-}
-
-//行为分析报警
-public static class NET_VCA_RULE_ALARM extends Structure
-{
-        public int dwSize;
-        public int dwRelativeTime;
-        public int dwAbsTime;
-	public NET_VCA_RULE_INFO struRuleInfo;
-	public NET_VCA_TARGET_INFO struTargetInfo;
-        public NET_VCA_DEV_INFO struDevInfo;
-        public int dwPicDataLen;
-	public byte byPicType;
-	public byte byRelAlarmPicNum; //关联通道报警图片数量
-	public byte bySmart;//IDS设备返回0(默认值)，Smart Functiom Return 1
-	public byte byPicTransType;        //图片数据传输方式: 0-二进制；1-url
-        public int dwAlarmID;     //报警ID，用以标识通道间关联产生的组合报警，0表示无效
-        public short wDevInfoIvmsChannelEx;     //与NET_VCA_DEV_INFO里的byIvmsChannel含义相同，能表示更大的值。老客户端用byIvmsChannel能继续兼容，但是最大到255。新客户端版本请使用wDevInfoIvmsChannelEx。
-	public byte byRelativeTimeFlag;      //dwRelativeTime字段是否有效  0-无效， 1-有效，dwRelativeTime表示UTC时间
-	public byte byAppendInfoUploadEnabled; //附加信息上传使能 0-不上传 1-上传
-        public Pointer pAppendInfo;     //指向附加信息NET_VCA_APPEND_INFO的指针，byAppendInfoUploadEnabled为1时或者byTimeDiffFlag为1时有效
-        public Pointer pImage;
-}
-
-public static class NET_DVR_SYSTEM_TIME extends Structure {
-        public short wYear;           //年
-        public short wMonth;          //月
-        public short wDay;            //日
-        public short wHour;           //时
-        public short wMinute;      //分
-        public short wSecond;      //秒
-        public short wMilliSec;    //毫秒
-        public byte[] byRes = new byte[2];
-}
-
-//设备支持AI开放平台接入，上传视频检测数据
-public static class NET_AIOP_VIDEO_HEAD extends Structure {
-        public int dwSize;      //dwSize = sizeof(NET_AIOP_VIDEO_HEAD)
-        public int dwChannel;    //设备分析通道的通道号；
-        public NET_DVR_SYSTEM_TIME struTime = new NET_DVR_SYSTEM_TIME(); 	//时间
-        public byte[] szTaskID = new byte[64];     //视频任务ID，来自于视频任务派发
-        public int dwAIOPDataSize;   //对应AIOPDdata数据长度
-        public int dwPictureSize;    //对应分析图片长度
-        public byte[] szMPID = new byte[64];        //检测模型包ID，用于匹配AIOP的检测数据解析；可以通过URI(GET /ISAPI/Intelligent/AIOpenPlatform/algorithmModel/management?format=json)获取当前设备加载的模型包的label description信息；
-        public Pointer pBufferAIOPData;  //AIOPDdata数据
-        public Pointer pBufferPicture;//对应分析图片数据
-        public byte byPictureMode;//图片数据传输模式 0-二进制，1-武汉云云存储，当byPictureMode为0时pBufferPicture为二进制数据，当byPictureMode为1时pBufferPicture为武汉云URL
-        public byte[] byRes2 = new byte[3];//保留字节
-        public int dwPresetIndex; //预置点序号
-        public byte[] byRes = new byte[176];
-}
-
-//设备支持AI开放平台接入，上传图片检测数据
-public static class NET_AIOP_PICTURE_HEAD extends Structure {
-        public int dwSize;           //dwSize = sizeof(NET_AIOP_PICTURE_HEAD)
-        public NET_DVR_SYSTEM_TIME struTime = new NET_DVR_SYSTEM_TIME(); 	//时间
-        public byte[] szPID = new byte[64];        //透传下发的图片ID，来自于图片任务派发
-        public int dwAIOPDataSize;   //对应AIOPDdata数据长度
-        public byte byStatus;         //状态值：0-成功，1-图片大小错误
-        public byte[] byRes1 = new byte[3];
-        public byte[] szMPID = new byte[64]; //检测模型包ID，用于匹配AIOP的检测数据解析；
-        public Pointer pBufferAIOPData;//AIOPDdata数据
-        public int dwPresetIndex; //预置点序号
-        public byte[] byRes = new byte[180];
-}
-
-//规则触发参数
-public static class NET_VCA_RULE_TRIGGER_PARAM extends Structure {
-  public byte byTriggerMode;   //规则的触发方式，0- 不启用，1- 轨迹点 2- 目标面积
-  public byte byTriggerPoint;  //触发点，触发方式为轨迹点时有效 0- 中,1-上,2-下
-  public byte[] byRes1 = new byte[2];       //保留
-  public float fTriggerArea;    //触发目标面积百分比 [0,100]，触发方式为目标面积时有效
- public byte[] byRes2 = new byte[4];       //保留
-}
-
-public static class NET_VCA_ONE_RULE_V42 extends Structure {
-    public byte byActive;       //是否激活规则, 0-否，非0-是
-    public byte byEventPriority;//事件优先级 0-低，1-中，2-高
-    public byte[] byRes1 = new byte[4];           //保留，设置为0字段
-    public short wEventType;        //行为事件类型，参考VCA_RULE_EVENT_TYPE_EX
-    public byte[] byRuleName = new byte[NAME_LEN/*32*/];        //规则名称
-    public NET_VCA_EVENT_UNION  uEventParam;            //行为分析事件参数
-    public NET_VCA_SIZE_FILTER  struSizeFilter;          //尺寸过滤器
-    public NET_DVR_SCHEDTIMEWEEK[] struAlarmTime = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS];//布防时间
-    public NET_DVR_HANDLEEXCEPTION_V40  struAlarmHandleType; /*处理方式*/
-    //异常处理方式中报警输出号与组号绑定，即组号为0时，表示关联的报警输出号范围为1-64，当组号为1时，表示关联的报警输出号范围为65-128， 且是组内紧凑排列，如果遇到0xffffffff表示本组 当前的及组内后续的报警出号无效
-    public int[] dwRelRecordChan = new int[MAX_CHANNUM_V30];    /* 报警触发的录象通道（四字节的通道号，初始值是 0xffffffff）*/
-    //关联的录像通道号与组号绑定，即组号为0时，表示关联的通道号范围为1-64，当组号为1时，表示关联的通道号范围为65-128， 且是组内紧凑排列，如果遇到0xffffffff表示本组 当前的及组内后续的关联通道号无效
-    public short wAlarmDelay; //智能报警延时，0-5s,1-10,2-30s,3-60s,4-120s,5-300s,6-600s
-    public byte[]   byRes2 = new byte[2];           //保留
-    public NET_VCA_FILTER_STRATEGY     struFilterStrategy;  //尺寸过滤策略
-    public NET_VCA_RULE_TRIGGER_PARAM     struTriggerParam; //规则触发参数
-    public byte[] byRes = new byte[32];
-}
-
-public static class NET_DVR_PTZ_POSITION extends Structure {
-    // 是否启用场景，在设置场景行为规则的时候该字段无效，在设置球机本地配置场景位置信息时作为使能位
-    public byte byEnable;
-    public byte[] byRes1 = new byte[3];  //保留
-    public byte[] byPtzPositionName = new byte[NAME_LEN]; //场景位置名称
-    public NET_DVR_PTZPOS struPtzPos; //ptz 坐标
-    public byte[] byRes2 = new byte[40];
-}
-
-//行为分析配置结构体
-public static class NET_VCA_RULECFG_V42 extends Structure {
-  public int dwSize;             //结构图大小
-  public byte byPicProType;            //报警时图片处理方式 0-不处理 1-上传
-  public byte byUpLastAlarm;         //是否先上传最近一次的报警，0-否，1-是
-  public byte byPicRecordEnable;   //是否启用图片存储, 0-不启用, 1-启用
-  public byte byRes1;
-  public NET_DVR_JPEGPARA     struPicParam;         //图片规格结构
-  public NET_VCA_ONE_RULE_V42[]  struRule = new NET_VCA_ONE_RULE_V42[16];       /* 规则数组*/
-  public short[] wRelSnapChan = new short[3]; //关联抓图通道，当主通道报警时，同时会上传关联通道的抓拍图片，0表示不关联，其他值为关联通道号
-  public byte byTrackEnable; //是否启用跟踪
-  public byte byRes2;
-  public NET_DVR_PTZ_POSITION  struPTZPosition;  //场景位置信息
-  public short wTrackDuration; //跟踪持续时间，单位s
-  public short wIntervalTime; //单次报警间隔时间（秒）[1-7200]（默认为600）
-  public short wHeightLimit;//目标检测高度下限（厘米）[0-250]（默认为80cm），小于此高度的目标将不作为目标进行检测
-  public byte[] byRes = new byte[58];//保留
-}
-
-public static final int CID_CODE_LEN = 4;
-public static final int DEV_SERIAL_LEN = 9;
-public static final int ACCOUNTNUM_LEN = 6;
-public static final int ACCOUNTNUM_LEN_32 = 32;
-
-public static class NET_DVR_CID_ALARM extends Structure {
-  public int dwSize;
-  public byte[] sCIDCode = new byte[CID_CODE_LEN/*4*/];    //CID事件号
-  public byte[] sCIDDescribe = new byte[NAME_LEN/*32*/];    //CID事件名
-  public NET_DVR_TIME_EX struTriggerTime = new NET_DVR_TIME_EX();            //触发报警的时间点
-  public NET_DVR_TIME_EX struUploadTime = new NET_DVR_TIME_EX();                //上传报警的时间点
-  public byte[] sCenterAccount = new byte[ACCOUNTNUM_LEN/*6*/];    //中心帐号
-  public byte byReportType;                    //见定义NET_DVR_ALARMHOST_REPORT_TYPE
-  public byte byUserType;                        //用户类型，0-网络用户 1-键盘用户,2-手机用户,3-系统用户
-  public byte[] sUserName = new byte[NAME_LEN/*32*/];        //网络用户用户名
-  public short wKeyUserNo;                        //键盘用户号    0xFFFF表示无效
-  public byte byKeypadNo;                        //键盘号        0xFF表示无效
-  public byte bySubSysNo;                        //子系统号        0xFF表示无效
-  public short wDefenceNo;                        //防区号        0xFFFF表示无效
-  public byte byVideoChanNo;                    //视频通道号    0xFF表示无效
-  public byte byDiskNo;                        //硬盘号        0xFF表示无效
-  public short wModuleAddr;                    //模块地址        0xFFFF表示无效
-  public byte byCenterType;                    //0-无效, 1-中心账号(长度6),2-扩展的中心账号(长度9)
-  public byte byRes1;
-  public byte[] sCenterAccountV40 = new byte[ACCOUNTNUM_LEN_32/*32*/];    //中心账号V40,使用此字段时sCenterAccount无效
-  public byte[] byDevSerialNo = new byte[DEV_SERIAL_LEN];   /*产品序列号*/
-  public byte byRepeaterNo;    //中继器号，为0无效
-  public short wRemoteCtrllerUserNo;    //遥控器用户号，为0无效
-  public int dwIOTChannelNo;    //IOT通道号
-  public byte[] byRes2 = new byte[12];
-}
-
-//车牌识别结果子结构
-public static class NET_DVR_PLATE_INFO extends Structure
-{
-          public byte byPlateType;                    //车牌类型
-          public byte byColor;                        //车牌颜色
-          public byte byBright;                        //车牌亮度
-          public byte byLicenseLen;                    //车牌字符个数
-          public byte byEntireBelieve;                //整个车牌的置信度，-100
-          public byte byRegion;                       // 区域索引值 0-保留，1-欧洲(EU)，2-俄语区域(ER)，3-欧洲&俄罗斯(EU&CIS) ,4-中东(ME),0xff-所有
-          public byte byCountry;                      // 国家索引值，参照枚举COUNTRY_INDEX（不支持"COUNTRY_ALL = 0xff, //ALL  全部"）
-          public byte byArea;                         //区域（省份），各国家内部区域枚举，阿联酋参照 EMI_AREA
-          public byte byPlateSize;                    //车牌尺寸，0~未知，1~long, 2~short(中东车牌使用)
-          public byte[] byRes = new byte[15];                       //保留
-          public byte[] sPlateCategory = new byte[8];//车牌附加信息, 即中东车牌中车牌号码旁边的小字信息，(目前只有中东地区支持)
-          public int dwXmlLen;                        //XML报警信息长度
-          public Pointer pXmlBuf;                      // XML报警信息指针,报警类型为 COMM_ITS_PLATE_RESUL时有效，其XML对应到EventNotificationAlert XML Block
-          public NET_VCA_RECT struPlateRect = new NET_VCA_RECT();        //车牌位置
-          public byte[] sLicense = new byte[MAX_LICENSE_LEN];        //车牌号码,注：中东车牌需求把小字也纳入车牌号码，小字和车牌号中间用空格分隔
-          public byte[] byBelieve = new byte[MAX_LICENSE_LEN];    //各个识别字符的置信度，如检测到车牌"浙A12345", 置信度为,20,30,40,50,60,70，则表示"浙"字正确的可能性只有%，"A"字的正确的可能性是%
-}
-
- public static class NET_DVR_VEHICLE_INFO extends Structure
- {
-	   public int dwIndex;          //车辆序号
-           public byte byVehicleType;    //车辆类型 0 表示其它车型，1 表示小型车，2 表示大型车 ,3表示行人触发 ,4表示二轮车触发 5表示三轮车触发(3.5Ver)
-           public byte byColorDepth;        //车身颜色深浅
-           public byte byColor;          //车身颜色,参考VCR_CLR_CLASS
-    /*雷达异常状态：
-    0~雷达正常，
-    1~雷达故障
-    2~雷达一直发送某一个相同速度值
-    3~雷达送出数据为0
-    4~雷达送出数据过大或者过小
-    */
-           public byte byRadarState;
-	   public short wSpeed;           //单位km/h
-	   public short wLength;          //前一辆车的车身长度
-                            /*违规类型，0-正常，1-低速，2-超速，3-逆行，4-闯红灯,5-压车道线,6-不按导向，7-路口滞留，
-                            8-机占非，9-违法变道，10-不按车道 11-违反禁令，12-路口停车，13-绿灯停车, 14-未礼让行人(违法代码1357),
-    15-违章停车，16-违章掉头,17-占用应急车道,18-禁右,19-禁左,20-压黄线,21-未系安全带,22-行人闯红灯,23-加塞,24-违法使用远光灯，
-    25-驾驶时拨打接听手持电话，26-左转不让直行，27-右转不让左转，28-掉头不让直行，29-大弯小转, 30-闯绿灯，31-未带头盔，
-    32-非机动车载人，33-非机动车占用机动车道，34-非机动车打伞棚, 35-黑烟车, 36-鸣笛*/
-           public byte byIllegalType;
-           public byte byVehicleLogoRecog; //参考枚举类型 VLR_VEHICLE_CLASS
-           public byte byVehicleSubLogoRecog; //车辆品牌子类型识别；参考VSB_VOLKSWAGEN_CLASS等子类型枚举。
-           public byte byVehicleModel; //车辆子品牌年款，0-未知，参考"车辆子品牌年款.xlsx"
-           public byte[] byCustomInfo = new byte[16];  //自定义信息
-	   public short wVehicleLogoRecog;  //车辆主品牌，参考"车辆主品牌.xlsx" (该字段兼容byVehicleLogoRecog);
-           public byte byIsParking;//是否停车 0-无效，1-停车，2-未停车
-           public byte byRes;//保留字节
-	   public int dwParkingTime; //停车时间，单位：s
-           public byte[] byRes3 = new byte[8];
-}
-
- //手动抓拍
- public static class NET_DVR_MANUALSNAP extends Structure
- {
-          public byte byOSDEnable;//0-不关闭(默认)，1-关闭
-          public byte byLaneNo;//车道号, 范围为1-6，默认为1(抓拍机内部测试使用)
-          public byte byChannel;//通道号
-	  public byte[] byRes = new byte[21]; //保留
-}
-
-//交通抓拍结果信息
-public static class NET_DVR_PLATE_RESULT extends Structure
-{
-	  public int dwSize;
-	  public byte byResultType;
-	  public byte byChanIndex;
-          public short wAlarmRecordID;
-	  public int dwRelativeTime;
-	  public byte[] byAbsTime = new byte[32];
-	  public int dwPicLen;
-	  public int dwPicPlateLen;
-          public int dwVideoLen;
-          public byte byTrafficLight;
-          public byte byPicNum;
-          public byte byDriveChan;
-          public byte byVehicleType;
-	  public int dwBinPicLen;
-          public int dwCarPicLen;
-	  public int dwFarCarPicLen;
-          public Pointer  pBuffer3;
-          public Pointer  pBuffer4;
-	  public Pointer pBuffer5;
-          public byte[] byRes3 = new byte[8];
-	  public NET_DVR_PLATE_INFO struPlateInfo;
-	  public NET_DVR_VEHICLE_INFO struVehicleInfo;
-	  public Pointer pBuffer1;
-          public Pointer pBuffer2;
-}
-
-public static class NET_DVR_TIME_V30 extends Structure
-{
-          public short wYear;
-	  public byte byMonth;
-	  public byte byDay;
-	  public byte byHour;
-	  public byte byMinute;
-	  public byte bySecond;
-	  public byte byRes;
-          public short wMilliSec;
-	  public byte[] byRes1 = new byte[2];
- }
-
-public static class NET_ITS_PICTURE_INFO extends Structure
-{
-         public int dwDataLen;
-         public byte byType;
-         public byte byDataType;
-         public byte byCloseUpType;
-         public byte byPicRecogMode;
-         public int dwRedLightTime;
-         public byte[] byAbsTime = new byte[32];
-         public NET_VCA_RECT  struPlateRect = new NET_VCA_RECT();
-         public NET_VCA_RECT  struPlateRecgRect = new NET_VCA_RECT();
-         public Pointer pBuffer;
-         public int dwUTCTime;//UTC时间
-         public byte byCompatibleAblity;//兼容能力字段，按位表示，值：0- 无效，1- 有效
-         public byte byTimeDiffFlag;      /*时差字段是否有效  0-时差无效， 1-时差有效 */
-         public byte cTimeDifferenceH;         /*与UTC的时差（小时），-12 ... +14， +表示东区,，byTimeDiffFlag为1时有效*/
-         public byte cTimeDifferenceM;      	/*与UTC的时差（分钟），-30, 30, 45， +表示东区，byTimeDiffFlag为1时有效*/
-         public byte[] byRes2 = new byte[4];
-}
-
-public static class NET_ITS_PLATE_RESULT extends Structure
- {
-	  public int dwSize;
-	  public int dwMatchNo;
-	  public byte byGroupNum;
-	  public byte byPicNo;
-	  public byte bySecondCam;
-	  public byte byFeaturePicNo;
-	  public byte byDriveChan;
-	  public byte byVehicleType;
-	  public byte byDetSceneID;
-	  public byte byVehicleAttribute;
-          public short wIllegalType;
-	  public byte[] byIllegalSubType = new byte[8];
-	  public byte byPostPicNo;
-	  public byte byChanIndex;
-          public short wSpeedLimit;
-	  public byte byChanIndexEx; //byChanIndexEx*256+byChanIndex表示真实通道号。
-	  public byte byRes2;
-	  public NET_DVR_PLATE_INFO   struPlateInfo = new NET_DVR_PLATE_INFO();
-	  public NET_DVR_VEHICLE_INFO   struVehicleInfo = new NET_DVR_VEHICLE_INFO();
-	  public byte[] byMonitoringSiteID= new byte[48];
- 	  public byte[] byDeviceID= new byte[48];
-	  public byte byDir;
-	  public byte byDetectType;
-	  public byte byRelaLaneDirectionType;
-	  public byte byCarDirectionType;
-	  public int dwCustomIllegalType;
-	  public Pointer pIllegalInfoBuf;
-	  public byte byIllegalFromatType;
-	  public byte byPendant;
-	  public byte byDataAnalysis;
-	  public byte byYellowLabelCar;
-	  public byte byDangerousVehicles;
-	  public byte byPilotSafebelt;
-	  public byte byCopilotSafebelt;
-	  public byte byPilotSunVisor;
-	  public byte byCopilotSunVisor;
-	  public byte byPilotCall;
-	  public byte byBarrierGateCtrlType;
-	  public byte byAlarmDataType;
-	  public NET_DVR_TIME_V30  struSnapFirstPicTime = new NET_DVR_TIME_V30();
-	  public int dwIllegalTime;
-	  public int dwPicNum;
-	  public NET_ITS_PICTURE_INFO[] struPicInfo= new NET_ITS_PICTURE_INFO[6];
-}
-
-public int MAX_PARKNO_LEN = 16; //车位编号长度
-public int MAX_ID_LEN = 48; //编号最大长度
-
-//停车场数据上传
-public static class NET_ITS_PARK_VEHICLE extends Structure
-{
-	  public int dwSize; //结构长度
-	  public byte byGroupNum; //图片组数量（单次轮询抓拍的图片数量）
-	  public byte byPicNo; //连拍的图片组上传图片序号（接收到图片组数量后，表示接收完成
-          //接收超时不足图片组数量时，根据需要保留或删除）
-	  public byte byLocationNum; //单张图片所管理的车位数
-	  public byte byParkError; //停车异常，0-正常 1 异常
-	  public byte[] byParkingNo = new byte[MAX_PARKNO_LEN];//车位编号
-	  public byte byLocationStatus; //车位车辆状态，0-无车，1有车
-	  public byte bylogicalLaneNum;//逻辑车位号，0-3，一个相机最大能管4个车位 （0代表最左边，3代表最右边）
-          public short wUpLoadType;//第零位表示：0~轮训上传、1~变化上传
-	  public byte[] byRes1 = new byte[4]; //保留字节
-	  public int dwChanIndex; //通道号数字通道
-	  public NET_DVR_PLATE_INFO   struPlateInfo;  //车牌信息结构
-	  public NET_DVR_VEHICLE_INFO struVehicleInfo; //车辆信息
-	  public byte[] byMonitoringSiteID = new byte[MAX_ID_LEN]; //监测点编号
-	  public byte[] byDeviceID = new byte[MAX_ID_LEN]; //设备编号
-	  public int dwPicNum; //图片数量（与picGroupNum不同，代表本条信息附带的图片数量，图片信息由struVehicleInfoEx定义
-	  public NET_ITS_PICTURE_INFO[] struPicInfo = new NET_ITS_PICTURE_INFO[2];  //图片信息,单张回调，最多2张图，由序号区分
-	  public byte[] byRes2 = new byte[256];
-}
-
-public static class NET_DVR_SNAPCFG extends Structure {
-
-       public int dwSize;
-       public byte byRelatedDriveWay;//触发IO关联的车道号
-       public byte bySnapTimes; //线圈抓拍次数，0-不抓拍，非0-连拍次数，目前最大5次
-       public short wSnapWaitTime;  //抓拍等待时间，单位ms，取值范围[0,60000]
-       public short[] wIntervalTime = new short[MAX_INTERVAL_NUM];//连拍间隔时间，ms
-       public int dwSnapVehicleNum; //抓拍车辆序号。
-       public NET_DVR_JPEGPARA  struJpegPara;//抓拍图片参数
-       public byte[] byRes2 = new byte[16];
-}
-
-// 道闸控制
-public static class NET_DVR_BARRIERGATE_CFG extends Structure {
-      public int dwSize;
-      public int dwChannel; //通道号
-      public byte byLaneNo;  //道闸号（0-表示无效值(设备需要做有效值判断),1-道闸1）
-    /*
-    若老的平台不支持byUnlock字段，该字段将赋值为0，通过“0-关闭道闸,1-开启道闸,2-停止道闸”中的任何一种操作皆可进行解锁。
-    若新平台支持byUnlock字段，需byUnlock字段赋值为1，并结合4~解锁道闸来进行解锁。byUnlock字段赋值为1后，“0-关闭道闸,1-开启道闸,2-停止道闸”操作将不可用于解锁。
-    */
-      public byte byBarrierGateCtrl;//0-关闭道闸,1-开启道闸,2-停止道闸 3-锁定道闸,4~解锁道闸
-      public byte byEntranceNo;//出入口编号 [1,8]
-      public byte byUnlock;//启用解锁使能，0~为不启用，1~启用
-      public byte[] byRes = new byte[12];
-}
-
-
-
-public static class NET_DVR_AGEGROUP_PARAM extends Structure {
-      public int dwTeenage;//少年（人数）
-      public int dwYouth;//青年（人数）
-      public int dwMidLife;//中年（人数）
-      public int dwElderly;//老年（人数）
-      public int dwChild;//儿童（人数）
-      public int dwAdolescent;//青少年（人数）
-      public int dwPrime;//壮年（人数）
-      public int dwMidage;//中老年（人数）
-      public byte[] byRes = new byte[48];
-}
-
-public static class NET_DVR_SEXGROUP_PARAM extends Structure {
-      public int dwMale;//男（人数）
-      public int dwFemale;//女（人数）
-      public byte[] byRes = new byte[64];
-}
-
-public static class NET_DVR_PROGRAM_INFO extends Structure {
-      public int dwProgramNo; //节目编号
-      public byte[] sProgramName = new byte[NAME_LEN]; //节目名称
-      public byte[] byRes= new byte[16];
-}
-
-public static class NET_DVR_FACECAPTURE_STATISTICS_RESULT extends Structure {
-      public int dwSize;
-      public NET_DVR_TIME_EX   struStartTime;/*间隔开始时间*/
-      public NET_DVR_TIME_EX   struEndTime;/*间隔结束时间*/
-      public byte byStatType;//数据类型统计：Bit0-年龄段有效，Bit1-性别有效，Bit2-人数有效
-      public byte[] byRes = new byte[7];
-      public int dwPeopleNum;//人数统计
-      public NET_DVR_AGEGROUP_PARAM  struAgeGroupParam;//年龄段人数统计
-      public NET_DVR_SEXGROUP_PARAM  struSexGroupParam;//性别人数统计
-      public NET_DVR_PROGRAM_INFO struProgramInfo;        //节目信息
-      public byte[] byRes1= new byte[76];
-}
-
-//获取交通数据条件结构
-public static class NET_DVR_TRAFFIC_DATA_QUERY_COND extends Structure {
-        public int dwSize;
-      /*
-       Bit0-通道有效
-       Bit1-时间有效
-       Bit2-车牌号有效
-       Bit3-车牌类型有效
-       Bit4-车牌颜色有效
-       Bit5-车身颜色有效
-       Bit6-车辆类型有效
-       Bit7-车辆品牌有效
-       Bit8-车道号有效
-       Bit9-监测方向有效
-       Bit10-最低速度有效
-       Bit11-最高速度有效
-       Bit12-数据类型有效
-       Bit13-布控方式类型有效
-       Bit14-违法取证有效
-       Bit15-事件类型有效
-       Bit16-取证类型有效
-       */
-        public int dwQueryCond;//查询条件 0表示无效，1表示有效
-        public int dwChannel;//默认是1（[1~32]，bit0表示通道1，依次类推bit31表示通道32）
-        public NET_DVR_TIME_V30 struStartTime;//开始时间
-        public NET_DVR_TIME_V30 struEndTime;//结束时间
-        public byte[] sLicense= new byte[MAX_LICENSE_LEN/*16*/];//(设备支持模糊查询, GB2312编码)
-       /*
-       Bit0-未知（其他）
-       Bit1-标准民用车与军车
-       Bit2-02式民用车牌
-       Bit3-武警车
-       Bit4-警车
-       Bit5-民用车双行尾牌
-       Bit6-使馆车牌
-       Bit7-农用车
-       Bit8-摩托车
-       */
-        public int dwPlateType;//车牌类型（支持按位表示，可以复选）
-       /*
-       Bit0-未知（其他）
-       Bit1-黄色
-       Bit2-白色
-       Bit3-黑色
-       Bit4-绿色
-       Bit5-蓝色
-       */
-        public int dwPlateColor;//车牌颜色（支持按位表示，可以复选）
-       /*
-       Bit0-未知（其他）
-       Bit1-白色
-       Bit2-银色
-       Bit3-灰色
-       Bit4-黑色
-       Bit5-红色
-       Bit6-深蓝色
-       Bit7-蓝色
-       Bit8-黄色
-       Bit9-绿色
-       Bit10-棕色
-       Bit11-粉色
-       Bit12-紫色
-       Bit13-深灰色
-       */
-        public int dwVehicleColor;//车身颜色（支持按位表示，可以复选）
-       /*
-       Bit0-未知（其他）
-       Bit1-客车
-       Bit2-大货车
-       Bit3-轿车
-       Bit4-面包车
-       Bit5-小货车
-       Bit6-行人
-       Bit7-二轮车
-       Bit8-三轮车
-       Bit9-SUV/MPV
-       Bit10-中型客车
-       */
-        public int dwVehicleType;//车辆类型（支持按位表示，可以复选）
-     /**
-       Bit0-其他（保留）
-       Bit1-低速
-       Bit2-超速
-       Bit3-逆行
-       Bit4-闯红灯
-       Bit5-压车道线
-       Bit6-不按导向
-       Bit7-路口滞留
-       Bit8-机占非
-       Bit9-违法变道
-       Bit10-不按车道
-       Bit11-违反禁令
-       Bit12-路口停车
-       Bit13-绿灯停车
-       Bit14-未礼让行人
-       Bit15-违章停车
-       Bit16-违章掉头
-       Bit17-占用应急车道
-       Bit18-未系安全带
-       */
-        public int dwIllegalType;
-       /**
-       Bit0-其他（保留）
-       Bit1-拥堵
-       Bit2-停车
-       Bit3-逆行
-       Bit4-行人
-       Bit5-抛洒物
-       Bit6-烟雾
-       Bit7-压线
-       Bit8-黑名单
-       Bit9-超速
-       Bit10-变道
-       Bit11-掉头
-       Bit12-机占非
-       Bit13-加塞
-       */
-        public int dwEventType;
-       /**
-       Bit0-其他（保留）
-       Bit1-城市公路违法停车
-       Bit2-高速公路违法停车
-       Bit3-压线
-       Bit4-逆行
-       Bit5-违法变道
-       Bit6-机占非
-       */
-        public int dwForensiceType;
-	public short wVehicleLogoRecog;  //车辆主品牌，参考"车辆主品牌.xlsx" （仅单选）
-	public byte byLaneNo;//车道号（0~255,0号车道 表示 车道号未知）
-	public byte byDirection;//监测方向，1-上行，2-下行，3-双向，4-由东向西，5-由南向北,6-由西向东，7-由北向南
-	public short wMinSpeed;//最低速度（0~999）单位km/h
-	public short wMaxSpeed;//最高速度（0~999）单位km/h
-	public byte byDataType;//数据类型 0-卡口数据，1-违法数据，2-交通事件，3-取证数据 （仅单选）
-	public byte byExecuteCtrl;//布控 0-白名单，1-黑名单，0xff-其他
-        public byte[] byRes = new byte[254];
-}
-
-public static final int MAX_TRAFFIC_PICTURE_NUM = 8; //交通图片数量
-//交通数据结构体
-public static class NET_DVR_TRAFFIC_DATA_QUERY_RESULT extends Structure
-{
-    public int dwSize;
-    public int dwChannel;//默认是1（[1~32]）
-    public byte[] sLicense = new byte[MAX_LICENSE_LEN/*16*/];
-    /*
-    Bit0-未知（其他）
-    Bit1-标准民用车与军车
-    Bit2-02式民用车牌
-    Bit3-武警车
-    Bit4-警车
-    Bit5-民用车双行尾牌
-    Bit6-使馆车牌
-    Bit7-农用车
-    Bit8-摩托车
-    */
-    public int dwPlateType;//车牌类型
-    /*
-    Bit0-未知（其他）
-    Bit1-黄色
-    Bit2-白色
-    Bit3-黑色
-    Bit4-绿色
-    Bit5-蓝色
-    */
-    public int dwPlateColor;//车牌颜色
-    /*
-    Bit0-未知（其他）
-    Bit1-白色
-    Bit2-银色
-    Bit3-灰色
-    Bit4-黑色
-    Bit5-红色
-    Bit6-深蓝色
-    Bit7-蓝色
-    Bit8-黄色
-    Bit9-绿色
-    Bit10-棕色
-    Bit11-粉色
-    Bit12-紫色
-    Bit13-深灰色
-    */
-    public int dwVehicleColor;//车身颜色
-    /*
-    Bit0-未知（其他）
-    Bit1-客车
-    Bit2-大货车
-    Bit3-轿车
-    Bit4-面包车
-    Bit5-小货车
-    Bit6-行人
-    Bit7-二轮车
-    Bit8-三轮车
-    Bit9-SUV/MPV
-    Bit10-中型客车
-    Bit11-机动车
-    Bit12-非机动车
-    Bit13-小型轿车
-    Bit14-微型轿车
-    Bit15-皮卡车
-    Bit16-集装箱卡车
-    Bit17-微卡，栏板卡
-    Bit18-渣土车
-    Bit19-吊车，工程车
-    Bit20-油罐车
-    Bit21-混凝土搅拌车
-    Bit22-平板拖车
-    Bit23-两厢轿车
-    Bit24-三厢轿车
-    Bit25-轿跑
-    Bit26-小型客车
-    */
-    public int dwVehicleType;//车辆类型
-    /**
-    Bit0-其他（保留）
-    Bit1-低速
-    Bit2-超速
-    Bit3-逆行
-    Bit4-闯红灯
-    Bit5-压车道线
-    Bit6-不按导向
-    Bit7-路口滞留
-    Bit8-机占非
-    Bit9-违法变道
-    Bit10-不按车道
-    Bit11-违反禁令
-    Bit12-路口停车
-    Bit13-绿灯停车
-    Bit14-未礼让行人
-    Bit15-违章停车
-    Bit16-违章掉头
-    Bit17-占用应急车道
-    Bit18-未系安全带
-    */
-    public int dwIllegalType;
-    /**
-    Bit0-其他（保留）
-    Bit1-拥堵
-    Bit2-停车
-    Bit3-逆行
-    Bit4-行人
-    Bit5-抛洒物
-    Bit6-烟雾
-    Bit7-压线
-    Bit8-黑名单
-    Bit9-超速
-    Bit10-变道
-    Bit11-掉头
-    Bit12-机占非
-    Bit13-加塞
-    */
-    public int dwEventType;
-    /**
-    Bit0-其他（保留）
-    Bit1-城市公路违法停车
-    Bit2-高速公路违法停车
-    Bit3-压线
-    Bit4-逆行
-    Bit5-违法变道
-    Bit6-机占非
-    */
-    public int dwForensiceType;
-    public short wVehicleLogoRecog;  //车辆主品牌，参考"车辆主品牌.xlsx"
-    public byte byLaneNo;//车道号（0~255,0号车道 表示 车道号未知）
-    public byte byDirection;//监测方向，1-上行，2-下行，3-双向，4-由东向西，5-由南向北,6-由西向东，7-由北向南
-    public short wSpeed;//速度（0~999）单位km/h
-    public byte byDataType;//数据类型: 0-卡口 1-违法 2-事件 3-取证
-    public byte[] byRes = new byte[253];
-    public NET_DVR_TRAFFIC_PICTURE_PARAM[] struTrafficPic = new NET_DVR_TRAFFIC_PICTURE_PARAM[MAX_TRAFFIC_PICTURE_NUM/*8*/];
-}
-
-//交通图片参数子结构
-public static final int PICTURE_NAME_LEN = 64;
-public static class NET_DVR_TRAFFIC_PICTURE_PARAM extends Structure
-{
-    public NET_DVR_TIME_V30 struRelativeTime = new NET_DVR_TIME_V30(); //抓拍相对时标
-    public NET_DVR_TIME_V30 struAbsTime = new NET_DVR_TIME_V30();  //抓拍绝对时标
-    public byte[] szPicName = new byte[PICTURE_NAME_LEN/*64*/];
-    public byte byPicType;//图片类型 0-车牌图，1-抓拍原图，2-合成图，3-特写图
-    public byte[] byRes = new byte[63];
-}
-
-public static class NET_DVR_VEHICLE_CONTROL_COND extends Structure{
-    public int dwChannel;
-    public int dwOperateType;
-    public byte[] sLicense = new byte[MAX_LICENSE_LEN];
-    public byte[] sCardNo = new byte[48];
-    public byte byListType;
-    public byte[] byRes1 = new byte[3];
-    public int dwDataIndex;
-    public byte[] byRes = new byte[116];
-}
-public static class NET_DVR_VEHICLE_CONTROL_LIST_INFO extends Structure{
-    public int dwSize;
-    public int dwChannel;
-    public int dwDataIndex;
-    public byte[] sLicense=new byte[16];
-    public byte byListType;
-    public byte byPlateType;
-    public byte byPlateColor;
-    public byte[] byRes = new byte[21];
-    public byte[] sCardNo = new byte[48];
-    public NET_DVR_TIME_V30 struStartTime = new NET_DVR_TIME_V30();
-    public NET_DVR_TIME_V30 struStopTime = new NET_DVR_TIME_V30();
-    public byte[] sOperateIndex=new byte[32];
-    public byte[] byRes1= new byte[224];
-
-    @Override
-    protected List getFieldOrder() {
-        List a = new ArrayList();
-        a.add("dwSize");
-        a.add("dwChannel");
-        a.add("dwDataIndex");
-        a.add("sLicense");
-        a.add("byListType");
-        a.add("byPlateType");
-        a.add("byPlateColor");
-        a.add("byRes");
-        a.add("sCardNo");
-        a.add("struStartTime");
-        a.add("struStopTime");
-        a.add("sOperateIndex");
-        a.add("byRes1");
-        return a;
-    }
-}
-
-//车辆报警（黑白名单）
-public static class NET_DVR_VEHICLE_CONTROL_ALARM extends Structure{
-	public int dwSize;
-	public byte byListType;   //名单属性（黑白名单）0-白名单，1-黑名单，2-临时名单
-	public byte byPlateType;  //车牌类型
-	public byte byPlateColor;    //车牌颜色
-	public byte byRes1;
-        public byte[] sLicense = new byte[MAX_LICENSE_LEN];//车牌号码
-        public byte[] sCardNo = new byte[MAX_CARDNO_LEN];  // 卡号
-        public NET_DVR_TIME_V30 struAlarmTime = new NET_DVR_TIME_V30(); //报警时间
-	public int dwChannel;          //设备通道号，如果直连的是IPC，则为ipc通道号；如果连的DVR\nvr,则为DVR\NVR的通道号
-	public int dwPicDataLen;   //图片数据大小，0表示无图片，不为0是表示后面带图片数据
-	public byte byPicType;    //图片类型，0-JPEG
-	public byte byPicTransType;        //图片数据传输方式: 0-二进制；1-url
-	public byte[] byRes3 = new byte[2];
-	public Pointer pPicData;
-        public byte[] byRes2 = new byte[48];
-}
-
-public int MAX_LED_INFO_LEN = 512;
-public int MAX_VOICE_INFO_LEN = 128;
-
-//LED屏幕显示参数
-public static class NET_DVR_LEDDISPLAY_CFG extends Structure {
-	public int dwSize;//结构体大小
-	public byte[] sDisplayInfo = new byte[MAX_LED_INFO_LEN/*512*/]; // LED显示内容
-	public byte byDisplayMode;//显示方式:0~左移,1~右移,2~立即显示
-	public byte bySpeedType;//速度类型:0~快,1~中,2~慢
-	public byte byShowPlateEnable;//显示车牌使能，0~关闭，1~启用
-	public byte byRes1;
-	public int dwShowTime;//显示时长，1~60秒
-	public byte[] byRes = new byte[128];
-}
-
-//语音播报控制参数
-public static class NET_DVR_VOICEBROADCAST_CFG extends Structure {
-	public int dwSize;//结构体大小
-	public byte[] sInfo = new byte[MAX_VOICE_INFO_LEN/*128*/]; //语音播报内容
-	public byte byBroadcastNum;// 语音播报次数， 1~10次
-	public byte byIntervalTime;// 语音播报间隔时间,1~5s
-	public byte[] byRes = new byte[126];
-}
-
-//缴费金额信息
-public static class NET_DVR_CHARGEACCOUNT_CFG extends Structure {
-	public int dwSize;//结构体大小
-	public float fAccount;//实际收费金额
-	public byte[] byRes = new byte[128];
-}
-
-public static final int DOOR_NAME_LEN = 32;        //门名称
-public static final int STRESS_PASSWORD_LEN = 8;   //胁迫密码长度
-public static final int SUPER_PASSWORD_LEN = 8;    //胁迫密码长度
-public static final int UNLOCK_PASSWORD_LEN = 8;   // 解除密码长度
-
-public static class NET_DVR_DOOR_CFG extends Structure
-{
-	public int dwSize;
-	public byte[] byDoorName = new byte[DOOR_NAME_LEN]; //门名称
-	public byte byMagneticType; //门磁类型，0-常闭，1-常开
-	public byte byOpenButtonType; //开门按钮类型，0-常闭，1-常开
-	public byte byOpenDuration; //开门持续时间，1-255s（楼层继电器动作时间）
-	public byte byDisabledOpenDuration; //残疾人卡开门持续时间，1-255s
-	public byte byMagneticAlarmTimeout; //门磁检测超时报警时间，0-255s，0表示不报警
-	public byte byEnableDoorLock; //是否启用闭门回锁，0-否，1-是
-	public byte byEnableLeaderCard; //是否启用首卡常开功能，0-否，1-是
-	public byte byLeaderCardMode; //首卡模式，0-不启用首卡功能，1-首卡常开模式，2-首卡授权模式（使用了此字段，则byEnableLeaderCard无效）
-	public int dwLeaderCardOpenDuration; //首卡常开持续时间，1-1440min
-	public byte[] byStressPassword = new byte[STRESS_PASSWORD_LEN]; //胁迫密码
-	public byte[] bySuperPassword = new byte[SUPER_PASSWORD_LEN]; //超级密码
-	public byte[] byUnlockPassword = new byte[UNLOCK_PASSWORD_LEN];         //解除码NET_DVR_LOCAL_CONTROLLER_STATUS
-	public byte byUseLocalController; //只读，是否连接在就地控制器上，0-否，1-是
-	public byte byRes1;
-	public short wLocalControllerID; //只读，就地控制器序号，1-64,0代表未注册
-	public short wLocalControllerDoorNumber; //只读，就地控制器的门编号，1-4,0代表未注册
-	public short wLocalControllerStatus; //只读，就地控制器在线状态：0-离线，1-网络在线，2-环路1上的RS485串口1，3-环路1上的RS485串口2，4-环路2上的RS485串口1，5-环路2上的RS485串口2，6-环路3上的RS485串口1，7-环路3上的RS485串口2，8-环路4上的RS485串口1，9-环路4上的RS485串口2（只读）
-	public byte byLockInputCheck; //是否启用门锁输入检测(1字节，0不启用，1启用，默认不启用)
-	public byte byLockInputType; //门锁输入类型(1字节，0常闭，1常开，默认常闭)
-	public byte byDoorTerminalMode; //门相关端子工作模式(1字节，0防剪防短，1普通，默认防剪防短)
-	public byte byOpenButton; //是否启用开门按钮(1字节，0是，1否，默认是)
-	public byte byLadderControlDelayTime; //梯控访客延迟时间，1-255min
-	public byte[] byRes2 = new byte[43];
-}
-
-public static class NET_DVR_DOOR_STATUS_PLAN extends Structure
-{
-	public int dwSize;
-	public int dwTemplateNo; //计划模板编号，为0表示取消关联，恢复默认状态（普通状态）
-	public byte[] byRes = new byte[64];
-}
-
-
-public static class NET_DVR_EVENT_CARD_LINKAGE_COND extends Structure
-{
-	public int dwSize;
-	public int dwEventID; //事件ID
-	public short wLocalControllerID; //就地控制器序号[1,64]
-	public byte[] byRes = new byte[106];
-}
-
-public static final int MAX_ALARMHOST_ALARMIN_NUM  = 512;//网络报警主机最大报警输入口数
-public static final int MAX_ALARMHOST_ALARMOUT_NUM = 512;//网络报警主机最大报警输出口数
-
-public static class NET_DVR_EVENT_CARD_LINKAGE_CFG_V50 extends Structure
-{
-	public int dwSize;    //结构体大小
-	public byte byProMode;                          //联动方式，0-事件，1-卡号, 2-MAC地址
-	public byte[] byRes1 = new byte[3];
-	public int dwEventSourceID;                    //事件源ID，当主类型为设备事件时无效， 当主类型是门事件时为门编号;当主类型为读卡器事件时，为读卡器ID;当为报警输入事件时为防区报警输入ID或事件报警输入ID。0xffffffff表示联动全部
-	public NET_DVR_EVETN_CARD_LINKAGE_UNION uLinkageInfo = new NET_DVR_EVETN_CARD_LINKAGE_UNION();  //联动方式参数
-	public byte[] byAlarmout = new byte[MAX_ALARMHOST_ALARMOUT_NUM];            //关联的报警输出号，按位表示，为0表示不关联，为1表示关联
-	public byte[] byRes2 = new byte[32];                         //保留
-	public byte[] byOpenDoor = new byte[MAX_DOOR_NUM_256];     //按位表示,是否联动开门，0-不联动，1-联动
-	public byte[] byCloseDoor = new byte[MAX_DOOR_NUM_256];    //按位表示,是否联动关门，0-不联动，1-联动
-	public byte[] byNormalOpen = new byte[MAX_DOOR_NUM_256];   //按位表示,是否联动常开，0-不联动，1-联动
-	public byte[] byNormalClose = new byte[MAX_DOOR_NUM_256];  //按位表示,是否联动常关，0-不联动，1-联动
-	public byte byMainDevBuzzer;                    //主机蜂鸣器   0-不联动，1-联动输出
-	public byte byCapturePic;                           //是否联动抓拍，0-不联动抓拍，1-联动抓拍
-	public byte byRecordVideo;                          //是否联动录像，0-不联动录像，1-联动录像
-	public byte[] byRes3 = new byte[29];                         //保留
-	public byte[] byReaderBuzzer = new byte[MAX_CARD_READER_NUM_512]; //联动读卡器蜂鸣器，按位表示，0-不联动，1-联动
-	public byte[] byAlarmOutClose = new byte[MAX_ALARMHOST_ALARMOUT_NUM];            //关联报警输出关闭，按字节表示，为0表示不关联，为1表示关联
-	public byte[] byAlarmInSetup = new byte[MAX_ALARMHOST_ALARMIN_NUM];  //关联防区布防，按字节表示，为0表示不关联，为1表示关联
-	public byte[] byAlarmInClose = new byte[MAX_ALARMHOST_ALARMIN_NUM];  //关联防区撤防，按字节表示，为0表示不关联，为1表示关联
-	public byte[] byRes = new byte[500];                           //保留
-}
-
-public static class NET_DVR_EVENT_LINKAGE_INFO extends Structure
-{
-	public short wMainEventType;                     //事件主类型，0-设备事件，1-报警输入事件，2-门事件，3-读卡器事件
-	public short wSubEventType;                      //事件次类型
-	public byte[] byRes = new byte[28];
-}
-
-public static final int NET_SDK_EMPLOYEE_NO_LEN = 32;  //工号长度
-public static class NET_DVR_EVETN_CARD_LINKAGE_UNION extends Union{
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN];          //卡号
-	public NET_DVR_EVENT_LINKAGE_INFO  struEventLinkage;                   //事件联动时参数
-	public byte[] byMACAddr = new byte[MACADDR_LEN];          //物理MAC地址
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
-}
-
-//卡参数配置条件
-public static class NET_DVR_CARD_CFG_COND extends Structure {
-      public int dwSize;
-      public int dwCardNum;
-      public byte byCheckCardNo;
-      public byte[] ibyRes = new byte[31];
-}
-
-//获取卡参数的发送数据
-public static class NET_DVR_CARD_CFG_SEND_DATA extends Structure {
-      public int dwSize;
-      public byte[] byCardNo = new byte[32];
-      public byte[] byRes = new byte[16];
-}
-
-public static class CARDRIGHTPLAN extends Structure {
-   public byte[] byRightPlan = new byte[4];
-}
-
-//卡参数
-public static class NET_DVR_CARD_CFG extends Structure {
-	public int dwSize;
-	public int dwModifyParamType;
-	public byte[] byCardNo = new byte[32];
-	public byte byCardValid;
-	public byte byCardType;
-	public byte byLeaderCard;
-	public byte byRes1;
-	public int dwDoorRight;
-	public NET_DVR_VALID_PERIOD_CFG struValid;
-	public int dwBelongGroup;
-	public byte[] byCardPassword = new byte[8];
-	public CARDRIGHTPLAN[] byCardRightPlan = new CARDRIGHTPLAN[32];
-	public int dwMaxSwipeTime;
-	public int dwSwipeTime;
-	public short wRoomNumber;
-	public short wFloorNumber;
-	public byte[] byRes2 = new byte[20];
-}
-
-public int ACS_CARD_NO_LEN = 32;  //门禁卡号长度
-public int MAX_GROUP_NUM_128 = 128; //最大群组数
-public int MAX_DOOR_NUM_256 = 256; //最大门数
-public int CARD_PASSWORD_LEN = 8;   //卡密码长度
-public int MAX_CARD_READER_NUM = 64;  //最大读卡器数
-public int MAX_DOOR_CODE_LEN = 8; //房间代码长度
-public int MAX_LOCK_CODE_LEN = 8; //锁代码长度
-public int MAX_CARD_RIGHT_PLAN_NUM = 4; //卡权限最大计划个数
-
-public static class CARDRIGHTPLAN_WORD extends Structure {
-   public short[] wRightPlan = new short[MAX_CARD_RIGHT_PLAN_NUM];
-}
-
-public static class NET_DVR_CARD_CFG_V50 extends Structure {
-	public int dwSize;
-	public int dwModifyParamType;//需要修改的卡参数，设置卡参数时有效，按位表示，每位代表一种参数，1为需要修改，0为不修改
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //卡号
-	public byte byCardValid; //卡是否有效，0-无效，1-有效（用于删除卡，设置时置为0进行删除，获取时此字段始终为1）
-	public byte byCardType; //卡类型，1-普通卡，2-残疾人卡，3-黑名单卡，4-巡更卡，5-胁迫卡，6-超级卡，7-来宾卡，8-解除卡，9-员工卡，10-应急卡，11-应急管理卡，默认普通卡
-	public byte byLeaderCard; //是否为首卡，1-是，0-否
-	public byte byRes1;
-	public byte[] byDoorRight = new byte[MAX_DOOR_NUM_256]; //门权限(楼层权限)，按位表示，1为有权限，0为无权限，从低位到高位表示对门1-N是否有权限
-	public NET_DVR_VALID_PERIOD_CFG struValid; //有效期参数
-	public byte[] byBelongGroup = new byte[MAX_GROUP_NUM_128]; //所属群组，按字节表示，1-属于，0-不属于
-	public byte[] byCardPassword = new byte[CARD_PASSWORD_LEN]; //卡密码
-	public CARDRIGHTPLAN_WORD[] wCardRightPlan = new CARDRIGHTPLAN_WORD[MAX_DOOR_NUM_256]; //卡权限计划，取值为计划模板编号，同个门不同计划模板采用权限或的方式处理
-	public int dwMaxSwipeTime; //最大刷卡次数，0为无次数限制（开锁次数）
-	public int dwSwipeTime; //已刷卡次数
-	public short wRoomNumber;  //房间号
-	public short wFloorNumber;   //层号
-	public int dwEmployeeNo;   //工号
-	public byte[] byName = new byte[NAME_LEN];   //姓名
-	public short wDepartmentNo;   //部门编号
-	public short wSchedulePlanNo;   //排班计划编号
-	public byte bySchedulePlanType;  //排班计划类型：0-无意义、1-个人、2-部门
-	public byte byRightType;  //下发权限类型：0-普通发卡权限、1-二维码权限、2-蓝牙权限（可视对讲设备二维码权限配置项：房间号、卡号（虚拟卡号）、最大刷卡次数（开锁次数）、有效期参数；蓝牙权限：卡号（萤石APP账号）、其他参数配置与普通发卡权限一致）
-	public byte[] byRes2 = new byte[2];
-	public int dwLockID;  //锁ID
-	public byte[] byLockCode = new byte[MAX_LOCK_CODE_LEN];    //锁代码
-	public byte[] byRoomCode = new byte[MAX_DOOR_CODE_LEN];  //房间代码
-	public int dwCardRight;      //卡权限
-	public int dwPlanTemplate;   //计划模板(每天)各时间段是否启用，按位表示，0--不启用，1-启用
-	public int dwCardUserId;    //持卡人ID
-	public byte byCardModelType;  //0-空，1- MIFARE S50，2- MIFARE S70，3- FM1208 CPU卡，4- FM1216 CPU卡，5-国密CPU卡，6-身份证，7- NFC
-	public byte[] byRes3 = new byte[83];
-}
-
-//有效期参数结构体
-public static class NET_DVR_VALID_PERIOD_CFG extends Structure {
-	public byte byEnable;
-	public byte[] byRes1 = new byte[3];
-	public NET_DVR_TIME_EX struBeginTime;
-	public NET_DVR_TIME_EX struEndTime;
-	public byte[] byRes2 = new byte[32];
-}
-
-//身份证信息报警
-public static class NET_DVR_ID_CARD_INFO_ALARM extends Structure {
-	public int dwSize;        //结构长度
-        public NET_DVR_ID_CARD_INFO  struIDCardCfg = new NET_DVR_ID_CARD_INFO();//身份证信息
-	public int dwMajor; //报警主类型，参考宏定义
-	public int dwMinor; //报警次类型，参考宏定义
-	public NET_DVR_TIME_V30  struSwipeTime = new NET_DVR_TIME_V30(); //时间
-	public byte[] byNetUser = new byte[MAX_NAMELEN] ;//网络操作的用户名
-	public NET_DVR_IPADDR    struRemoteHostAddr = new NET_DVR_IPADDR();//远程主机地址
-	public int dwCardReaderNo; //读卡器编号，为0无效
-	public int dwDoorNo; //门编号，为0无效
-	public int dwPicDataLen;   //图片数据大小，不为0是表示后面带数据
-	public Pointer pPicData;
-	public byte byCardType; //卡类型，1-普通卡，2-残疾人卡，3-黑名单卡，4-巡更卡，5-胁迫卡，6-超级卡，7-来宾卡，8-解除卡，为0无效
-	public byte byDeviceNo;                             // 设备编号，为0时无效（有效范围1-255）
-	public byte[] byRes2 = new byte[2];
-	public int dwFingerPrintDataLen;                  // 指纹数据大小，不为0是表示后面带数据
-	public Pointer pFingerPrintData;
-	public int dwCapturePicDataLen;                   // 抓拍图片数据大小，不为0是表示后面带数据
-	public Pointer pCapturePicData;
-	public byte[] byRes = new byte[188];
-}
-
-//开锁记录
-public static class NET_DVR_UNLOCK_RECORD_INFO extends Structure{
-	public byte byUnlockType; //开锁方式，参考UNLOCK_TYPE_ENUM
-	public byte[] byRes1 = new byte[3]; //保留
-	public byte[] byControlSrc = new byte[NAME_LEN]; //操作发起源信息，刷卡开锁时为卡号，蓝牙开锁时为萤石的APP账号，二维码开锁时为访客的手机号，其余情况下为设备编号
-	public int dwPicDataLen; //图片数据长度
-	public Pointer pImage; //图片指针
-	public int dwCardUserID; //持卡人ID
-	public short nFloorNumber;//刷卡开锁时有效，为楼层号
-	public short wRoomNumber; //操作发起源附加信息，刷卡开锁时有效，为房间号，
-	public short wLockID; //（对于门口机，0-表示本机控制器上接的锁、1-表示外接控制器上接的锁）
-	public byte[] byRes2 = new byte[2];
-	public byte[] byLockName = new byte[LOCK_NAME_LEN]; //刷卡开锁时有效，锁名称，对应门参数配置中门名称
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
-	public byte[] byRes = new byte[136]; //保留
-}
-
-//公告信息阅读回执
-public static class NET_DVR_NOTICEDATA_RECEIPT_INFO extends Structure{
-	public byte[] byNoticeNumber = new byte[MAX_NOTICE_NUMBER_LEN]; //公告编号
-	public byte[] byRes = new byte[224];  //保留
-}
-
-//认证记录（设备未实现）
-public static class NET_DVR_AUTH_INFO extends Structure{
-	public byte byAuthResult; //认证结果：0-无效，1-认证成功，2-认证失败
-	public byte byAuthType; //认证方式：0-无效，1-指纹，2-人脸
-	public byte[]  byRes1 = new byte[2]; //保留
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN/*32*/]; //卡号
-	public int dwPicDataLen; //图片数据长度（当认证方式byAuthType为人脸时有效）
-	public Pointer pImage; //图片指针（当认证方式byAuthType为人脸时有效）
-	public byte[] byRes = new byte[212];  //保留
-}
-
-//车牌信息上传
-public static class NET_DVR_UPLOAD_PLATE_INFO extends Structure{
-	public byte[] sLicense = new byte[MAX_LICENSE_LEN];        //车牌号码
-	public byte byColor;                      //车牌颜色，参考结构VCA_PLATE_COLOR
-	public byte[] byRes = new byte[239];  //保留
-}
-
-public static class NET_DVR_SEND_CARD_INFO extends Structure{
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN/*32*/]; //卡号
-	public byte[] byRes = new byte[224];  //保留
-}
-
-//可视对讲事件记录信息联合体
-public static class NET_DVR_VIDEO_INTERCOM_EVENT_INFO_UINON extends Union{
-	public byte[] byLen = new byte[256]; //联合体大小
-	public NET_DVR_UNLOCK_RECORD_INFO struUnlockRecord = new NET_DVR_UNLOCK_RECORD_INFO(); //开锁记录
-	public NET_DVR_NOTICEDATA_RECEIPT_INFO struNoticedataReceipt = new NET_DVR_NOTICEDATA_RECEIPT_INFO(); //公告信息阅读回执
-	public NET_DVR_AUTH_INFO struAuthInfo = new NET_DVR_AUTH_INFO(); //认证记录（设备未实现）
-	public NET_DVR_UPLOAD_PLATE_INFO struUploadPlateInfo = new NET_DVR_UPLOAD_PLATE_INFO(); //车牌信息上传
-	public NET_DVR_SEND_CARD_INFO struSendCardInfo = new NET_DVR_SEND_CARD_INFO(); //门口机发卡,对应设备处于发卡状态，刷卡时上传该事件
-}
-
-//可视对讲事件记录
-public static class NET_DVR_VIDEO_INTERCOM_EVENT extends Structure{
-	public int dwSize; //结构体大小
-	public NET_DVR_TIME_EX struTime = new NET_DVR_TIME_EX(); //时间
-	public byte[] byDevNumber = new byte[MAX_DEV_NUMBER_LEN]; //设备编号
-	public byte byEventType; //事件信息类型，1-开锁记录，2-公告信息阅读回执，3-认证记录，4-车牌信息上传，5非法卡刷卡事件，6-门口机发卡记录(需要启动门口机发卡功能，刷卡时才会上传该事件)
-	public byte byPicTransType;        //图片数据传输方式: 0-二进制；1-url
-	public byte[] byRes1 = new byte[2]; //保留
-	public NET_DVR_VIDEO_INTERCOM_EVENT_INFO_UINON uEventInfo = new NET_DVR_VIDEO_INTERCOM_EVENT_INFO_UINON(); //事件信息，具体内容参考byEventType取值
-	public int dwIOTChannelNo;    //IOT通道号
-	public byte[] byRes2 = new byte[252]; //保留
-}
-
-public static class NET_DVR_CONTROL_GATEWAY extends Structure{
-	public int dwSize; //结构体大小
-	public int dwGatewayIndex; //门禁序号，从1开始
-	public byte byCommand; //操作命令，0-关闭，1-打开，2-常开（通道状态），3-恢复（普通状态）
-	public byte byLockType; //锁类型，0-普通（以前默认都为0）,1-智能锁
-	public short wLockID; //锁ID，从1开始（远程开门口机锁时，0表示门口机本机控制器上接的锁、1表示外接控制器上接的锁）
-	public byte[] byControlSrc = new byte[NAME_LEN]; //操作发起源信息
-	public byte byControlType; //开锁类型，1-监视，2-通话
-	public byte[] byRes3 = new byte[3];
-	public byte[] byPassword = new byte[PASSWD_LEN];       //锁密码，当byLockType为智能锁时有效
-	public byte[] byRes2 = new byte[108]; //保留
-}
-
-
-//公告图片信息结构体
-public static class NET_DVR_NOTICE_PIC extends Structure{
-	public Pointer pPicData; //图片指针
-	public int dwPicDataLen; //图片数据长度
-	public byte[] byRes = new byte[32]; //保留
-}
-
-//公告数据
-public static class NET_DVR_NOTICE_DATA extends Structure{
-	public int dwSize; //结构体大小
-	public NET_DVR_TIME_EX struTime = new NET_DVR_TIME_EX(); //公告时间
-	public byte[] byNoticeNumber = new byte[MAX_NOTICE_NUMBER_LEN]; //公告编号
-	public byte[] byNoticeTheme = new byte[MAX_NOTICE_THEME_LEN];//公告主题
-	public byte[] byNoticeDetail = new byte[MAX_NOTICE_DETAIL_LEN]; //公告详情
-	public byte byLevel; //公告等级，1-广告类信息；2-物业信息；3-报警类信息;4-通知类信息
-	public byte byPicNum; //公告图片数量
-	public byte[] byRes1 = new byte[2]; //保留
-	public NET_DVR_NOTICE_PIC[] struNoticePic = new NET_DVR_NOTICE_PIC[MAX_NOTICE_PIC_NUM]; //公告图片
-	public byte[] byRes2 = new byte[128]; //保留
-}
-
-public static class NET_DVR_DATE extends Structure{
-	public short wYear;        //年
-	public byte byMonth;        //月
-	public byte byDay;        //日
-}
-
-//身份证信息
-public static class NET_DVR_ID_CARD_INFO extends Structure{
-	public int dwSize;        //结构长度
-	public byte[] byName = new byte[MAX_ID_NAME_LEN];   //姓名
-	public NET_DVR_DATE struBirth; //出生日期
-	public byte[] byAddr = new byte[MAX_ID_ADDR_LEN];  //住址
-	public byte[] byIDNum = new byte[MAX_ID_NUM_LEN];   //身份证号码
-	public byte[] byIssuingAuthority = new byte[MAX_ID_ISSUING_AUTHORITY_LEN];  //签发机关
-	public NET_DVR_DATE struStartDate;  //有效开始日期
-	public NET_DVR_DATE struEndDate;  //有效截止日期
-	public byte byTermOfValidity;  //是否长期有效， 0-否，1-是（有效截止日期无效）
-	public byte bySex;  //性别，1-男，2-女
-	public byte byNation;    //民族，1-"汉"，2-"蒙古"，3-"回",4-"藏",5-"维吾尔",6-"苗",7-"彝",8-"壮",9-"布依",10-"朝鲜",
-    //11-"满",12-"侗",13-"瑶",14-"白",15-"土家",16-"哈尼",17-"哈萨克",18-"傣",19-"黎",20-"傈僳",
-    //21-"佤",22-"畲",23-"高山",24-"拉祜",25-"水",26-"东乡",27-"纳西",28-"景颇",29-"柯尔克孜",30-"土",
-    //31-"达斡尔",32-"仫佬",33-"羌",34-"布朗",35-"撒拉",36-"毛南",37-"仡佬",38-"锡伯",39-"阿昌",40-"普米",
-    //41-"塔吉克",42-"怒",43-"乌孜别克",44-"俄罗斯",45-"鄂温克",46-"德昂",47-"保安",48-"裕固",49-"京",50-"塔塔尔",
-    //51-"独龙",52-"鄂伦春",53-"赫哲",54-"门巴",55-"珞巴",56-"基诺"
-	public byte[] byRes = new byte[101];
-}
-
-//门禁主机报警信息结构体
-public static class NET_DVR_ACS_ALARM_INFO extends Structure{
-	public int dwSize;
-	public int dwMajor; //报警主类型，参考宏定义
-	public int dwMinor; //报警次类型，参考宏定义
-	public NET_DVR_TIME struTime = new NET_DVR_TIME(); //时间
-	public byte[] sNetUser = new byte[MAX_NAMELEN] ;//网络操作的用户名
-	public NET_DVR_IPADDR struRemoteHostAddr = new NET_DVR_IPADDR();//远程主机地址
-	public NET_DVR_ACS_EVENT_INFO struAcsEventInfo = new NET_DVR_ACS_EVENT_INFO(); //详细参数
-	public int dwPicDataLen;   //图片数据大小，不为0是表示后面带数据
-	public Pointer pPicData;
-	public short wInductiveEventType; //归纳事件类型，0-无效，客户端判断该值为非0值后，报警类型通过归纳事件类型区分，否则通过原有报警主次类型（dwMajor、dwMinor）区分
-	public byte byPicTransType;        //图片数据传输方式: 0-二进制；1-url
-	public byte byRes1;             //保留字节
-	public int dwIOTChannelNo;    //IOT通道号
-	public Pointer pAcsEventInfoExtend;    //byAcsEventInfoExtend为1时，表示指向一个NET_DVR_ACS_EVENT_INFO_EXTEND结构体
-	public byte byAcsEventInfoExtend;    //pAcsEventInfoExtend是否有效：0-无效，1-有效
-	public byte byTimeType; //时间类型：0-设备本地时间，1-UTC时间（struTime的时间）
-	public byte[] byRes = new byte[10];
-}
-
-//门禁主机事件信息
-public static class NET_DVR_ACS_EVENT_INFO extends Structure {
-	public int dwSize;
-	public byte[] byCardNo = new byte[32];
-	public byte byCardType;
-	public byte byWhiteListNo;
-	public byte byReportChannel;
-	public byte byCardReaderKind;
-	public int dwCardReaderNo;
-	public int dwDoorNo;
-	public int dwVerifyNo;
-	public int dwAlarmInNo;
-	public int dwAlarmOutNo;
-	public int dwCaseSensorNo;
-	public int dwRs485No;
-	public int dwMultiCardGroupNo;
-	public short wAccessChannel;
-	public byte byDeviceNo;
-	public byte byDistractControlNo;
-	public int dwEmployeeNo;
-	public short wLocalControllerID;
-	public byte byInternetAccess;
-	public byte byType;
-	public byte[] byRes = new byte[20];
-}
-
-public static class NET_DVR_ACS_EVENT_DETAIL extends Structure {
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //卡号（mac地址），为0无效
-	public byte byCardType; //卡类型，1-普通卡，2-残疾人卡，3-黑名单卡，4-巡更卡，5-胁迫卡，6-超级卡，7-来宾卡，8-解除卡，为0无效
-	public byte byWhiteListNo; //白名单单号,1-8，为0无效
-	public byte byReportChannel; //报告上传通道，1-布防上传，2-中心组1上传，3-中心组2上传，为0无效
-	public byte byCardReaderKind; //读卡器属于哪一类，0-无效，1-IC读卡器，2-身份证读卡器，3-二维码读卡器,4-指纹头
-	public int dwCardReaderNo; //读卡器编号，为0无效
-	public int dwDoorNo; //门编号（楼层编号），为0无效
-	public int dwVerifyNo; //多重卡认证序号，为0无效
-	public int dwAlarmInNo;  //报警输入号，为0无效
-	public int dwAlarmOutNo; //报警输出号，为0无效
-	public int dwCaseSensorNo; //事件触发器编号
-	public int dwRs485No;    //RS485通道号，为0无效
-	public int dwMultiCardGroupNo; //群组编号
-	public short wAccessChannel;    //人员通道号
-	public byte byDeviceNo; //设备编号，为0无效（有效范围1-255）
-	public byte byDistractControlNo;//分控器编号，为0无效
-	public int dwEmployeeNo; //工号，为0无效
-	public short wLocalControllerID; //就地控制器编号，0-门禁主机，1-64代表就地控制器
-	public byte byInternetAccess; //网口ID：（1-上行网口1,2-上行网口2,3-下行网口1）
-	public byte byType;     //防区类型，0:即时防区,1-24小时防区,2-延时防区 ,3-内部防区，4-钥匙防区 5-火警防区 6-周界防区 7-24小时无声防区  8-24小时辅助防区，9-24小时震动防区,10-门禁紧急开门防区，11-门禁紧急关门防区 0xff-无
-	public byte[] byMACAddr = new byte[MACADDR_LEN]; //物理地址，为0无效
-	public byte bySwipeCardType;//刷卡类型，0-无效，1-二维码
-	public byte byEventAttribute; //事件属性：0-未定义，1-合法认证，2-其它
-	public int dwSerialNo; //事件流水号，为0无效
-	public byte byChannelControllerID; //通道控制器ID，为0无效，1-主通道控制器，2-从通道控制器
-	public byte byChannelControllerLampID; //通道控制器灯板ID，为0无效（有效范围1-255）
-	public byte byChannelControllerIRAdaptorID; //通道控制器红外转接板ID，为0无效（有效范围1-255）
-	public byte byChannelControllerIREmitterID; //通道控制器红外对射ID，为0无效（有效范围1-255）
-	public int dwRecordChannelNum; //录像通道数目
-	public Pointer pRecordChannelData;//录像通道，大小为sizeof(DWORD)* dwRecordChannelNum
-	public byte byUserType; //人员类型：0-无效，1-普通人（主人），2-来宾（访客），3-黑名单人，4-管理员
-	public byte byCurrentVerifyMode; //读卡器当前验证方式：0-无效，1-休眠，2-刷卡+密码，3-刷卡，4-刷卡或密码，5-指纹，6-指纹+密码，7-指纹或刷卡，8-指纹+刷卡，9-指纹+刷卡+密码，10-人脸或指纹或刷卡或密码，11-人脸+指纹，12-人脸+密码，
-            //13-人脸+刷卡，14-人脸，15-工号+密码，16-指纹或密码，17-工号+指纹，18-工号+指纹+密码，19-人脸+指纹+刷卡，20-人脸+密码+指纹，21-工号+人脸，22-人脸或人脸+刷卡，23-指纹或人脸，24-刷卡或人脸或密码，25-刷卡或人脸，26-刷卡或人脸或指纹，27-刷卡或指纹或密码
-	public byte byAttendanceStatus;  //考勤状态：0-未定义,1-上班，2-下班，3-开始休息，4-结束休息，5-开始加班，6-结束加班
-	public byte byStatusValue;  //考勤状态值
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）（对于设备来说，如果使用了工号（人员ID）字段，byEmployeeNo一定要传递，如果byEmployeeNo可转换为dwEmployeeNo，那么该字段也要传递；对于上层平台或客户端来说，优先解析byEmployeeNo字段，如该字段为空，再考虑解析dwEmployeeNo字段）
-	public byte[] byRes = new byte[64];
-}
-
-public static class NET_DVR_ACS_EVENT_CFG extends Structure {
-	public int dwSize;
-	public int dwMajor; //报警主类型，参考宏定义
-	public int dwMinor; //报警次类型，参考宏定义
-	public NET_DVR_TIME struTime; //时间
-	public byte[] sNetUser = new byte[MAX_NAMELEN];//网络操作的用户名
-	public NET_DVR_IPADDR    struRemoteHostAddr;//远程主机地址
-	public NET_DVR_ACS_EVENT_DETAIL struAcsEventInfo; //详细参数
-	public int dwPicDataLen;   //图片数据大小，不为0是表示后面带数据
-	public Pointer pPicData;
-	public short wInductiveEventType; //归纳事件类型，0-无效，其他值参见2.2章节，客户端判断该值为非0值后，报警类型通过归纳事件类型区分，否则通过原有报警主次类型（dwMajor、dwMinor）区分
-	public byte byTimeType; //时间类型：0-设备本地时间（默认），1-UTC时间（struTime的时间）
- 	public byte[] byRes = new byte[61];
-}
-
-public static final int NET_SDK_MONITOR_ID_LEN = 64;
-public static class NET_DVR_ACS_EVENT_COND extends Structure {
-	public int dwSize;
-	public int dwMajor; //报警主类型，参考事件上传宏定义，0-全部
-	public int dwMinor; //报警次类型，参考事件上传宏定义，0-全部
-	public NET_DVR_TIME struStartTime; //开始时间
-	public NET_DVR_TIME struEndTime; //结束时间
- 	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //卡号
- 	public byte[] byName = new byte[NAME_LEN]; //持卡人姓名
-	public byte byPicEnable; //是否带图片，0-不带图片，1-带图片
-	public byte byTimeType; //时间类型：0-设备本地时间（默认），1-UTC时间（struStartTime和struEndTime的时间）
- 	public byte[] byRes2 = new byte[2]; //保留
-	public int dwBeginSerialNo; //起始流水号（为0时默认全部）
-	public int dwEndSerialNo; //结束流水号（为0时默认全部）
-	public int dwIOTChannelNo; //IOT通道号，0-无效
- 	public short wInductiveEventType; //归纳事件类型，0-无效，其他值参见2.2章节，客户端判断该值为非0值后，报警类型通过归纳事件类型区分，否则通过原有报警主次类型（dwMajor、dwMinor）区分
-	public byte bySearchType;      //搜索方式：0-保留，1-按事件源搜索（此时通道号为非视频通道号），2-按监控点ID搜索
-	public byte byEventAttribute; //事件属性：0-未定义，1-合法事件，2-其它
- 	public byte[] szMonitorID = new byte[NET_SDK_MONITOR_ID_LEN/*64*/];          //监控点ID（由设备序列号、通道类型、编号组成，例如门禁点：设备序列号+“DOOR”+门编号）
- 	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
- 	public byte[] byRes = new byte[140]; //保留
-}
-
-public static class NET_DVR_FACE_PARAM_COND extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN];    //人脸关联的卡号
-	public byte[] byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];  //人脸的读卡器是否有效，0-无效，1-有效
-	public int dwFaceNum;    //设置或获取人脸数量，获取时置为0xffffffff表示获取所有人脸信息
-	public byte byFaceID;     //人脸编号，有效值范围为1-2   0xff表示该卡所有人脸
-	public byte[] byRes = new byte[127];   //保留
-}
-
-public static class NET_DVR_FACE_PARAM_CFG extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN];    //人脸关联的卡号
-	public int dwFaceLen;    //人脸数据长度<DES加密处理>，设备端返回的即加密后的数据
-	public Pointer pFaceBuffer;  //人脸数据指针
-	public byte[] byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];  //需要下发人脸的读卡器，按数组表示，从低位到高位表示，0-不下发该读卡器，1-下发到该读卡器
-	public byte byFaceID;     //人脸编号，有效值范围为1-2
-	public byte byFaceDataType;   //人脸数据类型：0-模板（默认），1-图片
-	public byte[] byRes = new byte[126];
-}
-
-public static class NET_DVR_FACE_PARAM_STATUS extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //人脸关联的卡号
-	public byte[] byCardReaderRecvStatus = new byte[MAX_CARD_READER_NUM_512];  //人脸读卡器状态，按字节表示，0-失败，1-成功，2-重试或人脸质量差，3-内存已满，4-已存在该人脸，5-非法人脸ID
-	public byte[] byErrorMsg = new byte[ERROR_MSG_LEN]; //下发错误信息，当byCardReaderRecvStatus为4时，表示已存在人脸对应的卡号
-	public int dwCardReaderNo;  //纹读卡器编号，可用于下发错误返回
-	public byte byTotalStatus;  //下发总的状态，0-当前人脸未下完所有读卡器，1-已下完所有读卡器(这里的所有指的是门禁主机往所有的读卡器下发了，不管成功与否)
-	public byte byFaceID;     //人脸编号，有效值范围为1-2
-	public byte[] byRes = new byte[130];
-}
-
-public static class NET_DVR_FACE_PARAM_BYCARD extends Structure
-{
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //人脸关联的卡号
-	public byte[] byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];  //人脸的读卡器信息，按数组表示
-	public byte[] byFaceID = new byte[MAX_FACE_NUM];        //需要删除的人脸编号，按数组下标，值表示0-不删除，1-删除该人脸
-	public byte[] byRes1 = new byte[42];          //保留
-}
-
-public static class NET_DVR_FACE_PARAM_BYREADER extends Structure
-{
-	public int dwCardReaderNo;  //按值表示，人脸读卡器编号
-	public byte byClearAllCard;  //是否删除所有卡的人脸信息，0-按卡号删除人脸信息，1-删除所有卡的人脸信息
-	public byte[] byRes1 = new byte[3];       //保留
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //人脸关联的卡号
-	public byte[] byRes = new byte[548];          //保留
-}
-
- public static class NET_DVR_DEL_FACE_PARAM_MODE extends Union
-{
-	public byte[] uLen = new byte[588];   //联合体长度
-	public NET_DVR_FACE_PARAM_BYCARD struByCard;     //按卡号的方式删除
-	public NET_DVR_FACE_PARAM_BYREADER struByReader;   //按读卡器的方式删除
-}
-
-public static class NET_DVR_FACE_PARAM_CTRL extends Structure
-{
-	public int dwSize;
-	public byte byMode;          //删除方式，0-按卡号方式删除，1-按读卡器删除
-	public byte[] byRes1 = new byte[3];        //保留
-	public NET_DVR_DEL_FACE_PARAM_MODE struProcessMode;  //处理方式
-	public byte[] byRes = new byte[64];          //保留
-}
-
-public static class NET_DVR_FINGER_PRINT_CFG_V50 extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //指纹关联的卡号
-	public int dwFingerPrintLen; 	//指纹数据长度
-	public byte[] byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];  //需要下发指纹的读卡器，按数组表示，从低位到高位表示，0-不下发该读卡器，1-下发到该读卡器
-	public byte byFingerPrintID;     //手指编号，有效值范围为1-10
-	public byte byFingerType;       //指纹类型  0-普通指纹，1-胁迫指纹，2-巡更指纹，3-超级指纹，4-解除指纹
-	public byte[] byRes1 = new byte[30];
-	public byte[] byFingerData = new byte[MAX_FINGER_PRINT_LEN];        //指纹数据内容
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
-	public byte[] byLeaderFP = new byte[MAX_DOOR_NUM_256]; //对门是否有首次认证功能（按字节表示）：0-无首次认证功能，1-有首次认证功能
-	public byte[] byRes = new byte[128];
-}
-
-public static class NET_DVR_FINGER_PRINT_STATUS_V50 extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //指纹关联的卡号
-	public byte[] byCardReaderRecvStatus = new byte[MAX_CARD_READER_NUM_512];  //指纹读卡器状态，按字节表示，0-失败，1-成功，2-该指纹模组不在线，3-重试或指纹质量差，4-内存已满，5-已存在该指纹，6-已存在该指纹ID，7-非法指纹ID，8-该指纹模组无需配置，10-指纹读卡器版本过低（无法支持工号）
-	public byte byFingerPrintID;     //手指编号，有效值范围为1-10
-	public byte byFingerType;       //指纹类型  0-普通指纹，1-胁迫指纹，2-巡更指纹，3-超级指纹，4-解除指纹
-	public byte byTotalStatus;  //下发总的状态，0-当前指纹未下完所有读卡器，1-已下完所有读卡器(这里的所有指的是门禁主机往所有的读卡器下发了，不管成功与否)
-	public byte byRecvStatus;    //主机错误状态：0-成功，1-手指编号错误，2-指纹类型错误，3-卡号错误（卡号规格不符合设备要求），4-指纹未关联工号或卡号（工号或卡号字段为空），5-工号不存在，6-指纹数据长度为0，7-读卡器编号错误，8-工号错误
-	public byte[] byErrorMsg = new byte[ERROR_MSG_LEN]; //下发错误信息，当byCardReaderRecvStatus为5时，表示已存在指纹对应的卡号
-	public int dwCardReaderNo;  //当byCardReaderRecvStatus为5时，表示已存在指纹对应的指纹读卡器编号，可用于下发错误返回。0时表示无错误信息
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
-	public byte[] byErrorEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //下发错误信息，当byCardReaderRecvStatus为5时，表示已存在指纹对应的工号（人员ID）
-	public byte[] byRes = new byte[128];
-}
-
-public static class NET_DVR_FINGER_PRINT_INFO_COND_V50 extends Structure
-{
-	public int dwSize;
-	public byte[] byCardNo = new byte[ACS_CARD_NO_LEN]; //指纹关联的卡号（该字段获取时有效，设置时无效）
-	public byte[] byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];  //指纹的读卡器是否有效，0-无效，1-有效
-	public int dwFingerPrintNum; //设置或获指纹数量，获取时置为0xffffffff表示获取所有指纹信息
-	public byte byFingerPrintID;     //手指编号，有效值范围为1-10   0xff表示该卡所有指纹
-	public byte byCallbackMode;     //设备回调方式，0-设备所有读卡器下完了返回，1-在时间段内下了部分也返回
-	public byte[] byRes2 = new byte[2];          //保留
-	public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
-	public byte[] byRes1 = new byte[128];          //保留
-}
-
-//自定义结构体，用于二维数组转换
-public static class NET_DVR_SINGLE_PLAN_SEGMENT_WEEK extends Structure
-{
-    public NET_DVR_SINGLE_PLAN_SEGMENT[] struPlanCfgDay = new NET_DVR_SINGLE_PLAN_SEGMENT[MAX_TIMESEGMENT_V30]; //一天的计划参数
-}
-
-public static class NET_DVR_WEEK_PLAN_CFG extends Structure
-{
-	public int dwSize;
-	public byte byEnable;  //是否使能，1-使能，0-不使能
-	public byte[] byRes1 = new byte[3];
-	public NET_DVR_SINGLE_PLAN_SEGMENT_WEEK[] struPlanCfg = new NET_DVR_SINGLE_PLAN_SEGMENT_WEEK[MAX_DAYS]; //周计划参数
-	public byte[] byRes2 = new byte[16];
-}
-
-public static class NET_DVR_SINGLE_PLAN_SEGMENT extends Structure
-{
-	public byte byEnable; //是否使能，1-使能，0-不使能
-	public byte byDoorStatus; //门状态模式（梯控模式），0-无效，1-常开状态（自由），2-常闭状态（禁用），3-普通状态（门状态计划使用）
-	public byte byVerifyMode; //验证方式，0-无效，1-刷卡，2-刷卡+密码(读卡器验证方式计划使用)，3-刷卡,4-刷卡或密码(读卡器验证方式计划使用), 5-指纹，6-指纹+密码，7-指纹或刷卡，8-指纹+刷卡，9-指纹+刷卡+密码（无先后顺序），10-人脸或指纹或刷卡或密码，11-人脸+指纹，12-人脸+密码，
-                       //13-人脸+刷卡，14-人脸，15-工号+密码，16-指纹或密码，17-工号+指纹，18-工号+指纹+密码，19-人脸+指纹+刷卡，20-人脸+密码+指纹，21-工号+人脸，22-人脸或人脸+刷卡
-	public byte[] byRes = new byte[5];
-	public NET_DVR_TIME_SEGMENT struTimeSegment; //时间段参数
-}
-
-
-public static class NET_DVR_TIME_SEGMENT extends Structure
-{
-	public NET_DVR_SIMPLE_DAYTIME struBeginTime; //开始时间点
-	public NET_DVR_SIMPLE_DAYTIME struEndTime;   //结束时间点
-}
-
-public static class NET_DVR_SIMPLE_DAYTIME extends Structure
-{
-	public byte byHour; //时
-	public byte byMinute; //分
-	public byte bySecond; //秒
-	public byte byRes;
-}
-
-public static class NET_DVR_WEEK_PLAN_COND extends Structure
-{
-	public int dwSize;
-	public int dwWeekPlanNumber; //周计划编号
-	public short wLocalControllerID; //就地控制器序号[1,64]
-	public byte[] byRes = new byte[106];
-}
-
-public static class NET_DVR_CAPTURE_FACE_COND extends Structure
-{
-	public int dwSize;
-	public byte[] byRes = new byte[128];
-}
-
-public static class NET_DVR_CAPTURE_FACE_CFG extends Structure
-{
-	public int dwSize;
-	public int dwFaceTemplate1Size;  //人脸模板1数据大小，等于0时，代表无人脸模板1数据
-	public Pointer pFaceTemplate1Buffer; //人脸模板1数据缓存（不大于2.5k）
-	public int dwFaceTemplate2Size;  //人脸模板2数据大小，等于0时，代表无人脸模板2数据
-	public Pointer pFaceTemplate2Buffer; //人脸模板2数据缓存（不大于2.5K）
-	public int dwFacePicSize;        //人脸图片数据大小，等于0时，代表无人脸图片数据
-	public Pointer pFacePicBuffer;       //人脸图片数据缓存
-	public byte byFaceQuality1;        //人脸质量，范围1-100
-	public byte byFaceQuality2;        //人脸质量，范围1-100
-	public byte byCaptureProgress;    //采集进度，目前只有两种进度值：0-未采集到人脸，100-采集到人脸（只有在进度为100时，才解析人脸信息）
-	public byte[] byRes = new byte[125];
-}
-
-public static class NET_DVR_XML_CONFIG_INPUT extends Structure {
-	public int dwSize;
-	public Pointer lpRequestUrl;
-	public int dwRequestUrlLen;
-        public Pointer lpInBuffer;
-	public int dwInBufferSize;
-	public int dwRecvTimeOut;
-	public byte[] byRes = new byte[32];
-}
-
-public static class NET_DVR_STRING_POINTER extends Structure {
-	public byte[] byString = new byte[2*1024];
-}
-
-public static class NET_DVR_XML_CONFIG_OUTPUT extends Structure {
-	public int dwSize;
-	public Pointer lpOutBuffer;
-	public int dwOutBufferSize;
-        public int dwReturnedXMLSize;
-        public Pointer lpStatusBuffer;
-	public int dwStatusSize;
-	public byte[] byRes = new byte[32];
-}
-
-//报警场景信息
-public static class NET_DVR_SCENE_INFO  extends Structure {
-	public int dwSceneID;              //场景ID, 0 - 表示该场景无效
-	public byte[] bySceneName = new byte[NAME_LEN];  //场景名称
-	public byte byDirection;            //监测方向 1-上行，2-下行，3-双向，4-由东向西，5-由南向北，6-由西向东，7-由北向南，8-其它
-	public byte[] byRes1 = new byte[3];              //保留
-	public NET_DVR_PTZPOS  struPtzPos;             //Ptz 坐标
-	public byte[] byRes2 = new byte[64] ;            //保留
-}
-
-// 方向结构体
-public static class NET_DVR_DIRECTION  extends Structure {
-	public NET_VCA_POINT struStartPoint = new NET_VCA_POINT();   // 方向起始点
-	public NET_VCA_POINT struEndPoint = new NET_VCA_POINT();     // 方向结束点
-}
-
-// 交通事件信息
-public static class NET_DVR_AID_INFO  extends Structure {
-	public byte byRuleID;   // 规则序号，为规则配置结构下标，0-16
-	public byte[] byRes1 = new byte[3];
-	public byte[] byRuleName = new byte[NAME_LEN]; //  规则名称
-	public int dwAIDType;  // 报警事件类型
-	public NET_DVR_DIRECTION struDirect = new NET_DVR_DIRECTION(); // 报警指向区域
-	public byte bySpeedLimit; //限速值，单位km/h[0,255]
- 	public byte byCurrentSpeed; //当前速度值，单位km/h[0,255]
-        public byte byVehicleEnterState; //车辆出入状态：0- 无效，1- 驶入，2- 驶出
-        public byte byState; //0-变化上传，1-轮巡上传
-        public byte[] byParkingID = new byte[16]; //停车位编号
-	public byte[] byRes2 = new byte[20];  // 保留字节
-}
-
-public int ILLEGAL_LEN = 32; //违法代码长度
-public int MONITORSITE_ID_LEN = 48;//监测点编号长度
-public int DEVICE_ID_LEN = 48;
-
-//交通取证报警
-public static class NET_DVR_TFS_ALARM  extends Structure {
-	public int dwSize;                //结构体大小
-	public int dwRelativeTime;        //相对时标
-	public int dwAbsTime;               //绝对时标
-	public int dwIllegalType;         //违章类型，采用国标定义，当dwIllegalType值为0xffffffff时使用byIllegalCode
-	public int dwIllegalDuration;     //违法持续时间（单位：秒） = 抓拍最后一张图片的时间 - 抓拍第一张图片的时间
-	public byte[] byMonitoringSiteID = new byte[MONITORSITE_ID_LEN];//监测点编号（路口编号、内部编号）
-	public byte[] byDeviceID = new byte[DEVICE_ID_LEN];             //设备编号
-	public NET_VCA_DEV_INFO struDevInfo = new NET_VCA_DEV_INFO();           //前端设备信息
-	public NET_DVR_SCENE_INFO struSceneInfo = new NET_DVR_SCENE_INFO();         //场景信息
-	public NET_DVR_TIME_EX struBeginRecTime = new NET_DVR_TIME_EX();      //录像开始时间
-	public NET_DVR_TIME_EX struEndRecTime = new NET_DVR_TIME_EX();        //录像结束时间
-	public NET_DVR_AID_INFO struAIDInfo = new NET_DVR_AID_INFO();           //交通事件信息
-	public NET_DVR_PLATE_INFO struPlateInfo = new NET_DVR_PLATE_INFO();         //车牌信息
-	public NET_DVR_VEHICLE_INFO struVehicleInfo = new NET_DVR_VEHICLE_INFO();       //车辆信息
-	public int dwPicNum; //图片数量
-	public NET_ITS_PICTURE_INFO[] struPicInfo = new NET_ITS_PICTURE_INFO[8];        //图片信息，最多8张
-	public byte bySpecificVehicleType;     //具体车辆种类  参考识别结果类型VTR_RESULT
-	public byte byLaneNo;  //关联车道号
-	public byte[] byRes1 = new byte[2]; //保留
-	public NET_DVR_TIME_V30 struTime = new NET_DVR_TIME_V30();//手动跟踪定位，当前时间。
-	public int dwSerialNo;//序号；
-	public byte byVehicleAttribute;//车辆属性，按位表示，0- 无附加属性(普通车)，bit1- 黄标车(类似年检的标志)，bit2- 危险品车辆，值：0- 否，1- 是
-	public byte byPilotSafebelt;//0-表示未知,1-系安全带,2-不系安全带
-	public byte byCopilotSafebelt;//0-表示未知,1-系安全带,2-不系安全带
-	public byte byPilotSunVisor;//0-表示未知,1-不打开遮阳板,2-打开遮阳板
-	public byte byCopilotSunVisor;//0-表示未知, 1-不打开遮阳板,2-打开遮阳板
-	public byte byPilotCall;// 0-表示未知, 1-不打电话,2-打电话
-	public byte[] byRes2 = new byte[2]; //保留
-	public byte[] byIllegalCode = new byte[ILLEGAL_LEN/*32*/];//违法代码扩展，当dwIllegalType值为0xffffffff；使用这个值
-	public short wCountry; // 国家索引值,参照枚举COUNTRY_INDEX
-	public byte byRegion; //区域索引值,0-保留，1-欧洲(Europe Region)，2-俄语区域(Russian Region)，3-欧洲&俄罗斯(EU&CIS) , 4-中东（Middle East），0xff-所有
-	public byte byCrossLine;//是否压线停车（侧方停车），0-表示未知，1-不压线，2-压线
-	public byte[] byParkingSerialNO = new byte[16];//泊车位编号
-	public byte byCrossSpaces;//是否跨泊车位停车（侧方停车），0-表示未知，1-未跨泊车位停车，2-跨泊车位停车
-	public byte byAngledParking;//是否倾斜停车（侧方停车）, 0-表示未知，1-未倾斜停车，2-倾斜停车
-	public byte byAlarmValidity;//报警置信度，可以输出驶入驶出的置信度，范围0-100；置信度越高，事件真实性越高
-	public byte[] byRes = new byte[45]; //保留
-}
-
-public static class NET_ITS_OVERLAPCFG_COND extends Structure{
-        public int dwSize;
-        public int dwChannel;
-        public int dwConfigMode; //配置模式，0-终端，1-前端(直连前端或终端接前端)
-        public byte byPicModeType;//0-表示小图(独立图)，1-表示大图(合成图)
-        /*
-          0表示关联 抓拍MPR模式（多帧触发抓拍 IPC使用）
-          1 表示关联 抓拍 HVT 模式（混卡IPC使用）
-        */
-        public byte byRelateType;
-        public byte[] byRes = new byte[14];
-        @Override
-        protected List<String> getFieldOrder() {
-            // TODO Auto-generated method stub
-            return Arrays.asList("dwSize", "dwChannel", "dwConfigMode", "byPicModeType", "byRelateType", "byRes");
-        }
-    }
-
- //字符叠加每一条信息结构体
- public static class NET_ITS_OVERLAP_SINGLE_ITEM_PARAM_V50 extends Structure{
-        public byte[] byRes1 = new byte[2];                   // 保留
-        public byte byItemType;       //类型，详见OVERLAP_ITEM_TYPE
-        public byte byChangeLineNum; //叠加项后的换行数[0-10](默认0)
-        public byte bySpaceNum;      //叠加项后的空格数[0-255](默认0)
-        public byte[] byRes2 = new byte[2];
-        public byte byEnablePos;  //是否启用坐标显示
-        public short wStartPosTop;    //起始上坐标,只对图片内部叠加有效[0~2448](默认0)
-        public short wStartPosLeft;    //起始左坐标,只对图片内部叠加有效[0~2448](默认0)
-        //自定义类型；与byItemType参数对应。可将byItemType参数类型自定义名称。若自定义内容为空，便默认以byItemType参数中的类型命名。
-        public byte[] byItemTypeCustom = new byte[32];
-        public byte[] byRes = new byte[8];
-        @Override
-        protected List<String> getFieldOrder() {
-            // TODO Auto-generated method stub
-            return Arrays.asList("byRes1", "byItemType", "byChangeLineNum", "bySpaceNum", "byRes2", "byEnablePos",
-            "wStartPosTop", "wStartPosLeft", "byItemTypeCustom","byRes");
-        }
- }
-
- public int MAX_OVERLAP_ITEM_NUM = 50; //最大字符叠加种数
- public static class NET_ITS_OVERLAP_ITEM_PARAM_V50 extends Structure{
-        public NET_ITS_OVERLAP_SINGLE_ITEM_PARAM_V50[] struSingleItem = new NET_ITS_OVERLAP_SINGLE_ITEM_PARAM_V50[MAX_OVERLAP_ITEM_NUM]; //单条字符参数
-        public int dwLinePercent;  //叠加行百分比(0-100),(默认100)
-        public int dwItemsStlye;   //叠加方式：0-横排,1-竖排(默认横排)
-        public short wStartPosTop;    //起始上坐标,只对图片内部叠加有效[0~2448](默认0)
-        public short wStartPosLeft;    //起始左坐标,只对图片内部叠加有效[0~2448](默认0)
-        public short wCharStyle;    //字体类型,0-宋体1-魏体(默认)
-        public short wCharSize;    //字符大小,0--16x16,1--32x32,2-48x48,3--64x64 (默认),8x128(Ver3.7)
-        public short wCharInterval;    //字符间距，[0～16]，可设单位：像素(默认)
-        public byte[] byRes1 = new byte[2];
-        public int dwForeClorRGB;      //前景色的RGB值bit0-1:(B) bit2-3:(G) bit4-5:(G) (默认x00FFFFFF-白)
-        public int dwBackClorRGB; //背景色的RGB值,只对图片外叠加有效bit0-1:(B) bit2-3:(G) bit4-5:(G) (默认x00000000-黑)
-        public byte byColorAdapt;    //颜色是否自适应0-否1-是
-        //(Ver3.7 新增)
-        // 参数补零使能 0-补零, 1-不补零（详细注释）速度,限速值 不足3位补0
-        public byte byParamFillZeroEnble;
-        public byte byPlateLeftCornerEnable;// 车牌小图叠加左上角使能 0-不叠加, 1-叠加
-        public byte byRes2;
-        public short wStartSPicPosTop; //起始上坐标,只对图片内部叠加有效[0~2448](默认0)
-        public short wStartSPicPosLeft; //起始左坐标,只对图片内部叠加有效[0~2448](默认0)
-        //OSD叠加位置  0-图片内,1-图片上边缘,2-图片下边缘（合成图专用的是上边缘外）（V3.7）
-        public byte byOsdLocate;
-        public byte[] byRes = new byte[63];
-        @Override
-        protected List<String> getFieldOrder() {
-            // TODO Auto-generated method stub
-            return Arrays.asList("struSingleItem","dwLinePercent","dwItemsStlye","wStartPosTop","wStartPosLeft","wCharStyle",
-            "wCharSize","wCharInterval","byRes1","dwForeClorRGB","dwBackClorRGB","byColorAdapt","byParamFillZeroEnble",
-            "byPlateLeftCornerEnable","byRes2","wStartSPicPosTop","wStartSPicPosLeft","byOsdLocate","byRes");
-        }
-    }
-
-  //叠加项具体信息
-  public static class NET_ITS_OVERLAP_INFO_PARAM extends Structure{
-      public byte[] bySite = new byte[128];           //地点描述
-      public byte[] byRoadNum = new byte[32];  //路口编号
-      public byte[] byInstrumentNum = new byte[32];                //设备编号
-      public byte[] byDirection = new byte[32];        //方向编号
-      public byte[] byDirectionDesc = new byte[32];    //方向描述
-      public byte[] byLaneDes = new byte[32];        //车道描述
-      public byte[] byRes1 = new byte[32];     //保留
-      public byte[] byMonitoringSite1 = new byte[44];        //监测点1信息
-      public byte[] byMonitoringSite2 = new byte[32];        //监测点2信息
-      public byte[] byRes = new byte[64];        //保留
- }
-
-  public static class NET_ITS_OVERLAP_CFG_V50 extends Structure{
-        public int dwSize;
-        public byte byEnable; //是否启用，0-不启用，1-启用
-        public byte[] byRes1 = new byte[3];
-        public NET_ITS_OVERLAP_ITEM_PARAM_V50 struOverLapItemV50 = new NET_ITS_OVERLAP_ITEM_PARAM_V50(); //字符串参数
-        public NET_ITS_OVERLAP_INFO_PARAM struOverLapInfo = new NET_ITS_OVERLAP_INFO_PARAM();  //字符串内容信息
-        public byte[] byRes = new byte[120];
-        @Override
-        protected List<String> getFieldOrder() {
-            // TODO Auto-generated method stub
-            return Arrays.asList("dwSize", "byEnable", "byRes1", "struOverLapItemV50", "struOverLapInfo", "byRes");
-        }
-    }
-
-//人体特征识别结果结构体
-public static class NET_VCA_HUMAN_FEATURE  extends Structure {
-	public byte byAgeGroup;    //年龄段,参见 HUMAN_AGE_GROUP_ENUM
-	public byte bySex;         //性别, 0-表示“未知”（算法不支持）,1 – 男 , 2 – 女, 0xff-算法支持，但是没有识别出来
-	public byte byEyeGlass;    //是否戴眼镜 0-表示“未知”（算法不支持）,1 – 不戴, 2 – 戴,0xff-算法支持，但是没有识别出来
-    //抓拍图片人脸年龄的使用方式，如byAge为15,byAgeDeviation为1,表示，实际人脸图片年龄的为14-16之间
-	public byte byAge;//年龄 0-表示“未知”（算法不支持）,0xff-算法支持，但是没有识别出来
-	public byte byAgeDeviation;//年龄误差值
-	public byte byEthnic;   //字段预留,暂不开放
-	public byte byMask;       //是否戴口罩 0-表示“未知”（算法不支持）,1 – 不戴, 2 – 戴, 0xff-算法支持，但是没有识别出来
-	public byte bySmile;      //是否微笑 0-表示“未知”（算法不支持）,1 – 不微笑, 2 – 微笑, 0xff-算法支持，但是没有识别出来
-	public byte[] byRes = new byte[8];    //保留
-}
-
-//人脸抓拍结果
-public static class NET_VCA_FACESNAP_RESULT  extends Structure {
-	public int dwSize;             // 结构大小
-	public int dwRelativeTime;     // 相对时标
-	public int dwAbsTime;            // 绝对时标
-	public int dwFacePicID;       //人脸图ID
-	public int dwFaceScore;        //人脸评分,0-100
-	public NET_VCA_TARGET_INFO struTargetInfo = new NET_VCA_TARGET_INFO();//报警目标信息
-	public NET_VCA_RECT struRect = new NET_VCA_RECT();      //人脸子图区域
-	public NET_VCA_DEV_INFO struDevInfo = new NET_VCA_DEV_INFO();    //前端设备信息
-	public int dwFacePicLen;        //人脸子图的长度，为0表示没有图片，大于0表示有图片
-	public int dwBackgroundPicLen; //背景图的长度，为0表示没有图片，大于0表示有图片(保留)
-	public byte bySmart;            //IDS设备返回0(默认值)，Smart Functiom Return 1
-	public byte byAlarmEndMark;//报警结束标记0-保留，1-结束标记（该字段结合人脸ID字段使用，表示该ID对应的下报警结束，主要提供给NVR使用，用于判断报警结束，提取识别图片数据中，清晰度最高的图片）
-	public byte byRepeatTimes;   //重复报警次数，0-无意义
-	public byte byUploadEventDataType;//人脸图片数据长传方式：0-二进制数据，1-URL
-	public NET_VCA_HUMAN_FEATURE struFeature = new NET_VCA_HUMAN_FEATURE();  //人体属性
-	public float   fStayDuration;  //停留画面中时间(单位: 秒)
-	public byte[] sStorageIP = new byte[16];        //存储服务IP地址
-	public short wStoragePort;            //存储服务端口号
-	public short wDevInfoIvmsChannelEx;     //与NET_VCA_DEV_INFO里的byIvmsChannel含义相同，能表示更大的值。老客户端用byIvmsChannel能继续兼容，但是最大到255。新客户端版本请使用wDevInfoIvmsChannelEx。
-	public byte byFacePicQuality;
-	public byte byUIDLen;     // 上传报警的标识长度
-	public byte byLivenessDetectionStatus;// 活体检测状态：0-保留，1-未知(检测失败)，2-非真人人脸，3-真人人脸，4-未开启活体检测
-    /*附加信息标识位（即是否有NET_VCA_FACESNAP_ADDINFO结构体）,0-无附加信息, 1-有附加信息。*/
-	public byte byAddInfo;
-        public Pointer pUIDBuffer;  //标识指针
-    //附加信息指针,指向NET_VCA_FACESNAP_ADDINFO结构体
-        public Pointer pAddInfoBuffer;
-	public byte byTimeDiffFlag;      /*时差字段是否有效  0-时差无效， 1-时差有效 */
-	public byte cTimeDifferenceH;         /*与UTC的时差（小时），-12 ... +14， +表示东区,，byTimeDiffFlag为1时有效*/
-	public byte cTimeDifferenceM;      	/*与UTC的时差（分钟），-30, 30, 45， +表示东区，byTimeDiffFlag为1时有效*/
-	public byte byBrokenNetHttp;     //断网续传标志位，0-不是重传数据，1-重传数据
-        public Pointer pBuffer1;  //人脸子图的图片数据
-        public Pointer pBuffer2;  //背景图的图片数据（保留，通过查找背景图接口可以获取背景图）
-}
-
-//人脸抓拍信息
-public static class NET_VCA_FACESNAP_INFO_ALARM extends Structure {
-       public int dwRelativeTime;     // 相对时标
-       public int dwAbsTime;            // 绝对时标
-       public int dwSnapFacePicID;       //抓拍人脸图ID
-       public int dwSnapFacePicLen;        //抓拍人脸子图的长度，为0表示没有图片，大于0表示有图片
-       public NET_VCA_DEV_INFO struDevInfo = new NET_VCA_DEV_INFO();        //前端设备信息
-       public byte byFaceScore;        //人脸评分，指人脸子图的质量的评分,0-100
-       public byte bySex;//性别，0-未知，1-男，2-女
-       public byte byGlasses;//是否带眼镜，0-未知，1-是，2-否
-        //抓拍图片人脸年龄的使用方式，如byAge为15,byAgeDeviation为1,表示，实际人脸图片年龄的为14-16之间
-       public byte byAge;//年龄
-       public byte byAgeDeviation;//年龄误差值
-       public byte byAgeGroup;//年龄段，详见HUMAN_AGE_GROUP_ENUM，若传入0xff表示未知
-       public byte byFacePicQuality;
-       public byte byRes1;              // 保留字节
-       public int dwUIDLen; // 上传报警的标识长度
-        public Pointer pUIDBuffer;  //标识指针
-        public float fStayDuration;  //停留画面中时间(单位: 秒)
-        public Pointer pBuffer1;  //抓拍人脸子图的图片数据
-}
-
-//籍贯参数
-public static class NET_DVR_AREAINFOCFG extends Structure {
-	public short wNationalityID; //国籍
-	public short wProvinceID; //省
-	public short wCityID; //市
-	public short wCountyID; //县
-	public int dwCode; //国家标准的省份、城市、县级代码，当这个字段不为0的时候，使用这个值，新设备上传这个值表示籍贯参数，老设备这个值为0
-}
-
-//人员信息
-public int MAX_HUMAN_BIRTHDATE_LEN = 10;
-public static class NET_VCA_HUMAN_ATTRIBUTE extends Structure {
-       public byte bySex; //性别：0-男，1-女
-       public byte byCertificateType; //证件类型：0-身份证，1-警官证
-       public byte[] byBirthDate = new byte[MAX_HUMAN_BIRTHDATE_LEN]; //出生年月，如：201106
-       public byte[] byName = new byte[NAME_LEN]; //姓名
-       public NET_DVR_AREAINFOCFG struNativePlace = new NET_DVR_AREAINFOCFG(); //籍贯参数
-       public byte[] byCertificateNumber = new byte[NAME_LEN];  //证件号
-       public int dwPersonInfoExtendLen;// 人员标签信息扩展长度
-        public Pointer pPersonInfoExtend;  //人员标签信息扩展信息
-       public byte byAgeGroup;//年龄段，详见HUMAN_AGE_GROUP_ENUM，如传入0xff表示未知
-       public byte[] byRes2 = new byte[11];
-}
-
-//黑名单信息
-public static class NET_VCA_BLACKLIST_INFO extends Structure {
-       public int dwSize;   //结构大小
-       public int dwRegisterID;  //名单注册ID号（只读）
-       public int dwGroupNo; //分组号
-       public byte byType; //黑白名单标志：0-全部，1-白名单，2-黑名单
-       public byte byLevel; //黑名单等级，0-全部，1-低，2-中，3-高
-       public byte[] byRes1 = new byte[2];  //保留
-       public NET_VCA_HUMAN_ATTRIBUTE struAttribute = new NET_VCA_HUMAN_ATTRIBUTE();  //人员信息
-       public byte[] byRemark = new byte[NAME_LEN]; //备注信息
-       public int dwFDDescriptionLen;//人脸库描述数据长度
-        public Pointer pFDDescriptionBuffer;//人脸库描述数据指针
-       public int dwFCAdditionInfoLen;//抓拍库附加信息长度
-        public Pointer pFCAdditionInfoBuffer;//抓拍库附加信息数据指针（FCAdditionInfo中包含相机PTZ坐标）
-       public byte[] byRes2 = new byte[4];
-}
-
-//黑名单报警信息
-public static class NET_VCA_BLACKLIST_INFO_ALARM extends Structure {
-       public NET_VCA_BLACKLIST_INFO struBlackListInfo = new NET_VCA_BLACKLIST_INFO(); //黑名单基本信息
-       public int dwBlackListPicLen;       //黑名单人脸子图的长度，为0表示没有图片，大于0表示有图片
-       public int dwFDIDLen;// 人脸库ID长度
-        public Pointer pFDID;  //人脸库Id指针
-       public int dwPIDLen;// 人脸库图片ID长度
-        public Pointer pPID;  //人脸库图片ID指针
-       public short wThresholdValue; //人脸库阈值[0,100]
-       public byte[] byRes = new byte[2];              // 保留字节
-       public Pointer pBuffer1;  //黑名单人脸子图的图片数据
-}
-
-
-//黑名单比对结果报警上传
-public static class NET_VCA_FACESNAP_MATCH_ALARM extends Structure {
-	public int dwSize;             // 结构大小
-	public float fSimilarity; //相似度，[0.001,1]
-	public NET_VCA_FACESNAP_INFO_ALARM  struSnapInfo = new NET_VCA_FACESNAP_INFO_ALARM(); //抓拍信息
-	public NET_VCA_BLACKLIST_INFO_ALARM struBlackListInfo = new NET_VCA_BLACKLIST_INFO_ALARM(); //黑名单信息
-	public byte[] sStorageIP = new byte[16];        //存储服务IP地址
-	public short wStoragePort;            //存储服务端口号
-	public byte byMatchPicNum; //匹配图片的数量，0-保留（老设备这个值默认0，新设备这个值为0时表示后续没有匹配的图片信息）
-	public byte byPicTransType;//图片数据传输方式: 0-二进制；1-url
-	public int dwSnapPicLen;//设备识别抓拍图片长度
-        public Pointer pSnapPicBuffer;//设备识别抓拍图片指针
-	public NET_VCA_RECT  struRegion = new  NET_VCA_RECT();//目标边界框，设备识别抓拍图片中，人脸子图坐标
-	public int dwModelDataLen;//建模数据长度
-        public Pointer pModelDataBuffer;// 建模数据指针
-	public byte byModelingStatus;// 建模状态
-	public byte byLivenessDetectionStatus;//活体检测状态：0-保留，1-未知（检测失败），2-非真人人脸，3-真人人脸，4-未开启活体检测
-	public byte cTimeDifferenceH;         /*与UTC的时差（小时），-12 ... +14， +表示东区,0xff无效*/
-	public byte cTimeDifferenceM;      	/*与UTC的时差（分钟），-30, 30, 45， +表示东区，0xff无效*/
-	public byte byMask;                //抓拍图是否戴口罩，0-保留，1-未知，2-不戴口罩，3-戴口罩
-	public byte bySmile;               //抓拍图是否微笑，0-保留，1-未知，2-不微笑，3-微笑
-	public byte byContrastStatus;      //比对结果，0-保留，1-比对成功，2-比对失败
-	public byte byBrokenNetHttp;     //断网续传标志位，0-不是重传数据，1-重传数据
-}
-
-//交通事件报警(扩展)
-public static class NET_DVR_AID_ALARM_V41 extends Structure {
-	public int dwSize;              //结构长度
-	public int dwRelativeTime;        //相对时标
-	public int dwAbsTime;            //绝对时标
-	public NET_VCA_DEV_INFO   struDevInfo = new NET_VCA_DEV_INFO();            //前端设备信息
-	public NET_DVR_AID_INFO   struAIDInfo = new NET_DVR_AID_INFO();         //交通事件信息
-	public NET_DVR_SCENE_INFO struSceneInfo = new NET_DVR_SCENE_INFO();       //场景信息
-	public int dwPicDataLen;        //图片长度
-        public Pointer pImage;             //指向图片的指针
-        // 0-数据直接上传; 1-云存储服务器URL(3.7Ver)原先的图片数据变成URL数据，图片长度变成URL长度
-	public byte byDataType;
-	public byte byLaneNo;  //关联车道号
-	public short wMilliSecond;        //时标毫秒
-        //监测点编号（路口编号、内部编号）
-	public byte[] byMonitoringSiteID = new byte[MONITORSITE_ID_LEN/*48*/];
-	public byte[] byDeviceID = new byte[DEVICE_ID_LEN/*48*/];//设备编号
-	public int dwXmlLen;//XML报警信息长度
-        public Pointer pXmlBuf;// XML报警信息指针,其XML对应到EventNotificationAlert XML Block
-	public byte byTargetType;// 检测的目标类型，0~未知，1~行人、2~二轮车、3~三轮车(行人检测中返回)
-	public byte[] byRes = new byte[19]; // 保留字节
-}
-
-//交通统计信息报警(扩展)
-public static class NET_DVR_TPS_ALARM_V41 extends Structure {
-	public int dwSize;          // 结构体大小
-	public int dwRelativeTime;  // 相对时标
-	public int dwAbsTime;       // 绝对时标
-	public NET_VCA_DEV_INFO      struDevInfo;     // 前端设备信息
-	public NET_DVR_TPS_INFO_V41  struTPSInfo;     // 交通参数统计信息
-    //监测点编号（路口编号、内部编号）
-	public byte[] byMonitoringSiteID = new byte[MONITORSITE_ID_LEN/*48*/];
-	public byte[] byDeviceID = new byte[DEVICE_ID_LEN/*48*/];//设备编号
-	public int dwStartTime;  // 开始统计时间
-	public int dwStopTime;    // 结束统计时间
-	public byte[] byRes = new byte[24];      // 保留
-}
-
-public static class NET_DVR_LANE_PARAM_V41 extends Structure {
-	public byte[] byRuleName = new byte[NAME_LEN]; // 车道规则名称
-	public byte byRuleID;             // 规则序号，为规则配置结构下标，0-7
-	public byte byLaneType;             // 车道上行或下行
-	public byte byTrafficState;       // 车道的交通状态，0-无效，1-畅通，2-拥挤，3-堵塞
-	public byte byLaneNo;            //车道号
-	public int dwVaryType;           // 车道交通参数变化类型参照  TRAFFIC_DATA_VARY_TYPE_EX_ENUM，按位区分
-	public int dwTpsType;            // 数据变化类型标志，表示当前上传的统计参数中，哪些数据有效，参照ITS_TPS_TYPE,按位区分
-	public int dwLaneVolume;         // 车道流量，统计有多少车子通过
-	public int dwLaneVelocity;       // 车道速度，公里计算
-	public int dwTimeHeadway ;       // 车头时距，以秒计算
-	public int dwSpaceHeadway;       // 车头间距，以米来计算
-	public float fSpaceOccupyRation;   // 车道占有率，百分比计算（空间上)
-	public float fTimeOccupyRation;    // 时间占有率，百分比计算
-	public int dwLightVehicle;       // 小型车数量
-	public int dwMidVehicle;         // 中型车数量
-	public int dwHeavyVehicle;       // 重型车数量
-	public NET_DVR_LANE_QUEUE struLaneQueue;        // 车道队列长度
-	public NET_VCA_POINT      struRuleLocation;     // 规则位置虚拟线圈的中心
-	public int dwOversizeVehicle;    // 大型车数量
-	public byte[] byRes2 = new byte[60];           // 保留
-}
-
-public int  MAX_TPS_RULE = 8;     // 最大参数规则数目
-public static class NET_DVR_TPS_INFO_V41 extends Structure {
-	public int dwLanNum;          // 交通参数的车道数目
-	public NET_DVR_LANE_PARAM_V41[]  struLaneParam= new NET_DVR_LANE_PARAM_V41[MAX_TPS_RULE];
-	public int dwSceneID;//场景ID
-	public byte[] byRes = new byte[28];         //保留
-}
-
-// 车道队列结构体
-public static class NET_DVR_LANE_QUEUE extends Structure {
-	public NET_VCA_POINT   struHead;       //队列头
-	public NET_VCA_POINT   struTail;       //队列尾
-	public int dwLength;      //实际队列长度 单位为米 [0-500]
-}
-
-//TPS统计过车数据上传
-public static class NET_DVR_TPS_STATISTICS_INFO extends Structure {
-	public int dwSize;          // 结构体大小
-	public int dwChan ;//通道号
-	public NET_DVR_TPS_STATISTICS_PARAM struTPSStatisticsInfo;// 交通参数统计信息
-	public byte[] byRes = new byte[128];      // 保留
-}
-
-// 交通参数统计信息
-public static class NET_DVR_TPS_STATISTICS_PARAM extends Structure {
-	public byte byStart;          // 开始码
-	public byte byCMD;         // 命令号， 08-定时成组数据指令
-	public byte[] byRes = new byte[2];        // 预留字节
-	public short wDeviceID;      // 设备ID
-	public short wDataLen;       // 数据长度
-	public byte byTotalLaneNum;  // 有效车道总数
-	public byte[] byRes1 = new byte[15];
-	public NET_DVR_TIME_V30    struStartTime;    //统计开始时间
-	public int dwSamplePeriod;    //统计时间,单位秒
-	public NET_DVR_TPS_LANE_PARAM[]  struLaneParam = new NET_DVR_TPS_LANE_PARAM[8];
-}
-
-//统计信息
-public static class NET_DVR_TPS_LANE_PARAM extends Structure {
-	public byte byLane;             // 对应车道号
-	public byte bySpeed;             // 车道过车平均速度
-	public byte[] byRes = new byte[2];             // 保留
-	public int dwLightVehicle;      // 小型车数量
-	public int dwMidVehicle;        // 中型车数量
-	public int dwHeavyVehicle;      // 重型车数量
-	public int dwTimeHeadway;      // 车头时距，以秒计算
-	public int dwSpaceHeadway;     // 车头间距，以米来计算
-	public float fSpaceOccupyRation; // 空间占有率，百分比计算,浮点数*1000
-	public float fTimeOccupyRation;  // 时间占有率，百分比计算,浮点数*1000
-	public byte[] byRes1 = new byte[16];               // 保留
-}
-
-public static class NET_DVR_ALARM_ISAPI_INFO extends Structure {
-        public Pointer pAlarmData;           // 报警数据（参见下表）
-	public int dwAlarmDataLen;   // 报警数据长度
-	public byte byDataType;        // 0-invalid,1-xml,2-json
-	public byte byPicturesNumber;  // 图片数量
-	public byte[] byRes = new byte[2];
-        public Pointer pPicPackData;         // 图片变长部分
-        //（byPicturesNumber个{NET_DVR_ALARM_ISAPI_PICDATA}；）
-	public byte[] byRes1 = new byte[32];
-}
-
-public static class NET_DVR_LOCAL_GENERAL_CFG extends Structure {
-	public byte byExceptionCbDirectly;    //0-通过线程池异常回调，1-直接异常回调给上层
-	public byte byNotSplitRecordFile;     //回放和预览中保存到本地录像文件不切片 0-默认切片，1-不切片
-	public byte byResumeUpgradeEnable;    //断网续传升级使能，0-关闭（默认），1-开启
-	public byte byAlarmJsonPictureSeparate;   //控制JSON透传报警数据和图片是否分离，0-不分离，1-分离（分离后走COMM_ISAPI_ALARM回调返回）
-	public byte[] byRes = new byte[4];      //保留
-        public long i64FileSize;      //单位：Byte
-	public int dwResumeUpgradeTimeout;       //断网续传重连超时时间，单位毫秒
-	public byte[] byRes1 = new byte[236];    //预留
-}
-
-
-public static class NET_DVR_LOCAL_CHECK_DEV extends Structure {
-	public int dwCheckOnlineTimeout;     //巡检时间间隔，单位ms  最小值为30s，最大值120s。为0时，表示用默认值(120s)
-	public int dwCheckOnlineNetFailMax;  //由于网络原因失败的最大累加次数；超过该值SDK才回调用户异常，为0时，表示使用默认值1
-	public byte[] byRes = new byte[256];
-}
-
-public static final int MAX_FILE_PATH_LEN = 256; //文件路径长度
-public static class NET_DVR_ALARM_ISAPI_PICDATA extends Structure {
-	public int dwPicLen;
-	public byte byPicType;  //图片格式: 1- jpg
-	public byte[] byRes = new byte[3];
-	public byte[] szFilename = new byte[MAX_FILE_PATH_LEN];
-        public Pointer pPicData; // 图片数据
-}
-
-public static class NET_DVR_FOCUSMODE_CFG extends Structure
-{
-	public int dwSize;
-	public byte byFocusMode;  /* 聚焦模式，0-自动，1-手动，2-半自动 */
-	public byte byAutoFocusMode; /* 自动聚焦模式，0-关，1-模式A，2-模式B，3-模式AB，4-模式C 自动聚焦模式，需要在聚焦模式为自动时才显示*/
-	public short wMinFocusDistance; /* 最小聚焦距离，单位CM,  0-自动，0xffff-无穷远 */
-	public byte byZoomSpeedLevel;  /* 变倍速度，为实际取值，1-3 */
-	public byte byFocusSpeedLevel; /* 聚焦速度，为实际取值，1-3 */
-	public byte byOpticalZoom;        /* 光学变倍，0-255 */
-	public byte byDigtitalZoom;        /* 数字变倍，0-255 */
-	public float fOpticalZoomLevel; /* 光学变倍(倍率值) [1,32], 最小间隔0.5 ，内部设备交互的时候*1000 */
-	public int dwFocusPos;/* dwFocusPos 是focus值（聚焦值），范围为[0x1000,0xC000]，这个值是sony坐标值，使用这个值是为了对外统一，保证不同的镜头对外focus值都转换在这个范围内 (手动聚焦模式下下应用)*/
-	public byte byFocusDefinitionDisplay;// 聚焦清晰度显示，0~不显示，1~显示, 开启会在码流上显示当前镜头目标的清晰度值，用于帮助客户调焦使相机抓拍能够达到最清晰的效果，该清晰度越大代表着越清晰，清晰度范围为：0~100.0000
-	public byte byFocusSensitivity; //聚焦灵敏度，范围[0,2]，聚焦模式为自动、半自动时生效
-	public byte[] byRes1 = new byte[2];
-	public int dwRelativeFocusPos;//相对focus值，其低16位表示聚焦值，0~4000；高16位代表当前聚焦值获取时的温度值
-	public byte[] byRes = new byte[48];
-}
-
-public static class NET_DVR_SERIALSTART_V40 extends Structure
-{
-	public int dwSize;         //结构体大小
-	public int dwSerialType;    //串口号（1-232串口，2-485串口）
-	public byte bySerialNum;   //串口编号
-	public byte[] byRes = new byte[255];
-
-	@Override
-	protected List<String> getFieldOrder() {
-	// TODO Auto-generated method stub
-		return Arrays.asList("dwSize","dwSerialType","bySerialNum","byRes");
-	}
-}
-
-public static class NET_DVR_PRESET_NAME extends Structure {
-    public int dwSize;
-    public short wPresetNum;   //预置点编号
-    public byte[] byRes1 = new byte[2]; //字节对齐
-    public byte[] byName = new byte[NAME_LEN];
-    public short wPanPos;  //水平参数 如果获取到的数据大于360默认减去360
-    public short wTiltPos; //垂直参数 如果获取到的数据大于360默认减去360
-    public short wZoomPos; //变倍参数如果获取到的数据大于360默认减去360
-    public byte[] byRes = new byte[58];
-}
-
-public static final int TEMPLATE_NAME_LEN = 32;      //计划模板名称长度
-public static final int MAX_HOLIDAY_GROUP_NUM = 16;  //计划模板最大假日组数
-public static class NET_DVR_PLAN_TEMPLATE extends Structure {
-       public int dwSize;
-       public byte byEnable; //是否启用，1-启用，0-不启用
-       public byte[] byRes1;
-       public byte[] byTemplateName= new byte[TEMPLATE_NAME_LEN]; //模板名称
-       public int dwWeekPlanNo; //周计划编号，0为无效
-       public int[] dwHolidayGroupNo= new int[MAX_HOLIDAY_GROUP_NUM]; //假日组编号，就前填充，遇0无效
-       public byte[] byRes2= new byte[32];
-}
-
-public static class NET_DVR_DAYTIME extends Structure {
-    public byte byHour;//0~24
-    public byte byMinute;//0~60
-    public byte bySecond;//0~60
-    public byte byRes;
-    public short wMilliSecond; //0~1000
-    public byte[] byRes1= new byte[2];
-}
-
-public static class NET_DVR_SCHEDULE_DAYTIME extends Structure {
-	public NET_DVR_DAYTIME  struStartTime; //开始时间
-	public NET_DVR_DAYTIME  struStopTime; //结束时间
-}
-
-public static class NET_DVR_BUILTIN_SUPPLEMENTLIGHT extends Structure {
-    public int dwSize;//结构体大小
-    public byte byMode;//补光灯模式 0-定时，1-开启，2-关闭，3-自动（非光敏，算法画面识别）
-    public byte byBrightnessLimit;//亮度限制[0,100]
-    public byte bySupplementLightMode;//补光灯类型,0~白光模式,1~混合模式
-    public byte byMixedLightRegulatMode;//混合补光灯亮度调节模式,0~自动,1~手动,当bySupplementLightMode = 1时生效
-    public byte byLrLightBrightness;//红外亮度控制[0,100],当byMixedLightRegulatMode = 1时生效。
-    public byte byHighLrLightBrightness;// 远光红外光亮度配置[0,100],当byMixedLightRegulatMode = 1时生效
-    public byte byHighBrightnessLimit;// 远光白光亮度配置[0,100],当byMixedLightRegulatMode = 1时生效
-    public byte byLowLrLightBrightness;// 近光红外光亮度配置[0,100],当byMixedLightRegulatMode = 1时生效
-    public NET_DVR_SCHEDULE_DAYTIME struSchedTime;//定时时间段
-    public byte byLowBrightnessLimit;//近光白光亮度配置[0,100],当byMixedLightRegulatMode = 1时生效
-    public byte byWhiteLightBrightness;// 白光灯亮度
-    public byte[] byRes1 = new byte[254];
-}
-
-public static class NET_DVR_HANDLEEXCEPTION_V41 extends Structure {
-    public int dwHandleType;        //异常处理,异常处理方式的"或"结果
-    /*0x00: 无响应*/
-    /*0x01: 监视器上警告*/
-    /*0x02: 声音警告*/
-    /*0x04: 上传中心*/
-    /*0x08: 触发报警输出*/
-    /*0x10: 触发JPRG抓图并上传Email*/
-    /*0x20: 无线声光报警器联动*/
-    /*0x40: 联动电子地图(目前只有PCNVR支持)*/
-    /*0x200: 抓图并上传FTP*/
-    /*0x400: 虚交侦测 联动 聚焦模式（提供可配置项，原先设备自动完成）IPC5.1.0*/
-    /*0x800: PTZ联动跟踪(球机跟踪目标)*/
-    /*0x4000:白光灯报警*/
-    /*0x10000:短信报警*/
-    public int dwMaxRelAlarmOutChanNum ; //触发的报警输出通道数（只读）最大支持数
-    public int[] dwRelAlarmOut = new int[MAX_ALARMOUT_V40]; //触发报警通道
-    public byte[] byRes = new byte[64];           //保留
-}
-
-public static class NET_DVR_PRESETCHAN_INFO extends Structure {
-    public int dwEnablePresetChan;    /*启用预置点的通道, 0xfffffff表示不调用预置点*/
-    public int dwPresetPointNo;        /*调用预置点通道对应的预置点序号, 0xfffffff表示不调用预置点。*/
-}
-
-public static class NET_DVR_CRUISECHAN_INFO extends Structure {
-    public int dwEnableCruiseChan;    /*启用巡航的通道*/
-    public int dwCruiseNo;        /*巡航通道对应的巡航编号, 0xfffffff表示无效*/
-}
-
-public static class NET_DVR_PTZTRACKCHAN_INFO extends Structure {
-    public int dwEnablePtzTrackChan;    /*启用云台轨迹的通道*/
-    public int dwPtzTrackNo;        /*云台轨迹通道对应的编号, 0xfffffff表示无效*/
-}
-
-public static class NET_DVR_EVENT_TRIGGER extends Structure {
-    public int dwSize;//结构体大小
-    public NET_DVR_HANDLEEXCEPTION_V41 struHandleException;     //异常处理方式
-    public int[] dwRelRecordChan = new int[MAX_CHANNUM_V40]; //实际触发录像通道，按值表示，采用紧凑型排列，从下标0开始顺序读取，中间遇到0xffffffff则后续无效。
-    public NET_DVR_PRESETCHAN_INFO[] struPresetChanInfo = new NET_DVR_PRESETCHAN_INFO[MAX_CHANNUM_V40]; //启用的预置点信息
-    public NET_DVR_CRUISECHAN_INFO[] struCruiseChanInfo = new NET_DVR_CRUISECHAN_INFO[MAX_CHANNUM_V40]; //启用巡航功能通道的信息
-    public NET_DVR_PTZTRACKCHAN_INFO[] struPtzTrackInfo = new NET_DVR_PTZTRACKCHAN_INFO[MAX_CHANNUM_V40]; //调用云台轨迹的通道信息
-    public byte byDirection;//触发方向：0-保留；1-全部；2-正向；3-反向
-    public byte[] byRes2 = new byte[255];
-}
-
-public static class NET_DVR_FACELIB_GUARD_COND extends Structure {
-    public int dwSize;
-    public int dwChannel;  //通道号
-    public byte[] szFDID = new byte[68];//人脸库的ID
-    public byte[] byRes = new byte[128];
-}
-
-public static class NET_DVR_INQUEST_ROOM extends Structure {
-    public byte byRoomIndex;     //审讯室编号
-    public byte byFileType;        //0-审讯文件，1-开庭上传文件
-    public byte[] byRes = new byte[22];       //保留
-}
-
-public static class NET_DVR_INQUEST_CDRW_CFG extends Structure {
-	public int dwSize;
-	public int dwNum;                       //刻录机的数量
-	public int[] dwRwSelectPara = new int[MAX_CHANNUM_V30];// 是否选中该光驱
-	public int dwModeSelect;                //0表示循环刻录模式  1表示并行刻录模式(默认模式)
-	public byte[] byRes= new byte[24];                   //保留
-	public int dwStartCDRW;                 //DVR 本地已经开始刻录
-	public int dwHdExcp;                    //硬盘有异 常
-	public int dwInterval;                  //时间间隔，10分钟(0)、20分钟(1)、30分钟(2)
-	public byte[] sLable= new byte[64];                  //光盘名称
-}
-
-public static class NET_DVR_INQUEST_CDRW_STATUS extends Structure {
-   /*运行状态：0-审讯开始，
-     1-审讯过程中刻录，2-审讯停止，
-     3-刻录审讯文件,
-     4-备份(事后备份和本地备份)
-     5-空闲
-     6-初始化硬盘
-     7-恢复审讯*/
-	public int dwType;
-	public NET_DVR_INQUEST_CDRW[] strCDRWNum = new NET_DVR_INQUEST_CDRW[MAX_INQUEST_CDRW_NUM];   //数组0表示刻录机1
-	public NET_DVR_TIME_EX struInquestStartTime = new NET_DVR_TIME_EX();        //审讯开始的时间点
-	public byte[] byRes= new byte[16];             //保留
-}
-
-public static class NET_DVR_INQUEST_CDRW extends Structure {
-	public int dwEnable;            //刻录机状态是否有效,0-无效,1-有效
-	public int dwStatus;            /*当dwType=0时， 0-光盘正常，1-无光盘或光盘异常,
-                                                            当dwType=1或2时，0-刻录正常，1-无光盘或光盘异常，2-光盘已封盘(81不支持)，3-光盘空间不足， 4-异常导致审讯终止(81不支持)
-                                                            当dwType=3时， 0-刻录正常，1-无光盘或光盘异常，2-光盘已封盘(81不支持)，3-光盘空间不足
-                                                            当dwType=4时，0-刻录正常，1-无光盘或光盘异常，2-光盘已封盘(81不支持)，3-光盘空间不足
-                                                            当dwType=5时,0-光盘正常， 1-无光盘或光盘异常,2-光盘已封盘(81不支持)
-                                                            当dwType=6或7时, 0-刻录正常, 1-无光盘或光盘异常, 2-光盘已封盘(81不支持), 3-光盘空间不足*/
-    public int dwVolumn;      //光盘容量,单位M
-	public int dwFreeSpace;   //光盘剩余容量,单位M
-	public int dwTimeLeft;     // 光盘剩余时间，单位秒
-	public byte byCDType;         // 光盘类型
-    public byte[] byRes= new byte[3];      //保留字节
-}
-
-//实时温度检测条件参数
-public static class NET_DVR_REALTIME_THERMOMETRY_COND extends Structure {
-    public int dwSize; /*结构体大小*/
-    public int dwChan; /*通道号，从1开始，0xffffffff代表获取全部通道*/
-    public byte byRuleID;/*规则ID，0代表获取全部规则，具体规则ID从1开始*/
-    public byte byMode;  //长连接模式：0- 保留（兼容不支持该功能的老设备），1- 定时模式，2- 温差模式
-    public byte[] byRes2 = new byte[62];
-}
-
-//点测温实时信息
-public static class NET_DVR_POINT_THERM_CFG extends Structure {
-    public float fTemperature;
-    public NET_VCA_POINT struPoint;
-    public byte[] byRes = new byte[120];
-}
-
-//框/线测温实时信息
-public static class NET_DVR_LINEPOLYGON_THERM_CFG extends Structure {
-    public float fMaxTemperature;
-    public float fMinTemperature;
-    public float fAverageTemperature;
-    public float fTemperatureDiff;
-    public NET_VCA_POLYGON struRegion;
-    public byte[] byRes = new byte[32];
-}
-
-//实时温度信息
-public static class NET_DVR_THERMOMETRY_UPLOAD extends Structure {
-    public int dwSize; /* 结构体大小 */
-    public int dwRelativeTime;
-    public int dwAbsTime;
-    public byte[] szRuleName = new byte[NAME_LEN];
-    public byte byRuleID;/* 规则ID，0代表获取全部规则，具体规则ID从1开始 */
-    public byte byRuleCalibType;
-    public short wPresetNo;
-    public NET_DVR_POINT_THERM_CFG struPointThermCfg;
-    public NET_DVR_LINEPOLYGON_THERM_CFG struLinePolygonThermCfg;
-    public byte byThermometryUnit;
-    public byte byDataType;
-    public byte byRes1;
-    public byte bySpecialPointThermType;
-    public float fCenterPointTemperature;
-    public float fHighestPointTemperature;
-    public float fLowestPointTemperature;
-    public NET_VCA_POINT struHighestPoint;
-    public NET_VCA_POINT struLowestPoint;
-    public byte byIsFreezedata;
-    public byte[] byRes = new byte[95];
-}
-
-public static class NET_DVR_ARRAY_LIST extends Structure {
-    public int dwSize;     // 结构体大小
-    public int dwCount;    // 阵列个数
-    public NET_DVR_ARRAY_INFO[] struArrayInfo = new NET_DVR_ARRAY_INFO[SUPPORT_ARRAY_NUM];
-}
-
-public static class NET_DVR_BGA_INFO extends Structure{
-    public byte byBga;  // 后台任务及类型
-    public byte byBgaState;           /*函数返回值--后台任务状态*/
-    public short wBgaPercentage;     /*函数返回值--后台任务执行百分比*/
-    public byte[] byRes = new byte[4];  // 保留字节
-}
-
-// 阵列信息
-public static class NET_DVR_ARRAY_INFO extends Structure{
-    public short wArrayID; // 阵列ID
-    public byte byRaidMode; // raid模式  参照RAID_MODE
-    public byte byStatus;  // 0-在线 1-磁盘丢失 2-下线 3-降级 4-异常 5-次正常 6-外来盘  7-已删除 8-SMART状态异常 0xff-不存在
-    public int dwHCapacity; // 阵列容量高32位
-    public int dwLCapacity; // 阵列容量低32位
-    public int dwHFreeSpace;   // 阵列剩余空间高32位
-    public int dwLFreeSpace;   // 阵列剩余空间高32位
-    public byte[] byArrayName = new byte[MAX_NAMELEN]; // 阵列名称
-    public byte byPDCount;  // 物理磁盘数目
-    public byte bySpareCount;   // 热备数目
-    public byte[] byRes1 = new byte[2];
-    public short[] wPDSlots = new short[SUPPORT_PD_NUM];    // 物理磁盘索引
-    public short[] wSparePDSlots = new short[SUPPORT_PD_NUM];    // 热备磁盘索引
-    public NET_DVR_BGA_INFO struBgaInfo;    // 后台任务运行状态
-    public short[] wPDSlotsPartTwo = new short[SUPPORT_PD_NUM_PARTTWO];  //物理磁盘索引扩展，0表示无效
-    public short[] wSparePDSlotsPartTwo = new short[SUPPORT_PD_NUM_PARTTWO];    // 热备磁盘索引扩展，0表示无效
-    public byte[] byRes2 = new byte[48]; // 保留字节
-}
-
-//物理磁盘
-public static class NET_DVR_PHY_DISK_INFO extends Structure{
-    public short wPhySlot;         // 硬盘槽位
-    public byte byType;         // 硬盘信息；0 普通，1全局热备，2-阵列热备 3-阵列盘
-    public byte byStatus;       // 硬盘状态；  0-正常 1-降级 2-已删除 3-磁盘丢失 4-下线 5-次正常 6-外来 7-异常 8-SMART状态异常 9-休眠 10-有坏块 0xff-不存在
-    public byte[] byMode = new byte[40];   // 硬盘类型 字符串
-    public int dwHCapacity;    //  磁盘总量高32位 单位kb
-    public int dwLCapacity;    //  磁盘总量低32位
-    public byte[] byArrrayName = new byte[MAX_NAMELEN];
-    public short wArrayID;          // 所属阵列ID
-    public byte byArrayInformation;   // 是否含有阵列信息：0 否，1是
-    public byte[] byRes = new byte[101];         // 保留字节
-}
-
-public static class NET_DVR_WORKSTATE_V40 extends Structure{
-	public int dwSize ;            //结构体大小
-	public int dwDeviceStatic;      //设备的状态,0-正常,1-CPU占用率太高,超过85%,2-硬件错误,例如串口死掉
-	public NET_DVR_DISKSTATE[]  struHardDiskStatic = new NET_DVR_DISKSTATE[MAX_DISKNUM_V30];   //硬盘状态,一次最多只能获取33个硬盘信息
-	public NET_DVR_CHANNELSTATE_V30[] struChanStatic = new NET_DVR_CHANNELSTATE_V30[MAX_CHANNUM_V40/*512*/];//通道的状态，从前往后顺序排列
-	public int[] dwHasAlarmInStatic = new int[MAX_ALARMIN_V40]; //有报警的报警输入口，按值表示，按下标值顺序排列，值为0xffffffff时当前及后续值无效
-	public int[] dwHasAlarmOutStatic = new int[MAX_ALARMOUT_V40]; //有报警输出的报警输出口，按值表示，按下标值顺序排列，值为0xffffffff时当前及后续值无效
-	public int dwLocalDisplay;            //本地显示状态,0-正常,1-不正常
-    public byte[] byAudioInChanStatus = new byte[MAX_AUDIO_V30/*2*/];        //按位表示语音通道的状态 0-未使用，1-使用中，第0位表示第1个语音通道
-    public byte[] byRes1 = new byte[2];
-    public float fHumidity;    //传感器获知的湿度,范围:0.0 ~100.0
-    public float fTemperature;    //传感器获知的温度，范围：-20.0 ~ 90.0
-    public byte[] byRes = new byte[116];                 //保留
-}
-
-public static class NET_DVR_GETWORKSTATE_COND extends Structure{
-	public int dwSize ;  //结构体长度
-    public byte byFindHardByCond; /*0-查找全部磁盘(但一次最多只能查找33个)，此时dwFindHardStatusNum无效*/
-    public byte byFindChanByCond ;  /*0-查找全部通道，此时dwFindChanNum无效*/
-    public byte[] byRes1 = new byte[2] ;//保留
-	public int[] dwFindHardStatus = new int[MAX_DISKNUM_V30/*33*/] ; /*要查找的硬盘号，按值表示，该值采用顺序排列， 遇到0xffffffff则认为后续无效 */
-	public int[] dwFindChanNo = new int[MAX_CHANNUM_V40/*512*/] ; /*要查找的通道号，按值表示，该值采用顺序排列， 遇到0xffffffff则认为后续无效 */
-    public byte[] byRes = new byte[64] ; //保留
-}
-
-//多边型结构体
-public static class NET_ITC_POLYGON extends Structure {
-	public int dwPointNum; //有效点 大于等于3，若是3点在一条线上认为是无效区域，线交叉认为是无效区域
-	public NET_VCA_POINT[] struPos = new NET_VCA_POINT[ITC_MAX_POLYGON_POINT_NUM]; //多边形边界点,最多20个
-}
-
-public static class CUSTOM_uRegion extends Union {
-	public NET_VCA_RECT struRect = new NET_VCA_RECT();
-	public NET_ITC_POLYGON struPolygon = new NET_ITC_POLYGON();
-}
-
-public static class NET_ITC_PLATE_RECOG_REGION_PARAM extends Structure{
-    public byte byMode; //区域类型，0-矩形，1-多边形
-    public byte[] byRes1 = new byte[3];
-	public CUSTOM_uRegion uRegion = new CUSTOM_uRegion();
-    public byte[] byRes = new byte[16];    //保留
-}
-
-//单组IO测速参数
-public static class NET_ITC_SINGLE_IOSPEED_PARAM extends Structure{
-    public byte byEnable; //是否启用，0-不启用，1-启用
-    public byte byTrigCoil1; //第一线圈关联IO，0-IO1,1-IO2,2-IO3,3-IO4,4-IO5,5-IO6
-    public byte byCoil1IOStatus;//第一线圈IO输入口状态，0-下降沿（默认），1-上升沿，2-上升沿和下降沿，3-高电平，4-低电平
-    public byte byTrigCoil2; //第二线圈关联IO，0-IO1,1-IO2,2-IO3,3-IO4,4-IO5,5-IO6
-    public byte byCoil2IOStatus;//第二线圈IO输入口状态，0-下降沿（默认），1-上升沿，2-上升沿和下降沿，3-高电平，4-低电平
-    public byte byRelatedDriveWay;//关联的车道号
-    public byte byTimeOut;//超时时间（默认10），单位s
-    public byte byRelatedIOOutEx;//第0位表示IO输出口1，以此类推，0-不关联，1-关联 支持关联到8个(兼容byRelatedIOOut字段)
-	public int dwDistance;//线圈距离（默认1000）,单位：厘米
-    public byte byCapSpeed;//起拍速度（默认30），单位km/h
-    public byte bySpeedLimit;//限速值（默认60），单位km/h
-    public byte bySpeedCapEn; //是否启用超速抓拍，0-否，1-是
-    public byte bySnapTimes1; //线圈1抓拍次数（默认不抓拍），0-不抓拍，非0-连拍次数，最大5次
-    public byte bySnapTimes2; //线圈2抓拍次数（默认1），0-不抓拍，非0-连拍次数，最大5次
-    public byte byBigCarSpeedLimit; //大车车速限制值
-    public byte byBigCarSignSpeed;//标志限速(大车)，单位km/h(3.7Ver)
-    public byte byIntervalType;    //间隔类型（默认按时间），0-时间起效,1-距离起效
-	public short[] wInterval1 = new short[MAX_INTERVAL_NUM];//线圈1连拍间隔时间（单位ms）或连拍间隔距离（单位分米），当byIntervalType为0时，表示间隔时间，当byIntervalType为1时，表示距离
-	public short[] wInterval2 = new short[MAX_INTERVAL_NUM];//线圈2连拍间隔时间（单位ms）或连拍间隔距离（单位分米），当byIntervalType为0时，表示间隔时间，当byIntervalType为1时，表示距离
-    public byte[] byRelatedIOOut = new byte[MAX_IOOUT_NUM]; //关联的IO输出口(可以同时关联多个)，数组0表示IO输出口1，数组1表示IO输出口2，以此类推，0-不关联，1-关联
-    public byte byFlashMode;   //闪光灯闪烁模式，0-同时闪，1-轮流闪
-    public byte byLaneType;   //车道类型，0-未配置、1-高速公路、2-城市快速路、0xff-其他道路
-    public byte byCarSignSpeed;//标志限速，单位km/h(3.7Ver)
-    public byte byUseageType; //车道用途类型，详见ITC_LANE_USEAGE_TYPE
-    public NET_ITC_PLATE_RECOG_REGION_PARAM[] struPlateRecog = new NET_ITC_PLATE_RECOG_REGION_PARAM[MAX_LANEAREA_NUM]; //牌识参数(可用牌识区域1个，保留一个)
-    //关联车道方向类型，参考ITC_RELA_LANE_DIRECTION_TYPE
-    //该参数为车道方向参数，与关联车道号对应，确保车道唯一性。
-    public byte byRelaLaneDirectionType;
-    public byte byLowSpeedLimit;                        //小车限底速值，单位km/h
-    public byte byBigCarLowSpeedLimit;                //大车限底速值，单位km/h
-    public byte byLowSpeedCapEn;                 //是否启用低速抓拍，0-否，1-是
-    public byte byEmergencyCapEn;                //是否启用应急车道抓拍，0-否，1-是
-    public byte[] byRes = new byte[27];
-}
-
-//牌识参数
-public static class NET_ITC_PLATE_RECOG_PARAM extends Structure{
-    public byte[] byDefaultCHN = new byte[MAX_CHJC_NUM]; /*设备运行省份的汉字简写*/
-    public byte byEnable; //是否启用该区域牌识，0-否，1-是
-	public int dwRecogMode;
-    /*识别的类型，
-     bit0-背向识别：0-正向车牌识别，1-背向识别(尾牌识别) ；
-     bit1-大车牌识别或小车牌识别：0-小车牌识别，1-大车牌识别 ；
-     bit2-车身颜色识别：0-不采用车身颜色识别，在背向识别或小车牌识别时禁止启用，1-车身颜色识别；
-     bit3-农用车识别：0-不采用农用车识别，1-农用车识别；
-     bit4-模糊识别：0-不采用模糊识别，1-模糊识别；
-     bit5-帧定位或场定位：0-帧定位，1-场定位；
-     bit6-帧识别或场识别：0-帧识别，1-场识别；
-     bit7-晚上或白天：0-白天，1-晚上
-     bit8-摩托车识别：0-不采用摩托车识别，1-摩托车识别;
-     bit9-场景模式：0-电警/多帧，1-卡口；
-     bit10-微小车牌：0-不启用，1-启用微小车牌识别(像素60～80)
-     bit11-安全带检测：0-不启用，1-启用安全带检测
-     bit12-民航车牌识别: 0-不启用，1-开启民航车牌识别
-     bit13-车牌过渡倾斜处理: 0-不启用，1-开启过渡倾斜处理（PRS）
-     bit14-超大车牌识别: 0-不启用，1-开启超大车牌识别（PRS）
-     bit15-遮阳板检测：0-不启用，1-启用遮阳板检测
-     bit16-黄标车检测：0-不启用，1-启用黄标车检测
-     bit17-危险品车辆检测：0-不启用，1-启用危险品车辆检测
-     bit18-使馆车牌识别：0-不启用，1-启用使馆车牌识别
-     bit19-车辆子品牌识别：0-不启用，1-启用车辆子品牌识别
-     bit20-打电话识别：0-不启用，1-启用
-     bit21-车窗悬挂物识别：0-不启用，1-启用
-     */
-    public byte byVehicleLogoRecog;//车标识别 0-不启用，1-启用
-     /*
-     0-保留，1-澳，2-京，3-渝，4-闽，5-甘，6-粤，7-桂，8-贵，9-琼，10-冀，11-豫，
-     12-黑，13-鄂，14-湘，15-吉，16-苏，17-赣，18-辽，19-蒙，20-宁，21-青，22-鲁，
-     23-晋，24-陕，25-沪，26-川，27-台，28-津，29-藏，30-港，31-新，32-云，33-浙，
-     34-皖，0xff-全部
-     */
-  public byte byProvince;//省份索引值
-  public byte byRegion;// 区域索引值 0-保留，1-欧洲，2-俄语区域, 3-欧洲&俄罗斯(EU&CIS),4-中东(Middle East)
-  public byte byCountry;//国家索引，参照枚举COUNTRY_INDEX(不支持“COUNTRY_ALL = 0xff,//ALL 全部”)
-  public short wPlatePixelWidthMin;//车牌像素识别宽度最小值（单位是像素）当前推荐范围[130,500]
-  public short wPlatePixelWidthMax;//车牌像素识别宽度最大值（单位是像素）当前推荐范围[130,500]
-  public byte[] byRes = new byte[24];
-}
-
-//卡口IO测速参数
-public static class NET_ITC_POST_IOSPEED_PARAM extends Structure{
-    public NET_ITC_PLATE_RECOG_PARAM struPlateRecog; //牌识参数
-    public NET_ITC_SINGLE_IOSPEED_PARAM[] struSingleIOSpeed = new NET_ITC_SINGLE_IOSPEED_PARAM[MAX_IOSPEED_GROUP_NUM]; //单个IO测速组参数
-    public byte[] byRes = new byte[32];
-}
-
-public static class NET_DVR_GEOGLOCATION extends Structure{
-    public int[] iRes = new int[2]; /*保留*/
-    public int dwCity; /*城市，详见PROVINCE_CITY_IDX */
-}
-
-public static class NET_ITC_INTERVAL_PARAM extends Structure{
-    public byte byIntervalType;    //间隔类型（默认按时间），0-时间起效,1-距离起效
-    public byte[] byRes1 = new byte[3];
-    public short[] wInterval = new short[MAX_INTERVAL_NUM];//连拍间隔时间（单位ms）或连拍间隔距离（单位分米），当byIntervalType为0时，表示间隔时间，当byIntervalType为1时，表示距离
-    public byte[] byRes = new byte[8];
-}
-
-public static class NET_ITC_VTLANE_PARAM extends Structure{
-    public byte byRelatedDriveWay;//关联的车道号
-    public byte bySpeedCapEn; //是否启用超速抓拍，0-否，1-是
-    public byte bySignSpeed;//标志限速，单位km/h
-    public byte bySpeedLimit;//限速值，单位km/h
-    public byte bySnapTimes; //抓拍次数（默认1），0-不抓拍，非0-连拍次数，最大5
-    public byte byBigCarSignSpeed;///*大车标志限速，单位km/h*/
-    public byte byBigCarSpeedLimit;/*大车限速值，单位km/h*/
-    public byte byRelatedIOOutEx;//第0位表示IO输出口1，以此类推，0-不关联，1-关联 支持关联到8个(兼容byRelatedIOOut字段)
-    public NET_ITC_INTERVAL_PARAM struInterval = new NET_ITC_INTERVAL_PARAM(); //抓拍间隔参数
-    public byte[] byRelatedIOOut = new byte[MAX_IOOUT_NUM]; //关联的IO输出口，可以同时关联多个
-    public byte byFlashMode;   //闪光灯闪烁模式，0-同时闪，1-轮流闪
-    public byte byLowSpeedLimit;/*限低速，单位km/h*/
-    public byte byBigCarLowSpeedLimit; /*大车限低速，单位km/h*/
-    //关联车道方向类型，参考ITC_RELA_LANE_DIRECTION_TYPE
-    //该参数为车道方向参数，与关联车道号对应，确保车道唯一性。
-    public byte byRelaLaneDirectionType;
-    public NET_ITC_PLATE_RECOG_REGION_PARAM[] struPlateRecog = new NET_ITC_PLATE_RECOG_REGION_PARAM[MAX_LANEAREA_NUM]; //车道牌识参数
-    public NET_VCA_LINE struLine = new NET_VCA_LINE(); //车道线
-}
-
-public static class NET_ITC_VTCOIL_INFO extends Structure{
-    public NET_VCA_RECT struLaneRect = new NET_VCA_RECT();  /*虚拟线圈区域*/
-    public byte byTrigFlag; //触发标志，0-车头触发；1-车尾触发；2-车头/车尾都触发
-    public byte byTrigSensitive;  //触发灵敏度，1-100
-    public byte[] byRelatedIOOut = new byte[MAX_IOOUT_NUM]; //关联的IO输出口(可以同时关联多个)，数组0表示IO输出口1，数组1表示IO输出口2，以此类推，0-不关联，1-关联
-    public byte byFlashMode;   //闪光灯闪烁模式，0-同时闪，1-轮流闪
-    public byte byLaneType;   //车道类型，0-未配置、1-高速公路、2-城市快速路、0xff-其他道路
-    public byte byEnableRadar; //是否启用雷达测速，0-否，1-是
-    public NET_ITC_VTLANE_PARAM struLane = new NET_ITC_VTLANE_PARAM(); //关联的车道参数
-    //车道用途类型，详见ITC_LANE_USEAGE_TYPE，使用1和8两种类型(3.7Ver)
-    public byte byUseageType;
-    //车辆行驶方向，详见ITC_LANE_CAR_DRIVE_DIRECT(3.7Ver)
-    public byte byCarDriveDirect;
-    public byte[] byRes = new byte[30];
-}
-
-public static class NET_ITC_RADAR_PARAM extends Structure{
-    public byte byRadarType;    //雷达类型，0-无雷达,1-安道雷雷达，2-奥利维亚，3-川速微波4,雷达接IO扩展盒(此参数在卡口虚拟线圈、混行卡口界面中使用，卡口RS485雷达不使用),0xff-其它类型
-    public byte byLevelAngle;   //与水平线所成角度,默认为25°(0到90度)
-    public short wRadarSensitivity; //雷达灵敏度
-    public short wRadarSpeedValidTime;//雷达速度有效时间(0~2000] ,0表示不支持
-    public byte[] byRes1 = new byte[2];
-    public float fLineCorrectParam;//线性矫正参数[0.0~2.0]
-    public int iConstCorrectParam;//常量矫正参数[-100~100]
-    public byte[] byRes2 = new byte[8];
-}
-
-//卡口虚拟线圈触发参数
-public static class NET_ITC_POST_VTCOIL_PARAM extends Structure{
-    public byte byRelatedLaneNum;//关联的车道个数
-    public byte byIsDisplay; //视频中是否显示虚拟线圈，0-不显示，1-显示
-    public byte byLoopPos; //晚间触发线圈的偏向（默认10）
-    public byte byPolarLenType; /*偏振镜类型，0：不加偏振镜；1：加施耐德偏振镜。*/
-    public byte byDayAuxLightMode; /*白天辅助照明模式，0：无辅助照明；1：LED灯照明；2：闪光灯照明*/
-    public byte byVideoLaneNO; //视频参考亮度的参考车道号
-    public byte byVideoLowTh; /*视频参考亮度低阈值初始化值（默认40）*/
-    public byte byVideoHighTh; /*视频参考亮度高阈值初始化值（默认55）*/
-    public byte byRecordMode; //录像标志：0-不录像，1-录像
-    public byte bySnapMode;//抓拍模式：0-频闪模式；1-爆闪模式
-    /*测速方式：0-不测速，0x1-雷达测速，0x2-视频测速*/
-    public byte bySpeedDetector;
-    public byte byRes2;
-    public short wResolutionX;/* 设备当前分辨率宽*/
-    public short wResolutionY;/* 设备当前分辨率高*/
-	public int dwDayInitExp; /*视频白天曝光时间的初始值2000*/
-	public int dwDayMaxExp; /*视频白天曝光时间的最大值20000*/
-	public int dwNightExp; /*晚间视频曝光时间的设置值3000*/
-	public int dwSnapExp; /*抓拍曝光时间*/
-    public byte byDayInitGain; /*视频白天增益的初始值200*/
-    public byte byDayMaxGain; /*视频白天增益的最大值400*/
-    public byte byNightGain; /*晚间视频增益*/
-    public byte bySnapGain; /*抓拍增益*/
-	public int dwSceneMode; //场景模式， 详见SCENE_MODE
-    public NET_DVR_GEOGLOCATION struGeogLocation = new NET_DVR_GEOGLOCATION(); //地址位置(默认浙江)
-    public NET_ITC_PLATE_RECOG_PARAM struPlateRecog = new NET_ITC_PLATE_RECOG_PARAM(); //牌识参数
-    public NET_ITC_VTCOIL_INFO[] struVtCoil = new NET_ITC_VTCOIL_INFO[MAX_VL_NUM]; //虚拟线圈参数
-    public NET_ITC_RADAR_PARAM struRadar = new NET_ITC_RADAR_PARAM();  //雷达参数
-    public NET_VCA_LINE struLine = new NET_VCA_LINE(); //右车道线
-    //违规检测类型，按位表示，详见ITC_VIOLATION_DETECT_TYPE，0-不启用，1-启用(3.7Ver)
-	public int dwVioDetectType;
-    public byte byDebugMode; /*调试模式，0-不启用，1-启用*/
-    public byte[] byRes = new byte[11];
-}
-
-//车道属性参数结构
-public static class NET_ITC_LANE_LOGIC_PARAM extends Structure{
-    public byte byUseageType;     //车道用途类型，详见ITC_LANE_USEAGE_TYPE
-    public byte byDirectionType;  //车道方向类型，详见ITC_LANE_DIRECTION_TYPE
-    public byte byCarDriveDirect; //车辆行驶方向，详见ITC_LANE_CAR_DRIVE_DIRECT
-    public byte[] byRes = new byte[33];        //保留
-}
-
-//视频电警线结构
-public static class NET_ITC_LINE extends Structure{
-   public NET_VCA_LINE struLine = new NET_VCA_LINE(); //线参数
-   public byte byLineType; //线类型，详见ITC_LINE_TYPE
-   public byte[] byRes = new byte[7];
-}
-
-public static class NET_ITC_SNAPMODE_PARAM extends Structure{
-    public byte byVehicleCapMode;//机动车抓拍模式，0-频闪模式；1-爆闪模式
-    public byte byNoVehicleCapMode;//非机动车抓拍模式，0-频闪模式；1-爆闪模式
-    public byte byPasserCapMode;//行人抓拍模式，0-频闪模式；1-爆闪模式
-    public byte[] byRes = new byte[29];
-}
-
-//size = 128
-public static class NET_ITC_HVT_EC_PARAM extends Structure{
-	public int dwCapShutter;            //抓拍快门0~65535
-    public short wCapGain;            //抓拍增益0～100
-    public byte[] byRes = new byte[2];
-	public int dwDayTimeVideoShutter;    //白天曝光时间最大值
-    public short wDayTimeVideoGain;        //白天增益最大值
-    public short wNightVideoGain;            //晚上增益最大值
-    public short wNightVideoShutter;        //晚上曝光时间最大值
-    public byte[] byRes1 = new byte[108];
-}
-
-public static class NET_ITC_LANE_HVT_PARAM extends Structure{
-    public byte byLaneNO; //关联的车道号 1~255（用于叠加和上传）
-    public byte bySignSpeed;    //标志限速，单位km/h 0～255  70
-    public byte bySpeedLimit;    //限速值，单位km/h 0～255    80 实际起效
-    public byte byBigCarSignSpeed;///*大车标志限速，单位km/h*/
-    public byte byBigCarSpeedLimit;/*大车限速值，单位km/h*/
-    public byte bySpeedCapEn; //是否启用超速抓拍，0-否，1-是
-    public byte byCaptureCount;//抓拍张数1～5(正常)
-    public byte byRelatedIOOut;    /*关联的IO输出口(可以同时关联多个)，按位表示IO输出口，第0位表示IO输出口1，以此类推，0-不关联，1-关联*/
-    public byte byFlashMode;        /*闪光灯闪烁模式，0-同时闪，1-轮流闪*/
-    public byte byEnableRadar; //是否启用雷达测速，0-否，1-是
-    public byte byChangeLaneEnable;   //违章变道抓拍使能，0-关闭，1-开启
-    public byte byChangeLaneCapNo;    //违章变道抓拍张数2-3
-	public int dwCapTarget;    //抓拍类型 bit0 表示机动车 bit1 表示非机动车 bit2 表示行人 0～表示不选择 1～表示选择
-    public NET_ITC_INTERVAL_PARAM struInterval; //抓拍间隔参数
-    public byte[] byRes3 = new byte[24];
-    public NET_ITC_LANE_LOGIC_PARAM struLane; //车道属性，用byUseageType和byCarDriveDirect
-    public NET_ITC_LINE struLeftLaneLine;          //左车道线，线类型为虚线、实线、单黄线和双黄线
-    public NET_ITC_LINE struRightLaneLine;          //右车道线，线类型为虚线、实线、单黄线和双黄线
-    public NET_ITC_POLYGON struPlateRecog;         //牌识区域参数
-    public NET_ITC_POLYGON struTraceArea;          //视频触发焦点区域
-    public NET_VCA_LINE  struForwardTrigLine;      //正向触发线：一条线段，关心端点位置，目前只支持水平配置，接口按线段的两个端点保存。（一般配置为正向车辆的最佳触发位置）
-    public NET_VCA_LINE  struBackwardTrigLine;     //背向触发线：一条线段，关心端点位置，目前只支持水平配置，接口按线段的两个端点保存（一般配置为背向车辆的最佳触发位置）
-    public NET_VCA_LINE  struLeftTrigLine;          //左边触发线：一条线段，关心端点位置，目前只支持垂直配置，接口按线段的两个端点保存（一般配置为从左边进入车辆的最佳触发位置）
-    public NET_VCA_LINE  struRightTrigLine;          //右边触发线：一条线段，关心端点位置，目前只支持垂直配置，接口按线段的两个端点保存（一般配置为从右边进入车辆的最佳触发位置）
-    public byte[] byRes4 = new byte[60];
-}
-
-public static class NET_ITC_POST_HVT_PARAM extends Structure{
-    public byte byLaneNum;//识别的车道个数，1-6
-    public byte bySceneMode;//0-未知1-城区道路；2-小区出入口
-    public byte byRoadExpBright;//路面期望亮度（视频曝光参数调整的依据之一。在无机动车时，依据此亮度期望值，调整视频曝光参数）
-    public byte byPlateExpBright;//车牌期望亮度（视频曝光参数调整的依据之一。在有机动车通过并识别到车牌时，依据此亮度期望值，对视频曝光参数调整）
-    public NET_ITC_POLYGON struDetectArea;                    //视频检测区域
-    public NET_ITC_SNAPMODE_PARAM struCapMode = new NET_ITC_SNAPMODE_PARAM();//抓拍模式
-    public NET_ITC_HVT_EC_PARAM struEcParam = new NET_ITC_HVT_EC_PARAM();    //曝光控制参数
-    public NET_ITC_LANE_HVT_PARAM[] struLaneParam = new NET_ITC_LANE_HVT_PARAM[MAX_ITC_LANE_NUM]; //单车道属性
-    public NET_ITC_PLATE_RECOG_PARAM struPlateRecog = new NET_ITC_PLATE_RECOG_PARAM();    //牌识参数
-    public NET_DVR_GEOGLOCATION struGeogLocation = new NET_DVR_GEOGLOCATION();    //地址位置（默认浙江）
-    public byte[] byRes = new byte[324];
-}
-
-//抓拍机4.0新增
-public static class NET_ITC_LANE_HVT_PARAM_V50 extends Structure{
-    public byte byLaneNO;        //关联的车道号1～255(用于叠加和上传)
-    public byte byFlashMode;    //闪光灯闪烁模式，0-同时闪，1-轮流闪
-    public byte bySignSpeed;    //小车标志限高速，单位km/h
-    public byte bySpeedLimit;    //小车限高速值，单位km/h
-    public byte bySignLowSpeed;    //小车标志限底速，单位km/h
-    public byte byLowSpeedLimit;    //小车限底速值，单位km/h
-    public byte byBigCarSignSpeed;    //大车标志限高速，单位km/h（新交规）
-    public byte byBigCarSpeedLimit;    //大车限高速值，单位km/h（新交规）
-    public byte byBigCarSignLowSpeed;    //大车标志限底速，单位km/h
-    public byte byBigCarLowSpeedLimit;    //大车限底速值，单位km/h
-    public byte bySnapTimes;    //卡口抓拍张数，1~3
-    public byte byDriveLineSnapTime;// 压线抓拍张数 1~3
-    public byte byHighSpeedSnapTime;// 超高速抓拍张数1~3
-    public byte byLowSpeedSnapTime;// 超低速抓拍张数1~3
-    public byte byBanSnapTime;// 违反禁令抓拍张数  1~3
-    public byte byReverseSnapTime;//逆行抓拍张数  1~3
-    public byte byRelatedDriveWay;                //关联车道号，用于匹配车检器
-    public byte byLaneType;   //车道类型，0-未配置、1-高速公路、2-城市快速路、0xff-其他道路
-    //关联车道方向类型，参考ITC_RELA_LANE_DIRECTION_TYPE
-    //该参数为车道方向参数，与关联车道号byRelatedDriveWay对应，确保车道唯一性。
-    public byte byRelaLaneDirectionType;
-    public byte[] byRes1 = new byte[27];
-    public byte byChangeLaneEnable;   //违章变道抓拍使能，0-关闭，1-开启
-    public byte byChangeLaneCapNo;    //违章变道抓拍张数2-3
-    //目前仅使用第一个车道的，以后可能会扩展为多车道分别配置
-    //类型, 按位表示,0-不启用,1-启用参考 ITC_VIOLATION_DETECT_TYPE
-    public int dwVioDetectType;
-    public int dwRelatedIOOut;  //关联的IO输出口(可以同时关联多个)，按位表示IO输出口，第0位表示IO输出口1，以此类推，0-不关联，1-关联
-    public NET_ITC_LINE struTrigLine; //触发线，目前仅使用第一个车道的，以后可能会扩展为多车道分别配置
-    public NET_ITC_LINE struLineLeft;                //左车道线
-    public NET_ITC_POLYGON struPlateRecog;       //牌识区域
-    public NET_ITC_LANE_LOGIC_PARAM struLane;   //车道属性，用byUseageType和byCarDriveDirect
-    public NET_ITC_INTERVAL_PARAM struInterval;//抓拍间隔参数（20byte）
-    public byte[] byRes2 = new byte[280];
-}
-
-public static class NET_ITC_POST_HVT_PARAM_V50 extends Structure{
-    public byte byLaneNum;    //识别的车道个数，1-6
-    public byte byCapType;        //抓拍类型，0-机、非、人（默认），1-机动车
-    public byte byCapMode;    //抓拍方式，0-视频抽帧，1-打断抓拍，2-混合模式，
-    public byte bySecneMode;    //场景模式，0-城区道路（默认），1-小区出入口，2-高速公路
-    public byte bySpeedMode;  //测速模式，0-无测速，1-雷达测速，2-视频测速
-    public byte byLineRuleEffect; //触发规则线有效性,每一位代表一条触发线,0-无效;1-有效。bit0-左触发线;bit1-右触发线;bit2-视频检测区域
-    public byte[] byRes1 = new byte[78];
-    public NET_ITC_LINE struLeftTrigLine;    //左触发线(一条垂直线)
-    public NET_ITC_LINE struRigtTrigLine;    //右触发线(一条垂直线)
-    public NET_ITC_LINE struLaneBoundaryLine;        //车道边界线（最右边车道的右车道线）
-    public NET_ITC_POLYGON struDetectArea;    //视频检测区域
-    public NET_DVR_GEOGLOCATION struGeogLocation; //地理位置（默认浙江省）计算时区
-    public NET_ITC_LANE_HVT_PARAM_V50[] struLaneParam = new NET_ITC_LANE_HVT_PARAM_V50[MAX_ITC_LANE_NUM/*6*/]; //单车道属性
-    public NET_ITC_PLATE_RECOG_PARAM struPlateRecog;    //牌识参数
-    public byte[] byRes2 = new byte[260];
-}
-
-public static class NET_ITC_TRIGGER_PARAM_UNION extends Union{
-	public int[] uLen = new int[1070];            //参数
-	public NET_ITC_POST_IOSPEED_PARAM      struIOSpeed = new NET_ITC_POST_IOSPEED_PARAM();    //（卡口）IO测速参数
-//	public NET_ITC_POST_SINGLEIO_PARAM     struSingleIO = new NET_ITC_POST_SINGLEIO_PARAM();   //（卡口）单IO参数
-//	public NET_ITC_POST_RS485_PARAM        struPostRs485 = new NET_ITC_POST_RS485_PARAM();  //（卡口）RS485车检器参数
-//	public NET_ITC_POST_RS485_RADAR_PARAM  struPostRadar = new NET_ITC_POST_RS485_RADAR_PARAM();  //（卡口）RS485雷达参数
-	public NET_ITC_POST_VTCOIL_PARAM       struVtCoil = new NET_ITC_POST_VTCOIL_PARAM();     //（卡口）虚拟线圈参数
-	public NET_ITC_POST_HVT_PARAM          struHvt = new NET_ITC_POST_HVT_PARAM();        //（卡口）混行卡口参数
-//	public NET_ITC_EPOLICE_IOTL_PARAM      struIOTL = new NET_ITC_EPOLICE_IOTL_PARAM();        //（电警）IO红绿灯参数
-//	public NET_ITC_EPOLICE_RS485_PARAM     struEpoliceRs485 = new NET_ITC_EPOLICE_RS485_PARAM(); //（电警）RS485车检器触发参数
-//	public NET_ITC_EPOLICE_RS485_PARAM     struPERs485 = new NET_ITC_EPOLICE_RS485_PARAM();    //（卡式电警）RS485车检器触发参数
-//	public NET_ITC_POST_MPR_PARAM          struPostMpr = new NET_ITC_POST_MPR_PARAM();    //多帧检测触发（MPR）
-//	public NET_DVR_VIA_VTCOIL_PARAM        struViaVtCoil = new NET_DVR_VIA_VTCOIL_PARAM();  //(VIA)视频检测参数
-//	public NET_ITC_POST_IMT_PARAM          struPostImt = new NET_ITC_POST_IMT_PARAM();//智慧监控触发
-//	public NET_ITC_POST_PRS_PARAM          struPostPrs = new NET_ITC_POST_PRS_PARAM();//视频检测触发
-//	public NET_IPC_POST_HVT_PARAM          struIpcHvt = new NET_IPC_POST_HVT_PARAM();//(IPC) 混行卡口参数
-	public NET_ITC_POST_HVT_PARAM_V50      struHvtV50 = new NET_ITC_POST_HVT_PARAM_V50();  /*（卡口）混行卡口参数V50*/
-//	public NET_ITC_POST_MOBILE_PARAM       struPostMobile = new NET_ITC_POST_MOBILE_PARAM();// 移动交通触发模式
-//	public NET_ITC_NOCOMITY_PEDESTRIAN_PARAM struNoComityPed = new NET_ITC_NOCOMITY_PEDESTRIAN_PARAM();//不礼让行人参数
-//	public NET_ITC_REDLIGHT_PEDESTRIAN_PARAM struRedLightPed = new NET_ITC_REDLIGHT_PEDESTRIAN_PARAM();//行人闯红灯参数
-}
-
-//单个触发参数结构
-public static class NET_ITC_SINGLE_TRIGGERCFG extends Structure{
-	public byte byEnable;    //是否启用该触发模式，0-否，1-是
-    public byte[] byRes1 = new byte[3];
-	public int dwTriggerType; //触发类型，详见ITC_TRIGGERMODE_TYPE
-	public NET_ITC_TRIGGER_PARAM_UNION uTriggerParam = new NET_ITC_TRIGGER_PARAM_UNION(); //触发参数
-    public byte[] byRes = new byte[64];
-}
-
-//触发参数结构
-public static class NET_ITC_TRIGGERCFG extends Structure{
-	public int dwSize;            //结构长度
-    public NET_ITC_SINGLE_TRIGGERCFG  struTriggerParam;  //单个触发参数
-    public byte[] byRes = new byte[32];
-}
-
-//单个IO接入信号灯参数
-public static class NET_ITC_SINGLE_IO_LIGHT_PARAM extends Structure{
-	public byte byLightType; //交通灯导向类型,0-左转灯,1-直行灯,2-右转灯
-	public byte byRelatedIO; //关联的IO口号
-	public byte byRedLightState; //红灯电平状态，0-高电平红灯，1-低电平红灯
-	public byte[] byRes = new byte[17];
-}
-
-//IO接入信号灯参数
-public static class NET_ITC_IO_LIGHT_PARAM extends Structure{
-    public NET_ITC_SINGLE_IO_LIGHT_PARAM[] struIOLight = new NET_ITC_SINGLE_IO_LIGHT_PARAM[MAX_LIGHT_NUM]; //单个IO接入信号灯参数
-    public byte[] byRes = new byte[8];
-}
-
-//单个485接入信号灯参数
-public static class NET_ITC_SINGLE_RS485_LIGHT_PARAM extends Structure{
-	public byte byLightType; //交通灯导向类型，0-左转灯，1-直行灯，2-右转灯
-	public byte byRelatedLightChan; //关联的红绿灯检测器通道号
-	public byte byInputLight;    //接入的信号灯类型，0-接红灯，1-接绿灯
-	public byte byRelatedYLightChan; //关联的黄灯检测器通道号
-    public byte[] byRes = new byte[16];
-}
-
-//485接入信号灯参数
-public static class NET_ITC_RS485_LIGHT_PARAM extends Structure{
-	public NET_ITC_SINGLE_RS485_LIGHT_PARAM[] struRS485Light = new NET_ITC_SINGLE_RS485_LIGHT_PARAM[MAX_LIGHT_NUM]; //单个485接入信号灯参数
-    public byte[] byRes = new byte[8];
-}
-
-public static class NET_POS_PARAM extends Structure{
-	public short wLeft;
-	public short wTop;
-	public short wRight;
-	public short wBottom;
-}
-
-//单组视频检测交通信号灯参数结构
-public static class NET_ITC_SINGLE_VIDEO_DETECT_LIGHT_PARAM extends Structure{
-	public byte byLightNum; //交通灯个数
-	public byte byStraightLight; //是否有直行标志灯，0-否 ，1-是
-	public byte byLeftLight; //是否有左转标志灯，0-否，1-是
-	public byte byRightLight; //是否有右转标志灯，0-否，1-是
-	public byte byRedLight;//是否有红灯，0-否，1-是
-	public byte byGreenLight; //是否有绿灯，0-否，1-是
-	public byte byYellowLight; //是否有黄灯，0-否，1-是
-	public byte byYellowLightTime;//取值范围（0～10s）（ITC3.7Ver）
-	public NET_POS_PARAM struLightRect; //交通灯区域
-    public byte[] byRes = new byte[24];
-}
-
-//视频检测交通信号灯参数结构(最大可有12个区域检测，488字节)
-public static class NET_ITC_VIDEO_DETECT_LIGHT_PARAM extends Structure{
-    public NET_ITC_SINGLE_VIDEO_DETECT_LIGHT_PARAM[] struTrafficLight = new NET_ITC_SINGLE_VIDEO_DETECT_LIGHT_PARAM[MAX_VIDEO_DETECT_LIGHT_NUM]; //单个视频检测信号灯参数
-    public byte[] byRes = new byte[8];
-}
-
-//交通信号灯接入参数
-public static class NET_ITC_LIGHT_ACCESSPARAM_UNION extends Union{
-    public int[] uLen = new int[122];
-    public NET_ITC_IO_LIGHT_PARAM struIOLight; //IO接入信号灯参数
-    public NET_ITC_RS485_LIGHT_PARAM struRS485Light; //485接入信号灯参数
-    public NET_ITC_VIDEO_DETECT_LIGHT_PARAM struVideoDelectLight; //视频检测信号灯参数
-}
-
-//交通信号灯参数结构
-public static class NET_ITC_TRAFFIC_LIGHT_PARAM extends Structure{
-    public byte bySource; //交通信号灯接入源，0-IO接入，1-RS485接入
-    public byte[] byRes1 = new byte[3];
-    public NET_ITC_LIGHT_ACCESSPARAM_UNION struLightAccess = new NET_ITC_LIGHT_ACCESSPARAM_UNION();//信号灯接入参数
-    public byte[] byRes = new byte[32];
-}
-
-//违规检测参数结构
-public static class NET_ITC_VIOLATION_DETECT_PARAM extends Structure{
-    public int dwVioDetectType; //违规检测类型, 按位表示, 详见ITC_VIOLATION_DETECT_TYPE ,0-不启用,1-启用
-    public byte byDriveLineSnapTimes; //压车道线抓拍张数,2-3
-    public byte byReverseSnapTimes; //逆行抓拍,2-3
-    public short wStayTime; //机占非停留时间（该时间后抓拍），单位s
-    public byte byNonDriveSnapTimes;//机占非抓拍张数2-3
-    public byte byChangeLaneTimes;//违法变道抓拍张数 2-3
-    public byte bybanTimes;//违法禁令抓拍张数2-3
-    public byte byDriveLineSnapSen;// 压线灵敏度(0~100)(3.7Ver)
-    public short wSnapPosFixPixel; //第2,3张抓拍位置最小偏移(违反信号灯时起效)（单位：像素） 命名需改进
-    public byte bySpeedTimes;//违法超速抓拍张数2-3(3.8Ver)
-    public byte byTurnAroundEnable;//违章掉头使能 0~关闭 1~开启
-    public byte byThirdPlateRecogTime;//第三张牌识时间 0~180s
-    public byte byPostSnapTimes;//卡口抓拍张数,1-2张
-    public byte[] byRes1 = new byte[18];
-    public short wStopLineDis;  //电警第2张违规图片与停止线的最短距离，[0,300]单位(像素)
-    public byte[] byRes = new byte[14];
-}
-
-//违规检测线参数结构
-public static class NET_ITC_VIOLATION_DETECT_LINE extends Structure{
-    public NET_ITC_LINE  struLaneLine = new NET_ITC_LINE(); //车道线参数
-    public NET_ITC_LINE  struStopLine = new NET_ITC_LINE(); //停止线参数
-    public NET_ITC_LINE  struRedLightLine = new NET_ITC_LINE(); //闯红灯触发线参数
-    public NET_ITC_LINE  struCancelLine = new NET_ITC_LINE(); //直行触发位置取消线
-    public NET_ITC_LINE struWaitLine = new NET_ITC_LINE(); //待行区停止线参数
-    public NET_ITC_LINE[] struRes = new NET_ITC_LINE[8];
-}
-
-//单个车道视频电警触发参数结构
-public static class NET_ITC_LANE_VIDEO_EPOLICE_PARAM extends Structure{
-    public byte byLaneNO; //关联的车道号
-    public byte bySensitivity; //线圈灵敏度，[1,100]
-    public byte byEnableRadar;//启用雷达测试0-不启用，1-启用
-    //关联车道方向类型，参考ITC_RELA_LANE_DIRECTION_TYPE
-    //该参数为车道方向参数，与关联车道号对应，确保车道唯一性。
-    public byte byRelaLaneDirectionType;
-    public NET_ITC_LANE_LOGIC_PARAM struLane; //车道参数
-    public NET_ITC_VIOLATION_DETECT_PARAM struVioDetect; //违规检测参数
-    public NET_ITC_VIOLATION_DETECT_LINE struLine; //违规检测线
-    public NET_ITC_POLYGON struPlateRecog; //牌识区域参数
-    public byte byRecordEnable;//闯红灯周期录像标志，0-不录像，1-录像
-    public byte byRecordType;//闯红灯录像类型，0-预录，1-延时录像
-    public byte byPreRecordTime;//闯红灯录像片段预录时间（默认0），单位：秒
-    public byte byRecordDelayTime;//闯红灯录像片段延时时间（默认0），单位：秒
-    public byte byRecordTimeOut;//闯红灯周期录像超时时间（秒）
-    public byte byCarSpeedLimit; //车速限制值，单位km/h
-    public byte byCarSignSpeed;//标志限速，单位km/h
-    public byte bySnapPicPreRecord; //抓拍图片预录时间点；0-默认值（第二张图片），1-第一张图片，2-第二张图片，3-第三张图片
-    public NET_ITC_INTERVAL_PARAM struInterval;//抓拍间隔参数（20byte）
-    public byte[] byRes = new byte[36];
-}
-
-//视频电警触发参数结构
-public static class NET_ITC_VIDEO_EPOLICE_PARAM extends Structure{
-    public byte byEnable;    //是否启用，0-不启用，1-启用
-    public byte byLaneNum; //识别的车道个数
-    public byte byLogicJudge;//闯红灯违规判断逻辑，设置值为：0-按方向，1-按车道
-    public byte byRes1;
-    public NET_ITC_PLATE_RECOG_PARAM struPlateRecog; //牌识参数
-    public NET_ITC_TRAFFIC_LIGHT_PARAM struTrafficLight; //交通信号灯参数
-    public NET_ITC_LANE_VIDEO_EPOLICE_PARAM[] struLaneParam = new NET_ITC_LANE_VIDEO_EPOLICE_PARAM[MAX_ITC_LANE_NUM]; //单车道参数
-    public NET_ITC_LINE  struLaneBoundaryLine; //车道边界线（最右边车道的边界线）
-    public NET_ITC_LINE  struLeftLine; //左转弯分界线
-    public NET_ITC_LINE  struRightLine; //右转弯分界线
-    public NET_ITC_LINE  struTopZebraLine; //上部斑马线
-    public NET_ITC_LINE  struBotZebraLine; //下部斑马线
-    public byte[] byRes = new byte[32];
-}
-
-public static class NET_DVR_CURTRIGGERMODE extends Structure{
-	public int dwSize;
-	public int dwTriggerType; //触发类型，详见ITC_TRIGGERMODE_TYPE
-    public byte[] byRes = new byte[24];
-}
-
-public static class NET_ITC_VIDEO_TRIGGER_COND extends Structure{
-	public int dwSize;
-	public int dwChannel;
-	public int dwTriggerMode; //视频触发模式类型，详见ITC_TRIGGERMODE_TYPE
-    public byte[] byRes = new byte[16];
-}
-
-public static class NET_ITC_VIDEO_TRIGGER_PARAM_UNION extends Union{
-	public int[] uLen = new int[1150];
-	public NET_ITC_VIDEO_EPOLICE_PARAM struVideoEP = new NET_ITC_VIDEO_EPOLICE_PARAM(); //视频电警参数
-}
-
-public static class NET_ITC_VIDEO_TRIGGER_PARAM extends Structure{
-	public int dwSize;
-	public int dwMode; //触发模式，详见ITC_TRIGGERMODE_TYPE
-	public NET_ITC_VIDEO_TRIGGER_PARAM_UNION uVideoTrigger = new NET_ITC_VIDEO_TRIGGER_PARAM_UNION(); //触发模式参数
-    public byte[] byRes = new byte[32];
-}
-
-public static class NET_DVR_STD_ABILITY extends Structure {
-	public Pointer lpCondBuffer;    //[in]条件参数(码字格式),例如通道号等.可以为NULL
-	public int dwCondSize;        //[in] dwCondSize指向的内存大小
-	public Pointer lpOutBuffer;    //[out]输出参数(XML格式),不为NULL
-	public int dwOutSize;        //[in] lpOutBuffer指向的内存大小
-	public Pointer lpStatusBuffer;    //[out]返回的状态参数(XML格式),获取成功时不会赋值,如果不需要,可以置NULL
-	public int dwStatusSize;    //[in] lpStatusBuffer指向的内存大小
-	public int dwRetSize;        //[out]获取到的数据长度(lpOutBuffer或者lpStatusBuffer指向的实际数据长度)
-	public byte[] byRes= new byte[32];        //保留字节
-}
-
-public static class NET_DVR_STD_CONFIG extends Structure {
-	public Pointer lpCondBuffer;        //[in]条件参数(结构体格式),例如通道号等.可以为NULL
-	public int dwCondSize;            //[in] lpCondBuffer指向的内存大小
-	public Pointer lpInBuffer;            //[in]输入参数(结构体格式),设置时不为NULL，获取时为NULL
-	public int dwInSize;            //[in] lpInBuffer指向的内存大小
-	public Pointer lpOutBuffer;        //[out]输出参数(结构体格式),获取时不为NULL,设置时为NULL
-	public int dwOutSize;            //[in] lpOutBuffer指向的内存大小
-	public Pointer lpStatusBuffer;        //[out]返回的状态参数(XML格式),获取成功时不会赋值,如果不需要,可以置NULL
-	public int dwStatusSize;        //[in] lpStatusBuffer指向的内存大小
-	public Pointer lpXmlBuffer;    //[in/out]byDataType = 1时有效,xml格式数据
-	public int dwXmlSize;      //[in/out]lpXmlBuffer指向的内存大小,获取时同时作为输入和输出参数，获取成功后会修改会实际长度，设置时表示实际长度，而不是整个内存大小
-	public byte byDataType;     //[in]输入/输出参数类型,0-使用结构体类型lpInBuffer/lpOutBuffer有效,1-使用XML类型lpXmlBuffer有效
-	public byte[] byRes= new byte[23];
-}
-
-public static class BYTE_ARRAY extends Structure
-{
-	public byte[] byValue;
-
-	public BYTE_ARRAY(int iLen) {
-		byValue = new byte[iLen];
-	}
-
-	@Override
-	protected List<String> getFieldOrder() {
-	// TODO Auto-generated method stub
-		return Arrays.asList("byValue");
-	}
-}
-
-public static class CALLBACK_USER extends Structure {
-       public byte[] byDeviceID= new byte[16];
-       public byte[] byCardNo= new byte[32];
-       public byte[] byDevIP= new byte[16];
+public static class RECV_ALARM extends Structure {
+    public byte[] RecvBuffer = new byte[400];//此处的400应不小于最大报警报文长度
 }
 
 
  /***API函数声明,详细说明见API手册***/
    public static interface FRealDataCallBack_V30 extends StdCallCallback {
-        public void invoke(int lRealHandle, int dwDataType,
+        public void invoke(NativeLong lRealHandle, int dwDataType,
                            ByteByReference pBuffer, int dwBufSize, Pointer pUser);
     }
 
    public static interface FMSGCallBack extends StdCallCallback {
-        public void invoke(int lCommand, NET_DVR_ALARMER pAlarmer, Pointer pAlarmInfo, int dwBufLen, Pointer pUser);
-    }
-
-   public static interface FMSGCallBack_V31 extends StdCallCallback {
-        public boolean invoke(int lCommand, NET_DVR_ALARMER pAlarmer, Pointer pAlarmInfo, int dwBufLen, Pointer pUser);
+        public void invoke(NativeLong lCommand, NET_DVR_ALARMER pAlarmer, HCNetSDK.RECV_ALARM pAlarmInfo, int dwBufLen, Pointer pUser);
     }
 
    public static interface FMessCallBack extends StdCallCallback {
-        public boolean invoke(int lCommand, String sDVRIP, String pBuf, int dwBufLen);
+        public boolean invoke(NativeLong lCommand, String sDVRIP, String pBuf, int dwBufLen);
     }
 
    public static interface FMessCallBack_EX extends StdCallCallback {
-        public boolean invoke(int lCommand, int lUserID, String pBuf, int dwBufLen);
+        public boolean invoke(NativeLong lCommand, NativeLong lUserID, String pBuf, int dwBufLen);
     }
 
    public static interface FMessCallBack_NEW extends StdCallCallback {
-        public boolean invoke(int lCommand, String sDVRIP, String pBuf, int dwBufLen, short dwLinkDVRPort);
+        public boolean invoke(NativeLong lCommand, String sDVRIP, String pBuf, int dwBufLen, short dwLinkDVRPort);
     }
 
    public static interface FMessageCallBack extends StdCallCallback {
-        public boolean invoke(int lCommand, String sDVRIP, String pBuf, int dwBufLen, int dwUser);
+        public boolean invoke(NativeLong lCommand, String sDVRIP, String pBuf, int dwBufLen, int dwUser);
     }
 
       public static interface FExceptionCallBack extends StdCallCallback {
-        public void invoke(int dwType, int lUserID, int lHandle, Pointer pUser);
+        public void invoke(int dwType, NativeLong lUserID, NativeLong lHandle, Pointer pUser);
     }
       public static interface FDrawFun extends StdCallCallback {
-        public void invoke(int lRealHandle, W32API.HDC hDc, int dwUser);
+        public void invoke(NativeLong lRealHandle, W32API.HDC hDc, int dwUser);
       }
 
     public static interface FStdDataCallBack extends StdCallCallback {
-        public void invoke(int lRealHandle, int dwDataType, ByteByReference pBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lRealHandle, int dwDataType, ByteByReference pBuffer, int dwBufSize, int dwUser);
       }
 
     public static interface FPlayDataCallBack extends StdCallCallback {
-        public void invoke(int lPlayHandle, int dwDataType, ByteByReference pBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lPlayHandle, int dwDataType, ByteByReference pBuffer, int dwBufSize, int dwUser);
       }
 
     public static interface FVoiceDataCallBack extends StdCallCallback {
-        public void invoke(int lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, int dwUser);
+        public void invoke(NativeLong lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, int dwUser);
       }
 
     public static interface FVoiceDataCallBack_V30 extends StdCallCallback {
-        public void invoke(int lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, Pointer pUser);
+        public void invoke(NativeLong lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, Pointer pUser);
       }
 
     public static interface FVoiceDataCallBack_MR extends StdCallCallback {
-        public void invoke(int lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, int dwUser);
+        public void invoke(NativeLong lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, int dwUser);
       }
 
     public static interface FVoiceDataCallBack_MR_V30 extends StdCallCallback {
-        public void invoke(int lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, String pUser);
+        public void invoke(NativeLong lVoiceComHandle, String pRecvDataBuffer, int dwBufSize, byte byAudioFlag, String pUser);
       }
 
     public static interface FVoiceDataCallBack2 extends StdCallCallback {
@@ -6746,35 +2722,31 @@ public static class CALLBACK_USER extends Structure {
       }
 
    public static interface FSerialDataCallBack extends StdCallCallback {
-        public void invoke(int lSerialHandle, String pRecvDataBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lSerialHandle, String pRecvDataBuffer, int dwBufSize, int dwUser);
       }
 
     public static interface FRowDataCallBack extends StdCallCallback {
-        public void invoke(int lUserID, String sIPAddr, int lRowAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lUserID, String sIPAddr, NativeLong lRowAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
       }
 
     public static interface FColLocalDataCallBack extends StdCallCallback {
-        public void invoke(int lUserID, String sIPAddr, int lColumnAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lUserID, String sIPAddr, NativeLong lColumnAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
       }
 
      public static interface FColGlobalDataCallBack extends StdCallCallback {
-        public void invoke(int lUserID, String sIPAddr, int lColumnAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
+        public void invoke(NativeLong lUserID, String sIPAddr, NativeLong lColumnAmout, String pRecvDataBuffer, int dwBufSize, int dwUser);
       }
 
    public static interface FJpegdataCallBack extends StdCallCallback {
-        public int invoke(int lCommand, int lUserID, String sDVRIP, String sJpegName, String pJpegBuf, int dwBufLen, int dwUser);
+        public int invoke(NativeLong lCommand, NativeLong lUserID, String sDVRIP, String sJpegName, String pJpegBuf, int dwBufLen, int dwUser);
       }
 
     public static interface FPostMessageCallBack extends StdCallCallback {
-        public int invoke(int dwType, int lIndex);
+        public int invoke(int dwType, NativeLong lIndex);
       }
 
  boolean  NET_DVR_Init();
  boolean  NET_DVR_Cleanup();
-
- boolean  NET_DVR_SetSDKLocalCfg(int enumType, Pointer lpInBuff);
- boolean  NET_DVR_GetSDKLocalCfg(int enumType, Pointer lpOutBuff);
-
  boolean  NET_DVR_SetDVRMessage(int nMessage, int hWnd);
 //NET_DVR_SetDVRMessage的扩展
  boolean  NET_DVR_SetExceptionCallBack_V30(int nMessage, int hWnd, FExceptionCallBack fExceptionCallBack, Pointer pUser);
@@ -6785,7 +2757,6 @@ public static class CALLBACK_USER extends Structure {
  boolean  NET_DVR_SetDVRMessageCallBack(FMessageCallBack fMessageCallBack, int dwUser);
 
  boolean  NET_DVR_SetDVRMessageCallBack_V30(FMSGCallBack fMessageCallBack, Pointer pUser);
- boolean  NET_DVR_SetDVRMessageCallBack_V31(FMSGCallBack_V31 fMessageCallBack, Pointer pUser);
 
  boolean  NET_DVR_SetConnectTime(int dwWaitTime, int dwTryTimes);
  boolean  NET_DVR_SetReconnect(int dwInterval, boolean bEnableRecon);
@@ -6795,432 +2766,310 @@ public static class CALLBACK_USER extends Structure {
  boolean  NET_DVR_StartListen(String sLocalIP, short wLocalPort);
  boolean  NET_DVR_StopListen();
 
- int  NET_DVR_StartListen_V30(String sLocalIP, short wLocalPort, FMSGCallBack DataCallback, Pointer pUserData);
- boolean  NET_DVR_StopListen_V30(int lListenHandle);
- int  NET_DVR_Login(String sDVRIP, short wDVRPort, String sUserName, String sPassword, NET_DVR_DEVICEINFO lpDeviceInfo);
- int  NET_DVR_Login_V30(String sDVRIP, short wDVRPort, String sUserName, String sPassword, NET_DVR_DEVICEINFO_V30 lpDeviceInfo);
- int NET_DVR_Login_V40(NET_DVR_USER_LOGIN_INFO pLoginInfo, NET_DVR_DEVICEINFO_V40 lpDeviceInfo);
- boolean  NET_DVR_Logout(int lUserID);
- boolean  NET_DVR_Logout_V30(int lUserID);
+ NativeLong NET_DVR_StartListen_V30(String sLocalIP, short wLocalPort, FMSGCallBack DataCallback, Pointer pUserData);
+ boolean  NET_DVR_StopListen_V30(NativeLong lListenHandle);
+ NativeLong NET_DVR_Login(String sDVRIP, short wDVRPort, String sUserName, String sPassword, NET_DVR_DEVICEINFO lpDeviceInfo);
+ NativeLong NET_DVR_Login_V30(String sDVRIP, short wDVRPort, String sUserName, String sPassword, NET_DVR_DEVICEINFO_V30 lpDeviceInfo);
+ boolean  NET_DVR_Logout(NativeLong lUserID);
+ boolean  NET_DVR_Logout_V30(NativeLong lUserID);
  int  NET_DVR_GetLastError();
- String   NET_DVR_GetErrorMsg(IntByReference pErrorNo);
+ String   NET_DVR_GetErrorMsg(NativeLongByReference pErrorNo);
  boolean  NET_DVR_SetShowMode(int dwShowType, int colorKey);
  boolean  NET_DVR_GetDVRIPByResolveSvr(String sServerIP, short wServerPort, String sDVRName, short wDVRNameLen, String sDVRSerialNumber, short wDVRSerialLen, String sGetIP);
  boolean   NET_DVR_GetDVRIPByResolveSvr_EX(String sServerIP, short wServerPort, String sDVRName, short wDVRNameLen, String sDVRSerialNumber, short wDVRSerialLen, String sGetIP, IntByReference dwPort);
 
 //预览相关接口
- int  NET_DVR_RealPlay(int lUserID, NET_DVR_CLIENTINFO lpClientInfo);
- int  NET_DVR_RealPlay_V30(int lUserID, NET_DVR_CLIENTINFO lpClientInfo, FRealDataCallBack_V30 fRealDataCallBack_V30, Pointer pUser, boolean bBlocked);
- int  NET_DVR_RealPlay_V40(int lUserID, NET_DVR_PREVIEWINFO lpPreviewInfo, FRealDataCallBack_V30 fRealDataCallBack_V30, Pointer pUser);
- boolean  NET_DVR_StopRealPlay(int lRealHandle);
- boolean  NET_DVR_RigisterDrawFun(int lRealHandle, FDrawFun fDrawFun, int dwUser);
- boolean  NET_DVR_SetPlayerBufNumber(int lRealHandle, int dwBufNum);
- boolean  NET_DVR_ThrowBFrame(int lRealHandle, int dwNum);
+ NativeLong NET_DVR_RealPlay(NativeLong lUserID, NET_DVR_CLIENTINFO lpClientInfo);
+ NativeLong NET_DVR_RealPlay_V30(NativeLong lUserID, NET_DVR_CLIENTINFO lpClientInfo, FRealDataCallBack_V30 fRealDataCallBack_V30, Pointer pUser, boolean bBlocked);
+ boolean  NET_DVR_StopRealPlay(NativeLong lRealHandle);
+ boolean  NET_DVR_RigisterDrawFun(NativeLong lRealHandle, FDrawFun fDrawFun, int dwUser);
+ boolean  NET_DVR_SetPlayerBufNumber(NativeLong lRealHandle, int dwBufNum);
+ boolean  NET_DVR_ThrowBFrame(NativeLong lRealHandle, int dwNum);
  boolean  NET_DVR_SetAudioMode(int dwMode);
- boolean  NET_DVR_OpenSound(int lRealHandle);
+ boolean  NET_DVR_OpenSound(NativeLong lRealHandle);
  boolean  NET_DVR_CloseSound();
- boolean  NET_DVR_OpenSoundShare(int lRealHandle);
- boolean  NET_DVR_CloseSoundShare(int lRealHandle);
- boolean  NET_DVR_Volume(int lRealHandle, short wVolume);
- boolean  NET_DVR_SaveRealData(int lRealHandle, String sFileName);
- boolean  NET_DVR_StopSaveRealData(int lRealHandle);
- boolean  NET_DVR_SetRealDataCallBack(int lRealHandle, FRowDataCallBack fRealDataCallBack, int dwUser);
- boolean  NET_DVR_SetStandardDataCallBack(int lRealHandle, FStdDataCallBack fStdDataCallBack, int dwUser);
- boolean  NET_DVR_CapturePicture(int lRealHandle, String sPicFileName);//bmp
+ boolean  NET_DVR_OpenSoundShare(NativeLong lRealHandle);
+ boolean  NET_DVR_CloseSoundShare(NativeLong lRealHandle);
+ boolean  NET_DVR_Volume(NativeLong lRealHandle, short wVolume);
+ boolean  NET_DVR_SaveRealData(NativeLong lRealHandle, String sFileName);
+ boolean  NET_DVR_StopSaveRealData(NativeLong lRealHandle);
+ boolean  NET_DVR_SetRealDataCallBack(NativeLong lRealHandle, FRowDataCallBack fRealDataCallBack, int dwUser);
+ boolean  NET_DVR_SetStandardDataCallBack(NativeLong lRealHandle, FStdDataCallBack fStdDataCallBack, int dwUser);
+ boolean  NET_DVR_CapturePicture(NativeLong lRealHandle, String sPicFileName);//bmp
 
 //动态生成I帧
- boolean  NET_DVR_MakeKeyFrame(int lUserID, int lChannel);//主码流
- boolean  NET_DVR_MakeKeyFrameSub(int lUserID, int lChannel);//子码流
+ boolean  NET_DVR_MakeKeyFrame(NativeLong lUserID, NativeLong lChannel);//主码流
+ boolean  NET_DVR_MakeKeyFrameSub(NativeLong lUserID, NativeLong lChannel);//子码流
 
 //云台控制相关接口
- boolean  NET_DVR_PTZControl(int lRealHandle, int dwPTZCommand, int dwStop);
- boolean  NET_DVR_PTZControl_Other(int lUserID, int lChannel, int dwPTZCommand, int dwStop);
- boolean  NET_DVR_TransPTZ(int lRealHandle, String pPTZCodeBuf, int dwBufSize);
- boolean  NET_DVR_TransPTZ_Other(int lUserID, int lChannel, String pPTZCodeBuf, int dwBufSize);
- boolean  NET_DVR_PTZPreset(int lRealHandle, int dwPTZPresetCmd, int dwPresetIndex);
- boolean  NET_DVR_PTZPreset_Other(int lUserID, int lChannel, int dwPTZPresetCmd, int dwPresetIndex);
- boolean  NET_DVR_TransPTZ_EX(int lRealHandle, String pPTZCodeBuf, int dwBufSize);
- boolean  NET_DVR_PTZControl_EX(int lRealHandle, int dwPTZCommand, int dwStop);
- boolean  NET_DVR_PTZPreset_EX(int lRealHandle, int dwPTZPresetCmd, int dwPresetIndex);
- boolean  NET_DVR_PTZCruise(int lRealHandle, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
- boolean  NET_DVR_PTZCruise_Other(int lUserID, int lChannel, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
- boolean  NET_DVR_PTZCruise_EX(int lRealHandle, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
- boolean  NET_DVR_PTZTrack(int lRealHandle, int dwPTZTrackCmd);
- boolean  NET_DVR_PTZTrack_Other(int lUserID, int lChannel, int dwPTZTrackCmd);
- boolean  NET_DVR_PTZTrack_EX(int lRealHandle, int dwPTZTrackCmd);
- boolean  NET_DVR_PTZControlWithSpeed(int lRealHandle, int dwPTZCommand, int dwStop, int dwSpeed);
- boolean  NET_DVR_PTZControlWithSpeed_Other(int lUserID, int lChannel, int dwPTZCommand, int dwStop, int dwSpeed);
- boolean  NET_DVR_PTZControlWithSpeed_EX(int lRealHandle, int dwPTZCommand, int dwStop, int dwSpeed);
- boolean  NET_DVR_GetPTZCruise(int lUserID, int lChannel, int lCruiseRoute, NET_DVR_CRUISE_RET lpCruiseRet);
- boolean  NET_DVR_PTZMltTrack(int lRealHandle, int dwPTZTrackCmd, int dwTrackIndex);
- boolean  NET_DVR_PTZMltTrack_Other(int lUserID, int lChannel, int dwPTZTrackCmd, int dwTrackIndex);
- boolean  NET_DVR_PTZMltTrack_EX(int lRealHandle, int dwPTZTrackCmd, int dwTrackIndex);
+ boolean  NET_DVR_PTZControl(NativeLong lRealHandle, int dwPTZCommand, int dwStop);
+ boolean  NET_DVR_PTZControl_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZCommand, int dwStop);
+ boolean  NET_DVR_TransPTZ(NativeLong lRealHandle, String pPTZCodeBuf, int dwBufSize);
+ boolean  NET_DVR_TransPTZ_Other(NativeLong lUserID, NativeLong lChannel, String pPTZCodeBuf, int dwBufSize);
+ boolean  NET_DVR_PTZPreset(NativeLong lRealHandle, int dwPTZPresetCmd, int dwPresetIndex);
+ boolean  NET_DVR_PTZPreset_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZPresetCmd, int dwPresetIndex);
+ boolean  NET_DVR_TransPTZ_EX(NativeLong lRealHandle, String pPTZCodeBuf, int dwBufSize);
+ boolean  NET_DVR_PTZControl_EX(NativeLong lRealHandle, int dwPTZCommand, int dwStop);
+ boolean  NET_DVR_PTZPreset_EX(NativeLong lRealHandle, int dwPTZPresetCmd, int dwPresetIndex);
+ boolean  NET_DVR_PTZCruise(NativeLong lRealHandle, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
+ boolean  NET_DVR_PTZCruise_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
+ boolean  NET_DVR_PTZCruise_EX(NativeLong lRealHandle, int dwPTZCruiseCmd, byte byCruiseRoute, byte byCruisePoint, short wInput);
+ boolean  NET_DVR_PTZTrack(NativeLong lRealHandle, int dwPTZTrackCmd);
+ boolean  NET_DVR_PTZTrack_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZTrackCmd);
+ boolean  NET_DVR_PTZTrack_EX(NativeLong lRealHandle, int dwPTZTrackCmd);
+ boolean  NET_DVR_PTZControlWithSpeed(NativeLong lRealHandle, int dwPTZCommand, int dwStop, int dwSpeed);
+ boolean  NET_DVR_PTZControlWithSpeed_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZCommand, int dwStop, int dwSpeed);
+ boolean  NET_DVR_PTZControlWithSpeed_EX(NativeLong lRealHandle, int dwPTZCommand, int dwStop, int dwSpeed);
+ boolean  NET_DVR_GetPTZCruise(NativeLong lUserID, NativeLong lChannel, NativeLong lCruiseRoute, NET_DVR_CRUISE_RET lpCruiseRet);
+ boolean  NET_DVR_PTZMltTrack(NativeLong lRealHandle, int dwPTZTrackCmd, int dwTrackIndex);
+ boolean  NET_DVR_PTZMltTrack_Other(NativeLong lUserID, NativeLong lChannel, int dwPTZTrackCmd, int dwTrackIndex);
+ boolean  NET_DVR_PTZMltTrack_EX(NativeLong lRealHandle, int dwPTZTrackCmd, int dwTrackIndex);
 
 //文件查找与回放
- int  NET_DVR_FindFile(int lUserID, int lChannel, int dwFileType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
- int  NET_DVR_FindNextFile(int lFindHandle, NET_DVR_FIND_DATA lpFindData);
- boolean  NET_DVR_FindClose(int lFindHandle);
- int  NET_DVR_FindNextFile_V30(int lFindHandle, NET_DVR_FINDDATA_V30 lpFindData);
- int  NET_DVR_FindFile_V30(int lUserID, NET_DVR_FILECOND pFindCond);
- boolean  NET_DVR_FindClose_V30(int lFindHandle);
+ NativeLong NET_DVR_FindFile(NativeLong lUserID, NativeLong lChannel, int dwFileType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
+ NativeLong NET_DVR_FindNextFile(NativeLong lFindHandle, NET_DVR_FIND_DATA lpFindData);
+ boolean  NET_DVR_FindClose(NativeLong lFindHandle);
+ NativeLong NET_DVR_FindNextFile_V30(NativeLong lFindHandle, NET_DVR_FINDDATA_V30 lpFindData);
+ NativeLong NET_DVR_FindFile_V30(NativeLong lUserID, NET_DVR_FILECOND pFindCond);
+ boolean  NET_DVR_FindClose_V30(NativeLong lFindHandle);
 //2007-04-16增加查询结果带卡号的文件查找
- int  NET_DVR_FindNextFile_Card(int lFindHandle, NET_DVR_FINDDATA_CARD lpFindData);
- int  NET_DVR_FindFile_Card(int lUserID, int lChannel, int dwFileType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
- boolean  NET_DVR_LockFileByName(int lUserID, String sLockFileName);
- boolean  NET_DVR_UnlockFileByName(int lUserID, String sUnlockFileName);
- int  NET_DVR_PlayBackByName(int lUserID, String sPlayBackFileName, HWND hWnd);
- int  NET_DVR_PlayBackByTime(int lUserID, int lChannel, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, HWND hWnd);
- int  NET_DVR_PlayBackByTime_V40(int lUserID, NET_DVR_VOD_PARA pVodPara);
- boolean  NET_DVR_PlayBackControl(int lPlayHandle, int dwControlCode, int dwInValue, IntByReference LPOutValue);
- boolean  NET_DVR_PlayBackControl_V40(int lPlayHandle, int dwControlCode, Pointer lpInBuffer, int dwInLen, Pointer lpOutBuffer, IntByReference lpOutLen);
- boolean  NET_DVR_StopPlayBack(int lPlayHandle);
- boolean  NET_DVR_SetPlayDataCallBack(int lPlayHandle, FPlayDataCallBack fPlayDataCallBack, int dwUser);
- boolean  NET_DVR_PlayBackSaveData(int lPlayHandle, String sFileName);
- boolean  NET_DVR_StopPlayBackSave(int lPlayHandle);
- boolean  NET_DVR_GetPlayBackOsdTime(int lPlayHandle, NET_DVR_TIME lpOsdTime);
- boolean  NET_DVR_PlayBackCaptureFile(int lPlayHandle, String sFileName);
- int  NET_DVR_GetFileByName(int lUserID, String sDVRFileName, String sSavedFileName);
- int  NET_DVR_GetFileByTime(int lUserID, int lChannel, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, String sSavedFileName);
- int  NET_DVR_GetFileByTime_V40(int lUserID, byte[] sSavedFileName, NET_DVR_PLAYCOND pDownloadCond);
- boolean  NET_DVR_StopGetFile(int lFileHandle);
- int  NET_DVR_GetDownloadPos(int lFileHandle);
- int	 NET_DVR_GetPlayBackPos(int lPlayHandle);
+ NativeLong NET_DVR_FindNextFile_Card(NativeLong lFindHandle, NET_DVR_FINDDATA_CARD lpFindData);
+ NativeLong NET_DVR_FindFile_Card(NativeLong lUserID, NativeLong lChannel, int dwFileType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
+ boolean  NET_DVR_LockFileByName(NativeLong lUserID, String sLockFileName);
+ boolean  NET_DVR_UnlockFileByName(NativeLong lUserID, String sUnlockFileName);
+ NativeLong NET_DVR_PlayBackByName(NativeLong lUserID, String sPlayBackFileName, HWND hWnd);
+ NativeLong NET_DVR_PlayBackByTime(NativeLong lUserID, NativeLong lChannel, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, HWND hWnd);
+ boolean  NET_DVR_PlayBackControl(NativeLong lPlayHandle, int dwControlCode, int dwInValue, IntByReference LPOutValue);
+ boolean  NET_DVR_StopPlayBack(NativeLong lPlayHandle);
+ boolean  NET_DVR_SetPlayDataCallBack(NativeLong lPlayHandle, FPlayDataCallBack fPlayDataCallBack, int dwUser);
+ boolean  NET_DVR_PlayBackSaveData(NativeLong lPlayHandle, String sFileName);
+ boolean  NET_DVR_StopPlayBackSave(NativeLong lPlayHandle);
+ boolean  NET_DVR_GetPlayBackOsdTime(NativeLong lPlayHandle, NET_DVR_TIME lpOsdTime);
+ boolean  NET_DVR_PlayBackCaptureFile(NativeLong lPlayHandle, String sFileName);
+ NativeLong NET_DVR_GetFileByName(NativeLong lUserID, String sDVRFileName, String sSavedFileName);
+ NativeLong NET_DVR_GetFileByTime(NativeLong lUserID, NativeLong lChannel, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, String sSavedFileName);
+ boolean  NET_DVR_StopGetFile(NativeLong lFileHandle);
+ int  NET_DVR_GetDownloadPos(NativeLong lFileHandle);
+ int	 NET_DVR_GetPlayBackPos(NativeLong lPlayHandle);
 
 //升级
- int  NET_DVR_Upgrade(int lUserID, String sFileName);
- int  NET_DVR_GetUpgradeState(int lUpgradeHandle);
- int  NET_DVR_GetUpgradeProgress(int lUpgradeHandle);
- boolean  NET_DVR_CloseUpgradeHandle(int lUpgradeHandle);
+ NativeLong NET_DVR_Upgrade(NativeLong lUserID, String sFileName);
+ int  NET_DVR_GetUpgradeState(NativeLong lUpgradeHandle);
+ int  NET_DVR_GetUpgradeProgress(NativeLong lUpgradeHandle);
+ boolean  NET_DVR_CloseUpgradeHandle(NativeLong lUpgradeHandle);
  boolean  NET_DVR_SetNetworkEnvironment(int dwEnvironmentLevel);
 //远程格式化硬盘
- int  NET_DVR_FormatDisk(int lUserID, int lDiskNumber);
- boolean  NET_DVR_GetFormatProgress(int lFormatHandle, IntByReference pCurrentFormatDisk, IntByReference pCurrentDiskPos, IntByReference pFormatStatic);
- boolean  NET_DVR_CloseFormatHandle(int lFormatHandle);
+ NativeLong NET_DVR_FormatDisk(NativeLong lUserID, NativeLong lDiskNumber);
+ boolean  NET_DVR_GetFormatProgress(NativeLong lFormatHandle, NativeLongByReference pCurrentFormatDisk, NativeLongByReference pCurrentDiskPos, NativeLongByReference pFormatStatic);
+ boolean  NET_DVR_CloseFormatHandle(NativeLong lFormatHandle);
 //报警
- int  NET_DVR_SetupAlarmChan(int lUserID);
- boolean  NET_DVR_CloseAlarmChan(int lAlarmHandle);
- int  NET_DVR_SetupAlarmChan_V30(int lUserID);
- int  NET_DVR_SetupAlarmChan_V41(int lUserID, NET_DVR_SETUPALARM_PARAM lpSetupParam);
- boolean  NET_DVR_CloseAlarmChan_V30(int lAlarmHandle);
+ NativeLong NET_DVR_SetupAlarmChan(NativeLong lUserID);
+ boolean  NET_DVR_CloseAlarmChan(NativeLong lAlarmHandle);
+ NativeLong NET_DVR_SetupAlarmChan_V30(NativeLong lUserID);
+ boolean  NET_DVR_CloseAlarmChan_V30(NativeLong lAlarmHandle);
 //语音对讲
- int  NET_DVR_StartVoiceCom(int lUserID, FVoiceDataCallBack fVoiceDataCallBack, int dwUser);
- int  NET_DVR_StartVoiceCom_V30(int lUserID, int dwVoiceChan, boolean bNeedCBNoEncData, FVoiceDataCallBack_V30 fVoiceDataCallBack, Pointer pUser);
- boolean  NET_DVR_SetVoiceComClientVolume(int lVoiceComHandle, short wVolume);
- boolean  NET_DVR_StopVoiceCom(int lVoiceComHandle);
+ NativeLong NET_DVR_StartVoiceCom(NativeLong lUserID, FVoiceDataCallBack fVoiceDataCallBack, int dwUser);
+ NativeLong NET_DVR_StartVoiceCom_V30(NativeLong lUserID, int dwVoiceChan, boolean bNeedCBNoEncData, FVoiceDataCallBack_V30 fVoiceDataCallBack, Pointer pUser);
+ boolean  NET_DVR_SetVoiceComClientVolume(NativeLong lVoiceComHandle, short wVolume);
+ boolean  NET_DVR_StopVoiceCom(NativeLong lVoiceComHandle);
 //语音转发
- int  NET_DVR_StartVoiceCom_MR(int lUserID, FVoiceDataCallBack_MR fVoiceDataCallBack, int dwUser);
- int  NET_DVR_StartVoiceCom_MR_V30(int lUserID, int dwVoiceChan, FVoiceDataCallBack_MR_V30 fVoiceDataCallBack, Pointer pUser);
- boolean  NET_DVR_VoiceComSendData(int lVoiceComHandle, String pSendBuf, int dwBufSize);
+ NativeLong NET_DVR_StartVoiceCom_MR(NativeLong lUserID, FVoiceDataCallBack_MR fVoiceDataCallBack, int dwUser);
+ NativeLong NET_DVR_StartVoiceCom_MR_V30(NativeLong lUserID, int dwVoiceChan, FVoiceDataCallBack_MR_V30 fVoiceDataCallBack, Pointer pUser);
+ boolean  NET_DVR_VoiceComSendData(NativeLong lVoiceComHandle, String pSendBuf, int dwBufSize);
 
 //语音广播
  boolean  NET_DVR_ClientAudioStart();
  boolean  NET_DVR_ClientAudioStart_V30(FVoiceDataCallBack2 fVoiceDataCallBack2, Pointer pUser);
  boolean  NET_DVR_ClientAudioStop();
- boolean  NET_DVR_AddDVR(int lUserID);
- int  NET_DVR_AddDVR_V30(int lUserID, int dwVoiceChan);
- boolean  NET_DVR_DelDVR(int lUserID);
- boolean  NET_DVR_DelDVR_V30(int lVoiceHandle);
+ boolean  NET_DVR_AddDVR(NativeLong lUserID);
+ NativeLong NET_DVR_AddDVR_V30(NativeLong lUserID, int dwVoiceChan);
+ boolean  NET_DVR_DelDVR(NativeLong lUserID);
+ boolean  NET_DVR_DelDVR_V30(NativeLong lVoiceHandle);
 ////////////////////////////////////////////////////////////
 //透明通道设置
- int  NET_DVR_SerialStart(int lUserID, int lSerialPort, FSerialDataCallBack fSerialDataCallBack, int dwUser);
-
-public static interface FSerialDataCallBack_V40 extends StdCallCallback {
-        public void invoke(int lSerialHandle, int lCHannel, byte[] pRecvDataBuffer, int dwBufSize, Pointer pUser);
-}
- int  NET_DVR_SerialStart_V40(int lUserID, Pointer lpInBuffer, int dwInBufferSize, FSerialDataCallBack_V40 fSerialDataCallBack_V40, Pointer pUser);
-
+ NativeLong NET_DVR_SerialStart(NativeLong lUserID, NativeLong lSerialPort, FSerialDataCallBack fSerialDataCallBack, int dwUser);
 //485作为透明通道时，需要指明通道号，因为不同通道号485的设置可以不同(比如波特率)
- boolean  NET_DVR_SerialSend(int lSerialHandle, int lChannel, byte[] pSendBuf, int dwBufSize);
- boolean  NET_DVR_SerialStop(int lSerialHandle);
- boolean  NET_DVR_SendTo232Port(int lUserID, String pSendBuf, int dwBufSize);
- boolean  NET_DVR_SendToSerialPort(int lUserID, int dwSerialPort, int dwSerialIndex, String pSendBuf, int dwBufSize);
+ boolean  NET_DVR_SerialSend(NativeLong lSerialHandle, NativeLong lChannel, String pSendBuf, int dwBufSize);
+ boolean  NET_DVR_SerialStop(NativeLong lSerialHandle);
+ boolean  NET_DVR_SendTo232Port(NativeLong lUserID, String pSendBuf, int dwBufSize);
+ boolean  NET_DVR_SendToSerialPort(NativeLong lUserID, int dwSerialPort, int dwSerialIndex, String pSendBuf, int dwBufSize);
 
 //解码 nBitrate = 16000
- Pointer  NET_DVR_InitG722Decoder(int nBitrate);
+ Pointer NET_DVR_InitG722Decoder(int nBitrate);
  void  NET_DVR_ReleaseG722Decoder(Pointer pDecHandle);
  boolean  NET_DVR_DecodeG722Frame(Pointer pDecHandle, String pInBuffer, String pOutBuffer);
 //编码
- Pointer  NET_DVR_InitG722Encoder();
+ Pointer NET_DVR_InitG722Encoder();
  boolean  NET_DVR_EncodeG722Frame(Pointer pEncodeHandle, String pInBuff, String pOutBuffer);
  void  NET_DVR_ReleaseG722Encoder(Pointer pEncodeHandle);
 
 //远程控制本地显示
- boolean  NET_DVR_ClickKey(int lUserID, int lKeyIndex);
+ boolean  NET_DVR_ClickKey(NativeLong lUserID, NativeLong lKeyIndex);
 //远程控制设备端手动录像
- boolean  NET_DVR_StartDVRRecord(int lUserID, int lChannel, int lRecordType);
- boolean  NET_DVR_StopDVRRecord(int lUserID, int lChannel);
+ boolean  NET_DVR_StartDVRRecord(NativeLong lUserID, NativeLong lChannel, NativeLong lRecordType);
+ boolean  NET_DVR_StopDVRRecord(NativeLong lUserID, NativeLong lChannel);
 //解码卡
- boolean  NET_DVR_InitDevice_Card(IntByReference pDeviceTotalChan);
+ boolean  NET_DVR_InitDevice_Card(NativeLongByReference pDeviceTotalChan);
  boolean  NET_DVR_ReleaseDevice_Card();
  boolean  NET_DVR_InitDDraw_Card(int hParent, int colorKey);
  boolean  NET_DVR_ReleaseDDraw_Card();
- int  NET_DVR_RealPlay_Card(int lUserID, NET_DVR_CARDINFO lpCardInfo, int lChannelNum);
- boolean  NET_DVR_ResetPara_Card(int lRealHandle, NET_DVR_DISPLAY_PARA lpDisplayPara);
+ NativeLong NET_DVR_RealPlay_Card(NativeLong lUserID, NET_DVR_CARDINFO lpCardInfo, NativeLong lChannelNum);
+ boolean  NET_DVR_ResetPara_Card(NativeLong lRealHandle, NET_DVR_DISPLAY_PARA lpDisplayPara);
  boolean  NET_DVR_RefreshSurface_Card();
  boolean  NET_DVR_ClearSurface_Card();
  boolean  NET_DVR_RestoreSurface_Card();
- boolean  NET_DVR_OpenSound_Card(int lRealHandle);
- boolean  NET_DVR_CloseSound_Card(int lRealHandle);
- boolean  NET_DVR_SetVolume_Card(int lRealHandle, short wVolume);
- boolean  NET_DVR_AudioPreview_Card(int lRealHandle, boolean bEnable);
- int  NET_DVR_GetCardLastError_Card();
- Pointer  NET_DVR_GetChanHandle_Card(int lRealHandle);
- boolean  NET_DVR_CapturePicture_Card(int lRealHandle, String sPicFileName);
+ boolean  NET_DVR_OpenSound_Card(NativeLong lRealHandle);
+ boolean  NET_DVR_CloseSound_Card(NativeLong lRealHandle);
+ boolean  NET_DVR_SetVolume_Card(NativeLong lRealHandle, short wVolume);
+ boolean  NET_DVR_AudioPreview_Card(NativeLong lRealHandle, boolean bEnable);
+ NativeLong NET_DVR_GetCardLastError_Card();
+ Pointer NET_DVR_GetChanHandle_Card(NativeLong lRealHandle);
+ boolean  NET_DVR_CapturePicture_Card(NativeLong lRealHandle, String sPicFileName);
 //获取解码卡序列号此接口无效，改用GetBoardDetail接口获得(2005-12-08支持)
- boolean  NET_DVR_GetSerialNum_Card(int lChannelNum, IntByReference pDeviceSerialNo);
+ boolean  NET_DVR_GetSerialNum_Card(NativeLong lChannelNum, IntByReference pDeviceSerialNo);
 //日志
- int  NET_DVR_FindDVRLog(int lUserID, int lSelectMode, int dwMajorType, int dwMinorType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
- int  NET_DVR_FindNextLog(int lLogHandle, NET_DVR_LOG lpLogData);
- boolean  NET_DVR_FindLogClose(int lLogHandle);
- int  NET_DVR_FindDVRLog_V30(int lUserID, int lSelectMode, int dwMajorType, int dwMinorType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, boolean bOnlySmart);
- int  NET_DVR_FindNextLog_V30(int lLogHandle, NET_DVR_LOG_V30 lpLogData);
- boolean  NET_DVR_FindLogClose_V30(int lLogHandle);
+ NativeLong NET_DVR_FindDVRLog(NativeLong lUserID, NativeLong lSelectMode, int dwMajorType, int dwMinorType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
+ NativeLong NET_DVR_FindNextLog(NativeLong lLogHandle, NET_DVR_LOG lpLogData);
+ boolean  NET_DVR_FindLogClose(NativeLong lLogHandle);
+ NativeLong NET_DVR_FindDVRLog_V30(NativeLong lUserID, NativeLong lSelectMode, int dwMajorType, int dwMinorType, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime, boolean bOnlySmart);
+ NativeLong NET_DVR_FindNextLog_V30(NativeLong lLogHandle, NET_DVR_LOG_V30 lpLogData);
+ boolean  NET_DVR_FindLogClose_V30(NativeLong lLogHandle);
 //截止2004年8月5日,共113个接口
 //ATM DVR
- int  NET_DVR_FindFileByCard(int lUserID, int lChannel, int dwFileType, int nFindType, String sCardNumber, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
+ NativeLong NET_DVR_FindFileByCard(NativeLong lUserID, NativeLong lChannel, int dwFileType, int nFindType, String sCardNumber, NET_DVR_TIME lpStartTime, NET_DVR_TIME lpStopTime);
 //截止2004年10月5日,共116个接口
 
 //2005-09-15
- boolean  NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, NET_DVR_JPEGPARA lpJpegPara, String sPicFileName);
+ boolean  NET_DVR_CaptureJPEGPicture(NativeLong lUserID, NativeLong lChannel, NET_DVR_JPEGPARA lpJpegPara, String sPicFileName);
 //JPEG抓图到内存
- boolean  NET_DVR_CaptureJPEGPicture_NEW(int lUserID, int lChannel, NET_DVR_JPEGPARA lpJpegPara, String sJpegPicBuffer, int dwPicSize, IntByReference lpSizeReturned);
+ boolean  NET_DVR_CaptureJPEGPicture_NEW(NativeLong lUserID, NativeLong lChannel, NET_DVR_JPEGPARA lpJpegPara, String sJpegPicBuffer, int dwPicSize, IntByReference lpSizeReturned);
 
 
 //2006-02-16
- int  NET_DVR_GetRealPlayerIndex(int lRealHandle);
- int  NET_DVR_GetPlayBackPlayerIndex(int lPlayHandle);
+ int  NET_DVR_GetRealPlayerIndex(NativeLong lRealHandle);
+ int  NET_DVR_GetPlayBackPlayerIndex(NativeLong lPlayHandle);
 
 //2006-08-28 704-640 缩放配置
- boolean  NET_DVR_SetScaleCFG(int lUserID, int dwScale);
- boolean  NET_DVR_GetScaleCFG(int lUserID, IntByReference lpOutScale);
- boolean  NET_DVR_SetScaleCFG_V30(int lUserID, NET_DVR_SCALECFG pScalecfg);
- boolean  NET_DVR_GetScaleCFG_V30(int lUserID, NET_DVR_SCALECFG pScalecfg);
+ boolean  NET_DVR_SetScaleCFG(NativeLong lUserID, int dwScale);
+ boolean  NET_DVR_GetScaleCFG(NativeLong lUserID, IntByReference lpOutScale);
+ boolean  NET_DVR_SetScaleCFG_V30(NativeLong lUserID, NET_DVR_SCALECFG pScalecfg);
+ boolean  NET_DVR_GetScaleCFG_V30(NativeLong lUserID, NET_DVR_SCALECFG pScalecfg);
 //2006-08-28 ATM机端口设置
- boolean  NET_DVR_SetATMPortCFG(int lUserID, short wATMPort);
- boolean  NET_DVR_GetATMPortCFG(int lUserID, ShortByReference LPOutATMPort);
+ boolean  NET_DVR_SetATMPortCFG(NativeLong lUserID, short wATMPort);
+ boolean  NET_DVR_GetATMPortCFG(NativeLong lUserID, ShortByReference LPOutATMPort);
 
 //2006-11-10 支持显卡辅助输出
  boolean  NET_DVR_InitDDrawDevice();
  boolean  NET_DVR_ReleaseDDrawDevice();
- int  NET_DVR_GetDDrawDeviceTotalNums();
- boolean  NET_DVR_SetDDrawDevice(int lPlayPort, int nDeviceNum);
+ NativeLong NET_DVR_GetDDrawDeviceTotalNums();
+ boolean  NET_DVR_SetDDrawDevice(NativeLong lPlayPort, int nDeviceNum);
 
- boolean  NET_DVR_PTZSelZoomIn(int lRealHandle, NET_DVR_POINT_FRAME pStruPointFrame);
- boolean  NET_DVR_PTZSelZoomIn_EX(int lUserID, int lChannel, NET_DVR_POINT_FRAME pStruPointFrame);
+ boolean  NET_DVR_PTZSelZoomIn(NativeLong lRealHandle, NET_DVR_POINT_FRAME pStruPointFrame);
+ boolean  NET_DVR_PTZSelZoomIn_EX(NativeLong lUserID, NativeLong lChannel, NET_DVR_POINT_FRAME pStruPointFrame);
 
 //解码设备DS-6001D/DS-6001F
- boolean  NET_DVR_StartDecode(int lUserID, int lChannel, NET_DVR_DECODERINFO lpDecoderinfo);
- boolean  NET_DVR_StopDecode(int lUserID, int lChannel);
- boolean  NET_DVR_GetDecoderState(int lUserID, int lChannel, NET_DVR_DECODERSTATE lpDecoderState);
+ boolean  NET_DVR_StartDecode(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECODERINFO lpDecoderinfo);
+ boolean  NET_DVR_StopDecode(NativeLong lUserID, NativeLong lChannel);
+ boolean  NET_DVR_GetDecoderState(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECODERSTATE lpDecoderState);
 //2005-08-01
- boolean  NET_DVR_SetDecInfo(int lUserID, int lChannel, NET_DVR_DECCFG lpDecoderinfo);
- boolean  NET_DVR_GetDecInfo(int lUserID, int lChannel, NET_DVR_DECCFG lpDecoderinfo);
- boolean  NET_DVR_SetDecTransPort(int lUserID, NET_DVR_PORTCFG lpTransPort);
- boolean  NET_DVR_GetDecTransPort(int lUserID, NET_DVR_PORTCFG lpTransPort);
- boolean  NET_DVR_DecPlayBackCtrl(int lUserID, int lChannel, int dwControlCode, int dwInValue, IntByReference LPOutValue, NET_DVR_PLAYREMOTEFILE lpRemoteFileInfo);
- boolean  NET_DVR_StartDecSpecialCon(int lUserID, int lChannel, NET_DVR_DECCHANINFO lpDecChanInfo);
- boolean  NET_DVR_StopDecSpecialCon(int lUserID, int lChannel, NET_DVR_DECCHANINFO lpDecChanInfo);
- boolean  NET_DVR_DecCtrlDec(int lUserID, int lChannel, int dwControlCode);
- boolean  NET_DVR_DecCtrlScreen(int lUserID, int lChannel, int dwControl);
- boolean  NET_DVR_GetDecCurLinkStatus(int lUserID, int lChannel, NET_DVR_DECSTATUS lpDecStatus);
+ boolean  NET_DVR_SetDecInfo(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECCFG lpDecoderinfo);
+ boolean  NET_DVR_GetDecInfo(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECCFG lpDecoderinfo);
+ boolean  NET_DVR_SetDecTransPort(NativeLong lUserID, NET_DVR_PORTCFG lpTransPort);
+ boolean  NET_DVR_GetDecTransPort(NativeLong lUserID, NET_DVR_PORTCFG lpTransPort);
+ boolean  NET_DVR_DecPlayBackCtrl(NativeLong lUserID, NativeLong lChannel, int dwControlCode, int dwInValue, IntByReference LPOutValue, NET_DVR_PLAYREMOTEFILE lpRemoteFileInfo);
+ boolean  NET_DVR_StartDecSpecialCon(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECCHANINFO lpDecChanInfo);
+ boolean  NET_DVR_StopDecSpecialCon(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECCHANINFO lpDecChanInfo);
+ boolean  NET_DVR_DecCtrlDec(NativeLong lUserID, NativeLong lChannel, int dwControlCode);
+ boolean  NET_DVR_DecCtrlScreen(NativeLong lUserID, NativeLong lChannel, int dwControl);
+ boolean  NET_DVR_GetDecCurLinkStatus(NativeLong lUserID, NativeLong lChannel, NET_DVR_DECSTATUS lpDecStatus);
 
 //多路解码器
 //2007-11-30 V211支持以下接口 //11
- boolean  NET_DVR_MatrixStartDynamic(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_DYNAMIC_DEC lpDynamicInfo);
- boolean  NET_DVR_MatrixStopDynamic(int lUserID, int dwDecChanNum);
- boolean  NET_DVR_MatrixGetDecChanInfo(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_CHAN_INFO lpInter);
- boolean  NET_DVR_MatrixSetLoopDecChanInfo(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_LOOP_DECINFO lpInter);
- boolean  NET_DVR_MatrixGetLoopDecChanInfo(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_LOOP_DECINFO lpInter);
- boolean  NET_DVR_MatrixSetLoopDecChanEnable(int lUserID, int dwDecChanNum, int dwEnable);
- boolean  NET_DVR_MatrixGetLoopDecChanEnable(int lUserID, int dwDecChanNum, IntByReference lpdwEnable);
- boolean  NET_DVR_MatrixGetLoopDecEnable(int lUserID, IntByReference lpdwEnable);
- boolean  NET_DVR_MatrixSetDecChanEnable(int lUserID, int dwDecChanNum, int dwEnable);
- boolean  NET_DVR_MatrixGetDecChanEnable(int lUserID, int dwDecChanNum, IntByReference lpdwEnable);
- boolean  NET_DVR_MatrixGetDecChanStatus(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_CHAN_STATUS lpInter);
+ boolean  NET_DVR_MatrixStartDynamic(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_DYNAMIC_DEC lpDynamicInfo);
+ boolean  NET_DVR_MatrixStopDynamic(NativeLong lUserID, int dwDecChanNum);
+ boolean  NET_DVR_MatrixGetDecChanInfo(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_CHAN_INFO lpInter);
+ boolean  NET_DVR_MatrixSetLoopDecChanInfo(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_LOOP_DECINFO lpInter);
+ boolean  NET_DVR_MatrixGetLoopDecChanInfo(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_LOOP_DECINFO lpInter);
+ boolean  NET_DVR_MatrixSetLoopDecChanEnable(NativeLong lUserID, int dwDecChanNum, int dwEnable);
+ boolean  NET_DVR_MatrixGetLoopDecChanEnable(NativeLong lUserID, int dwDecChanNum, IntByReference lpdwEnable);
+ boolean  NET_DVR_MatrixGetLoopDecEnable(NativeLong lUserID, IntByReference lpdwEnable);
+ boolean  NET_DVR_MatrixSetDecChanEnable(NativeLong lUserID, int dwDecChanNum, int dwEnable);
+ boolean  NET_DVR_MatrixGetDecChanEnable(NativeLong lUserID, int dwDecChanNum, IntByReference lpdwEnable);
+ boolean  NET_DVR_MatrixGetDecChanStatus(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_CHAN_STATUS lpInter);
 //2007-12-22 增加支持接口 //18
- boolean  NET_DVR_MatrixSetTranInfo(int lUserID, NET_DVR_MATRIX_TRAN_CHAN_CONFIG lpTranInfo);
- boolean  NET_DVR_MatrixGetTranInfo(int lUserID, NET_DVR_MATRIX_TRAN_CHAN_CONFIG lpTranInfo);
- boolean  NET_DVR_MatrixSetRemotePlay(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_REMOTE_PLAY lpInter);
- boolean  NET_DVR_MatrixSetRemotePlayControl(int lUserID, int dwDecChanNum, int dwControlCode, int dwInValue, IntByReference LPOutValue);
- boolean  NET_DVR_MatrixGetRemotePlayStatus(int lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_REMOTE_PLAY_STATUS lpOuter);
+ boolean  NET_DVR_MatrixSetTranInfo(NativeLong lUserID, NET_DVR_MATRIX_TRAN_CHAN_CONFIG lpTranInfo);
+ boolean  NET_DVR_MatrixGetTranInfo(NativeLong lUserID, NET_DVR_MATRIX_TRAN_CHAN_CONFIG lpTranInfo);
+ boolean  NET_DVR_MatrixSetRemotePlay(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_REMOTE_PLAY lpInter);
+ boolean  NET_DVR_MatrixSetRemotePlayControl(NativeLong lUserID, int dwDecChanNum, int dwControlCode, int dwInValue, IntByReference LPOutValue);
+ boolean  NET_DVR_MatrixGetRemotePlayStatus(NativeLong lUserID, int dwDecChanNum, NET_DVR_MATRIX_DEC_REMOTE_PLAY_STATUS lpOuter);
 //end
- boolean  NET_DVR_RefreshPlay(int lPlayHandle);
+ boolean  NET_DVR_RefreshPlay(NativeLong lPlayHandle);
 //恢复默认值
- boolean  NET_DVR_RestoreConfig(int lUserID);
+ boolean  NET_DVR_RestoreConfig(NativeLong lUserID);
 //保存参数
- boolean  NET_DVR_SaveConfig(int lUserID);
+ boolean  NET_DVR_SaveConfig(NativeLong lUserID);
 //重启
- boolean  NET_DVR_RebootDVR(int lUserID);
+ boolean  NET_DVR_RebootDVR(NativeLong lUserID);
 //关闭DVR
- boolean  NET_DVR_ShutDownDVR(int lUserID);
+ boolean  NET_DVR_ShutDownDVR(NativeLong lUserID);
 //参数配置 begin
- boolean  NET_DVR_GetDeviceConfig(int lUserID, int dwCommand, int dwCount, Pointer lpInBuffer, int dwInBufferSize, Pointer lpStatusList, Pointer lpOutBuffer, int dwOutBufferSize);
- boolean  NET_DVR_SetDeviceConfig(int lUserID, int dwCommand, int dwCount, Pointer lpInBuffer, int dwInBufferSize, Pointer lpStatusList, Pointer lpInParamBuffer, int dwInParamBufferSize);
- boolean  NET_DVR_GetDVRConfig(int lUserID, int dwCommand, int lChannel, Pointer lpOutBuffer, int dwOutBufferSize, IntByReference lpBytesReturned);
- boolean  NET_DVR_SetDVRConfig(int lUserID, int dwCommand, int lChannel, Pointer lpInBuffer, int dwInBufferSize);
- boolean  NET_DVR_GetSTDConfig(int lUserID, int dwCommand, NET_DVR_STD_CONFIG lpConfigParam);
- boolean  NET_DVR_SetSTDConfig(int lUserID, int dwCommand, NET_DVR_STD_CONFIG lpConfigParam);
- boolean  NET_DVR_GetDVRWorkState_V30(int lUserID, NET_DVR_WORKSTATE_V30 lpWorkState);
- boolean  NET_DVR_GetDVRWorkState(int lUserID, NET_DVR_WORKSTATE lpWorkState);
- boolean  NET_DVR_SetVideoEffect(int lUserID, int lChannel, int dwBrightValue, int dwContrastValue, int dwSaturationValue, int dwHueValue);
- boolean  NET_DVR_GetVideoEffect(int lUserID, int lChannel, IntByReference pBrightValue, IntByReference pContrastValue, IntByReference pSaturationValue, IntByReference pHueValue);
- boolean  NET_DVR_ClientGetframeformat(int lUserID, NET_DVR_FRAMEFORMAT lpFrameFormat);
- boolean  NET_DVR_ClientSetframeformat(int lUserID, NET_DVR_FRAMEFORMAT lpFrameFormat);
- boolean  NET_DVR_ClientGetframeformat_V30(int lUserID, NET_DVR_FRAMEFORMAT_V30 lpFrameFormat);
- boolean  NET_DVR_ClientSetframeformat_V30(int lUserID, NET_DVR_FRAMEFORMAT_V30 lpFrameFormat);
- boolean  NET_DVR_GetAlarmOut_V30(int lUserID, NET_DVR_ALARMOUTSTATUS_V30 lpAlarmOutState);
- boolean  NET_DVR_GetAlarmOut(int lUserID, NET_DVR_ALARMOUTSTATUS lpAlarmOutState);
- boolean  NET_DVR_SetAlarmOut(int lUserID, int lAlarmOutPort, int lAlarmOutStatic);
+ boolean  NET_DVR_GetDVRConfig(NativeLong lUserID, int dwCommand, NativeLong lChannel, Pointer lpOutBuffer, int dwOutBufferSize, IntByReference lpBytesReturned);
+ boolean  NET_DVR_SetDVRConfig(NativeLong lUserID, int dwCommand, NativeLong lChannel, Pointer lpInBuffer, int dwInBufferSize);
+ boolean  NET_DVR_GetDVRWorkState_V30(NativeLong lUserID, NET_DVR_WORKSTATE_V30 lpWorkState);
+ boolean  NET_DVR_GetDVRWorkState(NativeLong lUserID, NET_DVR_WORKSTATE lpWorkState);
+ boolean  NET_DVR_SetVideoEffect(NativeLong lUserID, NativeLong lChannel, int dwBrightValue, int dwContrastValue, int dwSaturationValue, int dwHueValue);
+ boolean  NET_DVR_GetVideoEffect(NativeLong lUserID, NativeLong lChannel, IntByReference pBrightValue, IntByReference pContrastValue, IntByReference pSaturationValue, IntByReference pHueValue);
+ boolean  NET_DVR_ClientGetframeformat(NativeLong lUserID, NET_DVR_FRAMEFORMAT lpFrameFormat);
+ boolean  NET_DVR_ClientSetframeformat(NativeLong lUserID, NET_DVR_FRAMEFORMAT lpFrameFormat);
+ boolean  NET_DVR_ClientGetframeformat_V30(NativeLong lUserID, NET_DVR_FRAMEFORMAT_V30 lpFrameFormat);
+ boolean  NET_DVR_ClientSetframeformat_V30(NativeLong lUserID, NET_DVR_FRAMEFORMAT_V30 lpFrameFormat);
+ boolean  NET_DVR_GetAlarmOut_V30(NativeLong lUserID, NET_DVR_ALARMOUTSTATUS_V30 lpAlarmOutState);
+ boolean  NET_DVR_GetAlarmOut(NativeLong lUserID, NET_DVR_ALARMOUTSTATUS lpAlarmOutState);
+ boolean  NET_DVR_SetAlarmOut(NativeLong lUserID, NativeLong lAlarmOutPort, NativeLong lAlarmOutStatic);
 
 //视频参数调节
- boolean  NET_DVR_ClientSetVideoEffect(int lRealHandle, int dwBrightValue, int dwContrastValue, int dwSaturationValue, int dwHueValue);
- boolean  NET_DVR_ClientGetVideoEffect(int lRealHandle, IntByReference pBrightValue, IntByReference pContrastValue, IntByReference pSaturationValue, IntByReference pHueValue);
+ boolean  NET_DVR_ClientSetVideoEffect(NativeLong lRealHandle, int dwBrightValue, int dwContrastValue, int dwSaturationValue, int dwHueValue);
+ boolean  NET_DVR_ClientGetVideoEffect(NativeLong lRealHandle, IntByReference pBrightValue, IntByReference pContrastValue, IntByReference pSaturationValue, IntByReference pHueValue);
 
 //配置文件
- boolean  NET_DVR_GetConfigFile(int lUserID, String sFileName);
- boolean  NET_DVR_SetConfigFile(int lUserID, String sFileName);
- boolean  NET_DVR_GetConfigFile_V30(int lUserID, String sOutBuffer, int dwOutSize, IntByReference pReturnSize);
+ boolean  NET_DVR_GetConfigFile(NativeLong lUserID, String sFileName);
+ boolean  NET_DVR_SetConfigFile(NativeLong lUserID, String sFileName);
+ boolean  NET_DVR_GetConfigFile_V30(NativeLong lUserID, String sOutBuffer, int dwOutSize, IntByReference pReturnSize);
 
- boolean  NET_DVR_GetConfigFile_EX(int lUserID, String sOutBuffer, int dwOutSize);
- boolean  NET_DVR_SetConfigFile_EX(int lUserID, String sInBuffer, int dwInSize);
+ boolean  NET_DVR_GetConfigFile_EX(NativeLong lUserID, String sOutBuffer, int dwOutSize);
+ boolean  NET_DVR_SetConfigFile_EX(NativeLong lUserID, String sInBuffer, int dwInSize);
 
 //启用日志文件写入接口
- boolean  NET_DVR_SetLogToFile(int bLogEnable, String strLogDir, boolean bAutoDel);
+ boolean  NET_DVR_SetLogToFile(boolean bLogEnable, String strLogDir, boolean bAutoDel);
  boolean  NET_DVR_GetSDKState(NET_DVR_SDKSTATE pSDKState);
  boolean  NET_DVR_GetSDKAbility(NET_DVR_SDKABL pSDKAbl);
- boolean  NET_DVR_GetPTZProtocol(int lUserID, NET_DVR_PTZCFG pPtzcfg);
+ boolean  NET_DVR_GetPTZProtocol(NativeLong lUserID, NET_DVR_PTZCFG pPtzcfg);
 //前面板锁定
- boolean  NET_DVR_LockPanel(int lUserID);
- boolean  NET_DVR_UnLockPanel(int lUserID);
+ boolean  NET_DVR_LockPanel(NativeLong lUserID);
+ boolean  NET_DVR_UnLockPanel(NativeLong lUserID);
 
- boolean  NET_DVR_SetRtspConfig(int lUserID, int dwCommand, NET_DVR_RTSPCFG lpInBuffer, int dwInBufferSize);
- boolean  NET_DVR_GetRtspConfig(int lUserID, int dwCommand, NET_DVR_RTSPCFG lpOutBuffer, int dwOutBufferSize);
-
- boolean  NET_DVR_ContinuousShoot(int lUserID, NET_DVR_SNAPCFG lpInter);
- boolean  NET_DVR_ManualSnap(int lUserID, NET_DVR_MANUALSNAP lpInter, NET_DVR_PLATE_RESULT lpOuter);
-
-  public static interface FRemoteConfigCallback extends StdCallCallback {
-  public void invoke(int dwType, Pointer lpBuffer, int dwBufLen, Pointer pUserData);
- }
-
-int NET_DVR_StartRemoteConfig(int lUserID, int dwCommand, Pointer lpInBuffer, int dwInBufferLen, FRemoteConfigCallback cbStateCallback, Pointer pUserData);
-boolean  NET_DVR_SendRemoteConfig(int lHandle, int dwDataType, Pointer pSendBuf, int dwBufSize);
-int NET_DVR_GetNextRemoteConfig(int lHandle, Pointer lpOutBuff, int dwOutBuffSize);
-boolean NET_DVR_StopRemoteConfig(int lHandle);
-boolean NET_DVR_RemoteControl(int lUserID, int dwCommand, Pointer lpInBuffer, int dwInBufferSize);
-
-boolean NET_DVR_STDXMLConfig(int lUserID, NET_DVR_XML_CONFIG_INPUT lpInputParam, NET_DVR_XML_CONFIG_OUTPUT lpOutputParam);
-boolean NET_DVR_GetSTDAbility(int lUserID, int dwAbilityType, NET_DVR_STD_ABILITY lpAbilityParam);
-boolean NET_DVR_GetDeviceAbility(int lUserID, int dwAbilityType, Pointer pInBuf, int dwInLength, Pointer pOutBuf, int dwOutLength);
-boolean NET_DVR_ControlGateway(int lUserID, int lGatewayIndex, int dwStaic);
-boolean NET_DVR_InquestStartCDW_V30(int lUserID, NET_DVR_INQUEST_ROOM lpInquestRoom, boolean bNotBurn);
-boolean NET_DVR_InquestStopCDW_V30(int lUserID, NET_DVR_INQUEST_ROOM lpInquestRoom, boolean bCancelWrite);
-boolean NET_DVR_GetArrayList(int lUserID, NET_DVR_ARRAY_LIST lpArrayList);
-
-boolean NET_DVR_GetLocalIP(byte[] strIP, IntByReference pValidNum, boolean pEnableBind);
-boolean NET_DVR_SetValidIP(int dwIPIndex, boolean bEnableBind);
-
- //gps相关结构定义
-public static class TimeSegParam extends Structure{
-    //GPS数据查找起始时间
-    public NET_DVR_TIME struBeginTime;
-    //GPS数据查找结束时间
-    public NET_DVR_TIME struEndTime;
-    //GPS点时间间隔，单位：秒
-    public int dwInterval;
-    //保留
-    public byte[] byRes = new byte[76];
-}
-
-//按时间点查询
-public static class TimePointParam extends Structure{
-    //GPS数据查找时间点
-    public NET_DVR_TIME struTimePoint ;
-    //保留
-    public byte[] byRes = new byte[104];
-}
-
-public static class GpsDataParamUion extends Union{
-    //按时间段查询
-    public TimeSegParam timeSeg = new TimeSegParam();
-    //按时间点查询
-    public TimePointParam timePoint = new TimePointParam();
-}
-
-//gps查询参数定义
-public static class NET_DVR_GET_GPS_DATA_PARAM extends Structure {
-    //查找方式：0- 按时间段查找GPS数据，1- 按时间点查找GPS数据
-    public int dwCmdType;
-    public GpsDataParamUion gpsDataParam;
-
-    public void read()
-    {
-        super.read();
-        switch(dwCmdType)
-        {
-            case 0:
-              gpsDataParam.setType(TimeSegParam.class);
-                break;
-            case 1:
-              gpsDataParam.setType(TimePointParam.class);
-                break;
-            default:
-                break;
-        }
-        gpsDataParam.read();
-    }
-    public void write()
-    {
-        super.write();
-        gpsDataParam.write();
-    }
-}
-
-//gps数据结构定义
-public static class NET_DVR_GPS_INFO extends Structure {
-     public byte[] byDirection = new byte[2];
-     public byte bySvs;
-     public byte byLocateMode;
-     public short wHDOP;
-     public short wHeight;
-     public int dwLatitude;
-     public int dwLongitude;
-     public int dwVehicleSpeed;
-     public int dwVehicleDirection;
-     public byte[] byRes= new byte[8];
-}
-
-//gps返回数据结构定义
-public static class NET_DVR_GPS_DATA extends Structure {
-    public NET_DVR_GPS_INFO struGPSInfo;
-    public NET_DVR_TIME struTime;
-    public byte[] byRes = new byte[12];
-}
-
- public static interface fGPSDataCallback extends StdCallCallback {
-       public void invoke(int nHandle, int dwState, Pointer lpBuffer, int dwBufLen, Pointer pUser);
- }
-
- int NET_DVR_GetVehicleGpsInfo(int lUserID, NET_DVR_GET_GPS_DATA_PARAM lpGPSDataParam, fGPSDataCallback cbGPSDataCallback, Pointer pUser);
+ boolean  NET_DVR_SetRtspConfig(NativeLong lUserID, int dwCommand, NET_DVR_RTSPCFG lpInBuffer, int dwInBufferSize);
+ boolean  NET_DVR_GetRtspConfig(NativeLong lUserID, int dwCommand, NET_DVR_RTSPCFG lpOutBuffer, int dwOutBufferSize);
 }
 
 
 //播放库函数声明,PlayCtrl.dll
 interface PlayCtrl extends StdCallLibrary
 {
-    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary(CommonKit.getWebPath()+"\\PlayCtrl.dll",PlayCtrl.class);
+    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary("D:\\workspace\\hc_spring2\\hc_spring2\\target\\classes\\hclib\\PlayCtrl",
+            PlayCtrl.class);
 
     public static final int STREAME_REALTIME = 0;
     public static final int STREAME_FILE = 1;
 
-    boolean PlayM4_GetPort(IntByReference nPort);
-    boolean PlayM4_OpenStream(int nPort, ByteByReference pFileHeadBuf, int nSize, int nBufPoolSize);
-    boolean PlayM4_InputData(int nPort, ByteByReference pBuf, int nSize);
-    boolean PlayM4_CloseStream(int nPort);
-    boolean PlayM4_SetStreamOpenMode(int nPort, int nMode);
-    boolean PlayM4_Play(int nPort, HWND hWnd);
-    boolean PlayM4_Stop(int nPort);
-    boolean PlayM4_SetSecretKey(int nPort, int lKeyType, String pSecretKey, int lKeyLen);
+    boolean PlayM4_GetPort(NativeLongByReference nPort);
+    boolean PlayM4_OpenStream(NativeLong nPort, ByteByReference pFileHeadBuf, int nSize, int nBufPoolSize);
+    boolean PlayM4_InputData(NativeLong nPort, ByteByReference pBuf, int nSize);
+    boolean PlayM4_CloseStream(NativeLong nPort);
+    boolean PlayM4_SetStreamOpenMode(NativeLong nPort, int nMode);
+    boolean PlayM4_Play(NativeLong nPort, HWND hWnd);
+    boolean PlayM4_Stop(NativeLong nPort);
+    boolean PlayM4_SetSecretKey(NativeLong nPort, NativeLong lKeyType, String pSecretKey, NativeLong lKeyLen);
 }
 
 //windows gdi接口,gdi32.dll in system32 folder, 在设置遮挡区域,移动侦测区域等情况下使用

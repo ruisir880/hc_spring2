@@ -7,5 +7,9 @@ import java.util.List;
 public interface DeviceService {
     List<HcDevice> findByArea(String defenseArea);
 
+    List<HcDevice> findByAll();
+
     void saveDevice(HcDevice hcDevice);
+
+    HcDevice findByIp(String ip);
 }

@@ -16,7 +16,19 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findDevicesByDefenseArea(defenseArea);
     }
 
+    @Override
+    public List<HcDevice> findByAll() {
+        return deviceRepository.findAll();
+    }
+
     public void saveDevice(HcDevice hcDevice){
         deviceRepository.save(hcDevice);
     }
+
+    @Override
+    public HcDevice findByIp(String ip) {
+        return deviceRepository.findByIp(ip);
+    }
+
+
 }

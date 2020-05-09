@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>监控系统</title>
+    </head>
+    <style>
+        body{
+            margin:0;
+        }
+        .main{
+        	position: absolute;
+        	top: 20px;
+            width:960px;
+            margin:0 auto;
+        }
+        .main .left{
+            position: absolute;
+            display: block;
+            left: 10px;
+            top: 0px;
+            height:500px;
+            width: 200px;
+            border:1px solid #f00;
+            /* line-height:120px; */
+        }
+        .main .middle{
+            position: absolute;
+            left: 220px;
+            top: 0px;
+            height:500px;
+            width: 500px;
+            border:1px solid #0f0;
+            line-height:300px;
+            display: block;
+
+        }
+        .main .right{
+        	position: absolute;
+            left: 730px;
+            top: 0px;
+            height:500px;
+            width: 500px;
+            display: block;
+            border:1px solid #00f;
+            line-height:100px;
+        }
+        ul.domtree,
+        ul.domtree ul {
+            margin: 0;
+            padding: 0 0 0 1em;
+        }
+
+        ul.domtree li {
+            list-style: none;
+            position: relative;
+            line-height: 80px;
+        }
+
+        ul.domtree>li:first-child:before {
+            border-style: none none none none;
+        }
+
+        ul.domtree li:before {
+            position: absolute;
+            content: '';
+            top: -1.5em;
+            left: -0.5em;
+            width: 0.5em;
+            height: 3.95em;
+            border-style: none none solid solid;
+            border-width: 0.05em;
+            border-color: #aaa;
+        }
+
+        ul.domtree li:not(:last-child):after {
+            position: absolute;
+            content: '';
+            top: 0.7em;
+            left: -0.5em;
+            bottom: 0;
+            border-style: none none none solid;
+            border-width: 0.05em;
+            border-color: #aaa;
+        }
+
+        .mycity ul { 
+			width: 500px; 
+			margin: 0px;
+			padding: 0px;
+		} 
+		.mycity li { 
+			width: 240px; /*如果显示三列 则width改为27px*/ 
+			float: left; 
+			display: block; 
+			padding: 5px;
+		}
+		.mycity li div{ 
+			position: absolute;
+			width: 236px; 
+			height: 176px;
+			float: left; 
+			display: none; 
+			border: 2px solid #ffd405;
+		} 
+		.mycity .selected{ 
+			display: block !important;
+		} 
+		.mycity li img{ 
+			width: 240px; 
+			float: left; 
+			display: block; 
+		} 
+        .my ul { 
+			width: 500px; 
+			margin: 0px;
+			padding: 0px;
+		} 
+		.my li { 
+			width: 240px; 
+			float: left; 
+			display: block; 
+			padding: 5px;
+		}
+		.my li img{ 
+			width: 240px; 
+			float: left; 
+			display: block; 
+		} 
+		.bottom{
+        	position: absolute;
+        	top: 530px;
+            width:960px;
+            margin:0 auto;
+        }
+        .bottom .swith_area{
+            position: absolute;
+            display: block;
+            left: 10px;
+            top: 0px;
+            height:200px;
+            width: 350px;
+            border:1px solid blue;
+        }
+        .bottom .swith_area .light_area {
+			position: absolute;
+			width: 200px;
+			height: 180px;
+			border:1px solid blue;
+			top: 10px;
+			left: 5px;
+		}
+		.bottom .swith_area .buzzer_area {
+			position: absolute;
+			left: 215px;
+			width: 130px;
+			height: 180px;
+			border:1px solid blue;
+			top: 10px;
+		}
+        .bottom .record_area{
+            position: absolute;
+            display: block;
+            left: 370px;
+            top: 0px;
+            width: 860px;
+            border:1px solid red;
+        }
+        .meetting-icon{
+        	background-image: url(${ctxPath}/images/common/icon01.jpg);
+        	background-repeat: no-repeat;
+        	/*background-color: red;*/
+        	/*background:url(icon01.jpg) -980px -70px no-repeat; */
+        	margin:0px; 
+        	padding:0px; 
+        	height:20px; 
+        	width:55px;
+        	text-align: right;
+        	line-height: center;
+        }
+        .tree_area {
+        	position: absolute;
+        	left: 10px;
+        }
+        .icon01 {
+      		width: 57px;
+      		text-align: right;
+        }
+        .icon01 img{
+        	padding: 0px 5px 0px 0px;
+        	vertical-align: middle
+        }
+        .icon02 {
+      		width: 70px;
+      		text-align: right;
+        }
+        .icon02 img{
+        	padding: 0px 5px 0px 0px;
+        	vertical-align: middle
+        }
+       .record_area table,th{
+			border:1px solid white;
+			background-color:blue;
+			color: white;
+			height: 20px;
+		}
+		.record_area table, td{
+			border: 1px solid white;
+			background-color: white;
+			color: black;
+			height: 50px;
+		}
+
+    </style>
+
+    <body>
+    	<!-- =================== Start Main =================== -->   
+        <div class="main">
+            <div class="left">
+            	<div class="tree_area">
+	            	 <ul class="domtree">
+				        <li>
+				            <div class="icon01"><img src="${ctxPath}/images/common/icon01.jpg" />主机</div>
+				            <ul>
+				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区1</div></li>
+				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区2</div></li>
+				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区3</div></li>
+				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区4</div></li>
+				            </ul>
+				        </li>
+				    </ul>
+				</div>
+            </div>
+            <div class="middle">
+            	<div class="mycity"> 
+					<ul> 
+					<li>
+						<img src="${ctxPath}/images/common/community.jpg" />
+						<div class="selected"></div>
+					</li> 
+					<li>
+						<img src="${ctxPath}/images/common/community.jpg" />
+					</li> 
+					<li>
+						<img src="${ctxPath}/images/common/community.jpg" />
+					</li> 
+					<li>
+						<img src="${ctxPath}/images/common/community.jpg" />
+					</li> 
+					</ul> 
+				</div>             	
+            </div>
+            <div class="right">
+				<iframe src="http://localhost:8080/test.html"></iframe>
+            </div>
+        </div>
+        <!-- =================== End Main =================== -->
+
+        <!-- =================== Start Bottom =================-->   
+        <div class="bottom">
+        	<div class="swith_area">
+        		<div class="light_area"></div>
+        		<div class="buzzer_area"></div>
+        	</div>
+        	<div class="record_area">
+        		<table>
+					<tr>
+						<th>序号</th>
+						<th>防区</th>
+						<th>报警状态</th>
+						<th>报警时间</th>
+						<th>结束时间</th>
+					</tr>
+					<tr>
+						<td>No.0001</td>
+						<td>Area0001</td>
+						<td>Bad</td>
+						<td>20200202 02:00:00</td>
+						<td>20200202 05:00:00</td>
+					</tr>
+				</table>
+        	</div>
+        </div>
+        <!-- =================== End Bottom =================== -->       
+    </body>
+</html>

@@ -2,22 +2,23 @@ package com.ray.hc_spring2.utils;
 
 
 import com.ray.hc_spring2.HCNetSDK;
+import com.ray.hc_spring2.model.HcDevice;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.NativeLongByReference;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-
-
-
-/**
- * Created by Hanlex.Liu on 2018/9/22 11:55.
- */
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class HCNetTools {
+    private static Logger logger = LoggerFactory.getLogger(HCNetTools.class);
     static HCNetSDK hCNetSDK = HCNetSDK.INSTANCE;
 
     HCNetSDK.NET_DVR_DEVICEINFO_V30 m_strDeviceInfo;//设备信息
@@ -27,20 +28,34 @@ public class HCNetTools {
     boolean bRealPlay;//是否在预览.
     String m_sDeviceIP;//已登录设备的IP地址
 
-    int lUserID;//用户句柄
+    NativeLong lUserID;//用户句柄
     NativeLong lPreviewHandle;//预览句柄
     NativeLongByReference m_lPort;//回调预览时播放库端口指针
-
-
-    //FRealDataCallBack fRealDataCallBack;//预览回调函数实现
+    FMSGCallBack fMSFCallBack;//报警回调函数实现
+    NativeLong lAlarmHandle;//报警布防句柄
 
     public HCNetTools()
     {
-        JPopupMenu.setDefaultLightWeightPopupEnabled(false);//防止被播放窗口(AWT组件)覆盖
-        lUserID = -1;
+        lUserID = new NativeLong(-1);
         lPreviewHandle = new NativeLong(-1);
         m_lPort = new NativeLongByReference(new NativeLong(-1));
         //fRealDataCallBack= new FRealDataCallBack();
+    }
+
+    public int testDevice(HcDevice hcDevice){
+        try {
+            int code = 0;
+            if (initDevices() == 1) {
+                return 1;//初始化失败
+            }
+            int regSuc = deviceRegist(hcDevice.getAccount(), hcDevice.getPassword(), hcDevice.getIp(), hcDevice.getPort());
+            if (regSuc != 0) {
+                code = regSuc;//注册失败
+            }
+            return code;
+        }finally {
+            shutDownDev();
+        }
     }
 
     /**
@@ -62,20 +77,21 @@ public class HCNetTools {
         if (bRealPlay){//判断当前是否在预览
             return 2;//"注册新用户请先停止当前预览";
         }
-        if (lUserID > -1){//先注销,在登录
+        if (lUserID.longValue() > -1){//先注销,在登录
             hCNetSDK.NET_DVR_Logout_V30(lUserID);
-            lUserID = -1;
+            lUserID = new NativeLong(-1);
         }
         //注册(既登录设备)开始
         m_sDeviceIP = ip;
         m_strDeviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V30();//获取设备参数结构
         lUserID = hCNetSDK.NET_DVR_Login_V30(m_sDeviceIP,(short)Integer.parseInt(port),name,password, m_strDeviceInfo);//登录设备
-        if (lUserID == -1){
+        if (lUserID.longValue() == -1){
             m_sDeviceIP = "";//登录未成功,IP置为空
             return 3;//"注册失败";
         }
         return 0;
     }
+
 
     /**
      * 获取设备通道
@@ -88,7 +104,7 @@ public class HCNetTools {
         m_strIpparaCfg = new HCNetSDK.NET_DVR_IPPARACFG();
         m_strIpparaCfg.write();
         Pointer lpIpParaConfig = m_strIpparaCfg.getPointer();
-        bRet = hCNetSDK.NET_DVR_GetDVRConfig(lUserID, HCNetSDK.NET_DVR_GET_IPPARACFG, 0, lpIpParaConfig, m_strIpparaCfg.size(), ibrBytesReturned);
+        bRet = hCNetSDK.NET_DVR_GetDVRConfig(lUserID, HCNetSDK.NET_DVR_GET_IPPARACFG, new NativeLong(0), lpIpParaConfig, m_strIpparaCfg.size(), ibrBytesReturned);
         m_strIpparaCfg.read();
 
         String devices = "";
@@ -122,18 +138,173 @@ public class HCNetTools {
 
     public void shutDownDev(){
         //如果已经注册,注销
-        if (lUserID > -1){
+            if (lUserID.longValue() > -1){
             hCNetSDK.NET_DVR_Logout_V30(lUserID);
         }
         hCNetSDK.NET_DVR_Cleanup();
     }
 
+    public boolean startAlarm(HcDevice device) {
+        int result = deviceRegist(device.getAccount(), device.getPassword(), device.getIp(), device.getPort());
+        MessageUtil.register(result, device.getIp());
+        if (result == 0) {
+            if (fMSFCallBack == null)
+            {
+                fMSFCallBack = new FMSGCallBack();
+            }
+            Pointer pUser = null;
+            if (!hCNetSDK.NET_DVR_SetDVRMessageCallBack_V30(fMSFCallBack, pUser))
+            {
+                logger.error("设置回调函数失败!");
+            }
 
-
-
-    public static void main(String[] args) {
-
+            lAlarmHandle = hCNetSDK.NET_DVR_SetupAlarmChan_V30(lUserID);
+            if (lAlarmHandle.intValue() == -1)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
+
+    /******************************************************************************
+     *内部类:   FMSGCallBack
+     *报警信息回调函数
+     ******************************************************************************/
+    public class FMSGCallBack implements HCNetSDK.FMSGCallBack
+    {
+        //报警信息回调函数
+
+        public void invoke(NativeLong lCommand, HCNetSDK.NET_DVR_ALARMER pAlarmer, HCNetSDK.RECV_ALARM pAlarmInfo, int dwBufLen, Pointer pUser)
+        {
+            String sAlarmType = new String();
+            //todo 插入数据库
+            // DefaultTableModel alarmTableModel = ((DefaultTableModel) jTableAlarm.getModel());//获取表格模型
+
+            String[] newRow = new String[3];
+            //报警时间
+            Date today = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String[] sIP = new String[2];
+
+            //lCommand是传的报警类型
+            switch (lCommand.intValue())
+            {
+                //9000报警
+                case HCNetSDK.COMM_ALARM_V30:
+                    HCNetSDK.NET_DVR_ALARMINFO_V30 strAlarmInfoV30 = new HCNetSDK.NET_DVR_ALARMINFO_V30();
+                    strAlarmInfoV30.write();
+                    Pointer pInfoV30 = strAlarmInfoV30.getPointer();
+                    pInfoV30.write(0, pAlarmInfo.RecvBuffer, 0, strAlarmInfoV30.size());
+                    strAlarmInfoV30.read();
+
+                    switch (strAlarmInfoV30.dwAlarmType)
+                    {
+                        case 0:
+                            sAlarmType = new String("信号量报警");
+                            break;
+                        case 1:
+                            sAlarmType = new String("硬盘满");
+                            break;
+                        case 2:
+                            sAlarmType = new String("信号丢失");
+                            break;
+                        case 3:
+                            sAlarmType = new String("移动侦测");
+                            break;
+                        case 4:
+                            sAlarmType = new String("硬盘未格式化");
+                            break;
+                        case 5:
+                            sAlarmType = new String("读写硬盘出错");
+                            break;
+                        case 6:
+                            sAlarmType = new String("遮挡报警");
+                            break;
+                        case 7:
+                            sAlarmType = new String("制式不匹配");
+                            break;
+                        case 8:
+                            sAlarmType = new String("非法访问");
+                            break;
+                    }
+
+                    newRow[0] = dateFormat.format(today);
+                    //报警类型
+                    newRow[1] = sAlarmType;
+                    //报警设备IP地址
+                    sIP = new String(pAlarmer.sDeviceIP).split("\0", 2);
+                    newRow[2] = sIP[0];
+                    // alarmTableModel.insertRow(0, newRow);
+                    System.out.println("============================");
+                    break;
+
+                //8000报警
+                case HCNetSDK.COMM_ALARM:
+                    HCNetSDK.NET_DVR_ALARMINFO strAlarmInfo = new HCNetSDK.NET_DVR_ALARMINFO();
+                    strAlarmInfo.write();
+                    Pointer pInfo = strAlarmInfo.getPointer();
+                    pInfo.write(0, pAlarmInfo.RecvBuffer, 0, strAlarmInfo.size());
+                    strAlarmInfo.read();
+
+
+                    switch (strAlarmInfo.dwAlarmType)
+                    {
+                        case 0:
+                            sAlarmType = new String("信号量报警");
+                            break;
+                        case 1:
+                            sAlarmType = new String("硬盘满");
+                            break;
+                        case 2:
+                            sAlarmType = new String("信号丢失");
+                            break;
+                        case 3:
+                            sAlarmType = new String("移动侦测");
+                            break;
+                        case 4:
+                            sAlarmType = new String("硬盘未格式化");
+                            break;
+                        case 5:
+                            sAlarmType = new String("读写硬盘出错");
+                            break;
+                        case 6:
+                            sAlarmType = new String("遮挡报警");
+                            break;
+                        case 7:
+                            sAlarmType = new String("制式不匹配");
+                            break;
+                        case 8:
+                            sAlarmType = new String("非法访问");
+                            break;
+                    }
+
+                    newRow[0] = dateFormat.format(today);
+                    //报警类型
+                    newRow[1] = sAlarmType;
+                    //报警设备IP地址
+                    sIP = new String(pAlarmer.sDeviceIP).split("\0", 2);
+                    newRow[2] = sIP[0];
+                    //  alarmTableModel.insertRow(0, newRow);
+                    System.out.println("++++++++++++++++++++++++++++++++++=");
+                    break;
+
+                //ATM DVR transaction information
+                case HCNetSDK.COMM_TRADEINFO:
+                    //处理交易信息报警
+                    break;
+
+                //IPC接入配置改变报警
+                case HCNetSDK.COMM_IPCCFG:
+                    // 处理IPC报警
+                    break;
+
+                default:
+                    logger.error("未知报警类型");
+                    break;
+            }
+        }
+    }
 
 }
