@@ -1,7 +1,9 @@
 package com.ray.hc_spring2.core.service;
 
 import com.ray.hc_spring2.HcSpring2Application;
+import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.repository.OperationLogRepository;
+import com.ray.hc_spring2.model.DefenseArea;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.web.controller.HCController;
@@ -30,10 +32,20 @@ public class HCImplTest {
     @Autowired
     private OperationLogRepository operationLogRepository;
 
+    @Autowired
+    private DefenseAreaRepository defenseAreaRepository;
+
 
     @Test
     public void findByUsername() {
         userInfoService.findByUsername("admin");
+    }
+
+    @Test
+    public void testAddDefenseArea(){
+        DefenseArea defenseArea = new DefenseArea();
+        defenseArea.setDefenseName("1");
+        defenseAreaRepository.save(defenseArea);
     }
 
     @Test
@@ -44,8 +56,16 @@ public class HCImplTest {
         hcDevice.setPassword("Special101");
         hcDevice.setIp("192.168.1.64");
         hcDevice.setPort("8000");
-        hcDevice.setDefenseArea("防区1");
+
+        DefenseArea  defenseArea = new DefenseArea();
+        defenseArea.setId(1L);
+        hcDevice.setDefenseArea(defenseArea);
         deviceService.saveDevice(hcDevice);
+    }
+
+    @Test
+    public void testQueryDefenseArea(){
+        deviceService.findByAll();
     }
 
     @Test
@@ -70,4 +90,7 @@ public class HCImplTest {
         }
         operationLogRepository.save(operationLogs);
     }
+
+
+
 }

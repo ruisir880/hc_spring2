@@ -30,10 +30,11 @@
                     <div id="box_center">
                         防区&nbsp;： <select name="defenseArea" id="defenseArea" class="ui_select01">
                         <option value="">--请选择--</option>
-                        <option value="1">防区1</option>
-                        <option value="2">防区2</option>
-                        <option value="3">防区3</option>
-                        <option value="4">防区4</option>
+                        @if(!isEmpty(defenseAreaList)){
+                        @for(area in defenseAreaList){
+                        <option value=${area.id}>防区${area.defenseName}</option>
+                        @}
+                        @}
                     </select>
                     </div>
                     <div id="box_bottom">
@@ -57,7 +58,7 @@
                     @for(device in deviceList){
                     <tr>
                         </td>
-                        <td>${device.defenseArea}</td>
+                        <td>${device.defenseArea.defenseName}</td>
                         <td>${device.ip}</td>
                         <td>${device.account}</td>
                         <td>${device.password}</td>

@@ -10,6 +10,7 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link rel="stylesheet" type="text/css" href="style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/user.js"></script>
     <title>监控系统</title>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -27,31 +28,7 @@
             });
         });
 
-        /** 模糊查询来电用户  **/
-        function search(){
-            var username = $("#username").val();
-            var realName = $("#realName").val();
-            var mobile = $("#mobile").val();
-            var targetUrl = "${ctxPath}/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile;
-            window.location.href=targetUrl;
-        }
 
-        /** 模糊查询来电用户  **/
-        function deleteUser(userId){
-            $.ajax({
-                type:"POST",
-                url:"${ctxPath}/deleteUser",
-                data:{"userId":userId},
-                dataType : "text",
-                success:function(data){
-                    if(data=="0"){
-                        art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
-                    }else{
-                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
-                    }
-                }
-            });
-        }
 
     </script>
     <style>
@@ -79,22 +56,20 @@
         </div>
         <div class="ui_content">
             <div class="ui_tb">
-                <table class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <table class="table" id="userListTable" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
                     <tr>
 
                         </th>
-                        <th>用户角色</th>
                         <th>用户名</th>
                         <th>真实姓名</th>
                         <th>电话号码</th>
                         <th>邮件</th>
                         <th>操作</th>
                     </tr>
-                    @if(!isEmpty(userPage)){
-                    @for(user in userPage){
+                    @if(!isEmpty(userList)){
+                    @for(user in userList){
                     <tr>
                         </td>
-                        <td>${user.roleInfo == null ? "" :user.roleInfo.description}</td>
                         <td>${user.username}</td>
                         <td>${user.realName}</td>
                         <td>${user.mobile}</td>

@@ -74,7 +74,6 @@
 <form id="submitForm" name="submitForm" method="post">
     <div id="container">
         <div id="nav_links">
-            当前位置：系统管理&nbsp;>&nbsp;<span style="color: #1A5CC6;">设备编辑</span>
             <div id="page_close">
                 <a href="javascript:parent.$.fancybox.close();">
                     <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
@@ -116,11 +115,16 @@
                     <td class="ui_text_lt">
                         <select name="defenseArea" id="defenseArea" class="ui_select01">
                             <option value="">--请选择--</option>
-                            <option value="1">防区1</option>
-                            <option value="2">防区2</option>
-                            <option value="3">防区3</option>
-                            <option value="4">防区4</option>
+                            @if(!isEmpty(defenseAreaList)){
+                            @for(area in defenseAreaList){
+                            <option value=${area.id}
+                            @if(!isEmpty(device.defenseArea) && device.defenseArea.id==area.id){
+                            selected="true"
+                            @}
 
+                            >防区${area.defenseName}</option>
+                            @}
+                            @}
                         </select>
                     </td>
                 </tr>

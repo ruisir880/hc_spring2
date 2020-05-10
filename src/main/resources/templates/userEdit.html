@@ -4,10 +4,10 @@
     <title>监控系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
-    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
-    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/user.js"></script>
     <script type="text/javascript">
@@ -17,7 +17,7 @@
              */
             $("#submitbutton").click(function() {
                 if(validateForm()){
-                    checkFyFhSubmit();
+                    checkSubmit();
                 }
             });
 
@@ -25,10 +25,10 @@
              * 取消
              */
             $("#cancelbutton").click(function() {
+                $('#username').val('');
                 $('#password').val('');
                 $("#realName").val('');
                 $("#mobile").val('');
-                $("#address").val('');
                 $("#email").val('');
             });
 
@@ -39,31 +39,29 @@
             }
         });
 
-        function checkFyFhSubmit(){
-            var userId = $('#userId').val();
+        function checkSubmit(){
+            var uid = $('#userId').val();
             var username = $('#username').val();
             var password = $('#password').val();
             var realName = $("#realName").val();
             var mobile = $("#mobile").val();
-            var address = $("#address").val();
             var email = $("#email").val();
-            var role = $("#role").val();
-            var areaId
-            if($('#district').val()){
-                areaId = $('#district').val()
-            }else {
-                areaId = $('#city').val()
-            }
-            if(realName!="" && mobile!="" && email!=""){
+            if(username!="" && password!=""){
                 $.ajax({
                     type:"POST",
-                    url:"${ctxPath}/updateUser",
-                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile,
-                        "address":address, "email":email,"areaId":areaId,"role":role},
+                    url:"${ctxPath}/addUser",
+                    data:{"uid":uid,"username":username,"password":password,"realName":realName, "mobile":mobile,"email":email},
                     dataType : "text",
                     success:function(data){
-                       if(data=="0"){
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'修改成功', ok:true,});
+// 					alert(data);
+                        // 如果返回数据不为空，更改“房源信息”
+                        if(data=="-1"){
+                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户名已存在', ok:true,});
+                            $("#username").css("background", "#EEE");
+                            $("#username").focus();
+                            return false;
+                        }else if(data=="0"){
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'用户添加成功', ok:true,});
                         }
                     }
                 });
@@ -77,7 +75,6 @@
 <form id="submitForm" name="submitForm" method="post">
     <div id="container">
         <div id="nav_links">
-            当前位置：基础数据&nbsp;>&nbsp;<span style="color: #1A5CC6;">用户编辑</span>
             <div id="page_close">
                 <a href="javascript:parent.$.fancybox.close();">
                     <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
@@ -85,17 +82,21 @@
             </div>
         </div>
         <td class="ui_content">
-            <form id="addUser" action="">
+            <form id="editUser" action="">
                 <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
                     <p hidden><input value="${userInfo.uid}" id="userId" name="userId"></p>
                 <tr>
-                    <td class="ui_text_lt" width="80">用户名</td>
+                    <td class="ui_text_lt" width="80">用户名*</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="username" name="username"  class="ui_input_txt02" value="${userInfo.username}"  disabled="disabled"/>
+                        <input type="text" id="username" name="username" value="${userInfo.username}"  class="ui_input_txt02"
+                           @if(userInfo.uid>0){
+                               disabled="true"
+                           @}
+                        />
                     </td>
                 </tr>
                 <tr>
-                    <td class="ui_text_lt" width="80">密码</td>
+                    <td class="ui_text_lt" width="80">密码*</td>
                     <td class="ui_text_lt">
                         <input type="password" id="password" name="password" value="${userInfo.password}"  class="ui_input_txt02"/>
                     </td>
@@ -110,81 +111,24 @@
                 <tr>
                     <td class="ui_text_lt" width="80">电话号码</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="mobile" name="mobile" value="${userInfo.mobile}" class="ui_input_txt02"/>
+                        <input type="text" id="mobile" name="mobile"  class="ui_input_txt02"  value="${userInfo.mobile}"/>
                     </td>
                 </tr>
 
                 <tr>
                     <td class="ui_text_lt" width="80">邮件地址</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="email" name="email" value="${userInfo.email}"  class="ui_input_txt02"/>
+                        <input type="text" id="email" name="email"  class="ui_input_txt02" value="${userInfo.email}" />
                     </td>
                 </tr>
+                <!--<tr>-->
+                    <!--<td class="ui_text_lt" width="80">用户权限</td>-->
+                    <!--<td class="ui_text_lt">-->
+                        <!--编辑用户<input type="checkbox" value=""/>-->
+                        <!--&nbsp;添加用户<input type="checkbox" value=""/>-->
+                    <!--</td>-->
+                <!--</tr>-->
 
-                <tr>
-                    <td class="ui_text_lt">所属区域</td>
-                    <td class="ui_text_lt">
-                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,'city')">
-                            @if(!isEmpty(provinces)){
-                            @for(province in provinces){
-                            <option value=${province.id}
-                                    @if(!isEmpty(provinceId) && province.id == provinceId){
-                                    selected="true"
-                                    @}
-                            >${province.name}</option>
-                            @}
-                            @}
-                        </select>
-                    </td>
-                    <td class="ui_text_lt">
-                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,'district')">
-                            <option value="">--请选择--</option>
-                            @if(!isEmpty(cities)){
-                            @for(city in cities){
-                            <option value=${city.id}
-                                    @if(!isEmpty(cityId) && city.id == cityId){
-                                    selected="true"
-                                    @}
-                            >${city.name}</option>
-                            @}
-                            @}
-                        </select>
-                    </td>
-                    <td class="ui_text_lt">
-                        <select name="district" id="district" class="ui_select01">
-                            <option value="">--请选择--</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="ui_text_lt">用户角色</td>
-                    <td class="ui_text_lt">
-                        <select name="role" id="role" class="ui_select01">
-                            <option value="">--请选择--</option>
-                            <option value="admin"
-                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="admin"){
-                                    selected="true"
-                                    @}
-                            >管理员</option>
-                            <option value="projectManager"
-                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="projectManager"){
-                                    selected="true"
-                                    @}
-                            >项目负责人</option>
-                            <option value="cooperation"
-                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="cooperation"){
-                                    selected="true"
-                                    @}
-                            >协作单位</option>
-                            <option value="technician"
-                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="technician"){
-                                    selected="true"
-                                    @}
-                            >技术专家</option>
-                        </select>
-                    </td>
-                </tr>
 
                 <tr>
                     <td>&nbsp;</td>

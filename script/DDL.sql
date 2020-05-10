@@ -1,13 +1,22 @@
-    create table hc_device (
+ create table defense_area (
+        id bigint not null auto_increment,
+        defense_name varchar(50) not null,
+        PRIMARY KEY (id)
+    )character set = utf8;
+    ALTER TABLE defense_area add constraint UQ_DN unique (defense_name);
+
+ create table hc_device (
         id bigint not null auto_increment,
         ip varchar(15) not null,
         port varchar(6) not null,
         account varchar(50) not null,
         password varchar(50) not null,
-        defense_area varchar(200),
-        PRIMARY KEY (id)
+        defense_area_id bigint,
+        PRIMARY KEY (id),
+        FOREIGN KEY (defense_area_id) REFERENCES defense_area (id)
     )character set = utf8;
     ALTER TABLE hc_device add constraint UQ_ip unique (ip);
+
 
     create table user_info (
         uid bigint not null auto_increment,

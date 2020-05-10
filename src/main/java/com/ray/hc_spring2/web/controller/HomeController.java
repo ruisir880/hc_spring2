@@ -45,19 +45,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value ="/userAdd")
-    public ModelAndView userAdd() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("userAdd");
-        return modelAndView;
-    }
 
-    @RequestMapping(value ="/userList")
-    public ModelAndView userList() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("userList");
-        return modelAndView;
-    }
 
     @RequestMapping(value ="/main")
     public ModelAndView mainHtml() {
@@ -67,14 +55,6 @@ public class HomeController {
         modelAndView.addObject("url2","rtsp://admin:Special101@192.168.1.65:554/h264/ch1/main/av_stream");
         return modelAndView;
     }
-
-    @RequestMapping(value ="/vod")
-    public ModelAndView vod() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("vod");
-        return modelAndView;
-    }
-
 
 
 

@@ -18,8 +18,10 @@ public class HcDevice implements Serializable {
     private String password;
     @Column(nullable = false)
     private String port;
-    @Column
-    private String defenseArea;
+
+    @ManyToOne
+    @JoinColumn(name = "defense_area_id")
+    private DefenseArea defenseArea;
 
 
 
@@ -56,13 +58,6 @@ public class HcDevice implements Serializable {
     }
 
 
-    public String getDefenseArea() {
-        return defenseArea;
-    }
-
-    public void setDefenseArea(String defenseArea) {
-        this.defenseArea = defenseArea;
-    }
 
     public Long getId() {
         return id;
@@ -70,5 +65,13 @@ public class HcDevice implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DefenseArea getDefenseArea() {
+        return defenseArea;
+    }
+
+    public void setDefenseArea(DefenseArea defenseArea) {
+        this.defenseArea = defenseArea;
     }
 }
