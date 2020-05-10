@@ -63,6 +63,8 @@ public class HomeController {
     public ModelAndView mainHtml() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("main");
+        modelAndView.addObject("url","rtsp://admin:Special101@192.168.1.64:554/h264/ch1/main/av_stream");
+        modelAndView.addObject("url2","rtsp://admin:Special101@192.168.1.65:554/h264/ch1/main/av_stream");
         return modelAndView;
     }
 
@@ -72,6 +74,9 @@ public class HomeController {
         modelAndView.setViewName("vod");
         return modelAndView;
     }
+
+
+
 
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {

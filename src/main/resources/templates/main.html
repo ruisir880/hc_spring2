@@ -3,6 +3,19 @@
     <head>
         <meta charset="utf-8"/>
         <title>监控系统</title>
+
+		<script type="text/javascript">
+
+			function choseDefenseArea(node){
+				var areaNode = document.getElementById(node);
+				var index = areaNode.getAttribute("id").substr(8);
+				for(var i =1;i<5;i++){
+					var area = document.getElementById("areaDiv"+i);
+					area.className="";
+				}
+				document.getElementById("areaDiv"+index).className="selected";
+			}
+		</script>
     </head>
     <style>
         body{
@@ -101,8 +114,9 @@
 			height: 176px;
 			float: left; 
 			display: none; 
-			border: 2px solid #ffd405;
-		} 
+			border: 5px solid #ffd405;
+		}
+
 		.mycity .selected{ 
 			display: block !important;
 		} 
@@ -222,10 +236,10 @@
 				        <li>
 				            <div class="icon01"><img src="${ctxPath}/images/common/icon01.jpg" />主机</div>
 				            <ul>
-				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区1</div></li>
-				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区2</div></li>
-				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区3</div></li>
-				                <li><div class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" />防区4</div></li>
+				                <li><div id="areaNode1" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode1');" />防区1</div></li>
+				                <li><div id="areaNode2" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode2');"/>防区2</div></li>
+				                <li><div id="areaNode3" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode3');"/>防区3</div></li>
+				                <li><div id="areaNode4" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode4');"/>防区4</div></li>
 				            </ul>
 				        </li>
 				    </ul>
@@ -236,22 +250,70 @@
 					<ul> 
 					<li>
 						<img src="${ctxPath}/images/common/community.jpg" />
-						<div class="selected"></div>
+						<div id="areaDiv1" class="selected"></div>
 					</li> 
 					<li>
 						<img src="${ctxPath}/images/common/community.jpg" />
+						<div id="areaDiv2"></div>
 					</li> 
 					<li>
 						<img src="${ctxPath}/images/common/community.jpg" />
+						<div id="areaDiv3"></div>
 					</li> 
 					<li>
 						<img src="${ctxPath}/images/common/community.jpg" />
+						<div id="areaDiv4"></div>
 					</li> 
 					</ul> 
 				</div>             	
             </div>
             <div class="right">
-				<iframe src="http://localhost:8080/test.html"></iframe>
+				<div class="my">
+					<ul>
+						<li >
+							<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc1' events='false' width="300" height="250">
+								<param name='mrl' value='${url}' />
+								<param name='volume' value='50' />
+								<param name='autoplay' value='true' />
+								<param name='loop' value='false' />
+								<param name='fullscreen' value='false' />
+								<param name='controls' value='false' />
+							</object>
+						</li>
+						<li>
+							<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc2' events='false' width="300" height="250">
+								<param name='mrl' value='${url2}' />
+								<param name='volume' value='50' />
+								<param name='autoplay' value='true' />
+								<param name='loop' value='false' />
+								<param name='fullscreen' value='false' />
+								<param name='controls' value='false' />
+							</object>
+						</li>
+						<li>
+							<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc1' events='false' width="300" height="250">
+								<param name='mrl' value='${url}' />
+								<param name='volume' value='50' />
+								<param name='autoplay' value='true' />
+								<param name='loop' value='false' />
+								<param name='fullscreen' value='false' />
+								<param name='controls' value='false' />
+							</object>
+						</li>
+						<li>
+							<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc2' events='false' width="300" height="250">
+								<param name='mrl' value='${url2}' />
+								<param name='volume' value='50' />
+								<param name='autoplay' value='true' />
+								<param name='loop' value='false' />
+								<param name='fullscreen' value='false' />
+								<param name='controls' value='false' />
+							</object>
+						</li>
+					</ul>
+				</div>
+
+
             </div>
         </div>
         <!-- =================== End Main =================== -->

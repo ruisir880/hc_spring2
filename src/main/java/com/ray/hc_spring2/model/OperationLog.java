@@ -15,7 +15,7 @@ public class OperationLog implements Serializable {
     @Column(nullable = false)
     private String user;
     @Column(nullable = false)
-    private Date date;
+    private Date generationTime;
 
 
     public String getOperation() {
@@ -34,11 +34,21 @@ public class OperationLog implements Serializable {
         this.user = user;
     }
 
-    public Date getDate() {
-        return date;
+
+
+    public long getId() {
+        return id;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getGenerationTime() {
+        return generationTime;
+    }
+
+    public void setGenerationTime(Date generationTime) {
+        this.generationTime = generationTime;
     }
 }

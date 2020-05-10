@@ -4,7 +4,7 @@ public class Constants {
 
     public static final int HASHITERATIONS =2; //加密的次数
     public static final String HASHALGORITHMNAME = "MD5"; //加密方式
-    public static final int PAGE_SIZE =10;
+    public static final int PAGE_SIZE =15;
 
     public static final String SON_RECORDS_ERROR_MSG ="This is son records found:";
 

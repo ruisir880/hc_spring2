@@ -1,7 +1,9 @@
 package com.ray.hc_spring2.core.service;
 
 import com.ray.hc_spring2.HcSpring2Application;
+import com.ray.hc_spring2.core.repository.OperationLogRepository;
 import com.ray.hc_spring2.model.HcDevice;
+import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.web.controller.HCController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -23,6 +26,9 @@ public class HCImplTest {
 
     @Autowired
     private HCController hcController;
+
+    @Autowired
+    private OperationLogRepository operationLogRepository;
 
 
     @Test
@@ -51,5 +57,17 @@ public class HCImplTest {
     @Test
     public void testAlarm(){
         hcController.startAlarmHandler();
+    }
+
+    @Test
+    public void testOperation(){
+        List<OperationLog> operationLogs = new ArrayList<>();
+        for(int i=0;i<100;i++){
+            OperationLog operationLog = new OperationLog();
+            operationLog.setOperation("do");
+            operationLog.setUser("user"+i);
+            operationLogs.add(operationLog);
+        }
+        operationLogRepository.save(operationLogs);
     }
 }
