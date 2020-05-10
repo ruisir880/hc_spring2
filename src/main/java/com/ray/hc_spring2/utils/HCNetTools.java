@@ -161,10 +161,23 @@ public class HCNetTools {
             lAlarmHandle = hCNetSDK.NET_DVR_SetupAlarmChan_V30(lUserID);
             if (lAlarmHandle.intValue() == -1)
             {
+                //布放失败
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean cancelAlarm(HcDevice device) {
+        if (!hCNetSDK.NET_DVR_CloseAlarmChan_V30(lAlarmHandle)) {
+            //撤防失败
+            lAlarmHandle = new NativeLong(-1);
+            return false;
+        } else
+        {
+            lAlarmHandle = new NativeLong(-1);
+            return true;
+        }
     }
 
 

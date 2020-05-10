@@ -167,11 +167,11 @@
             }else  if('left_tab7' == tabid){
                 $.ajax({
                     type:"POST",
-                    url:"${ctxPath}/startAlarm",
+                    url:"${ctxPath}/startOrCancelAlarm",
                     dataType : "text",
-                    success:function(data){
-                        if(data=="0"){
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'修改成功', ok:true,});
+                    success:function(result){
+                        if(result.code=="0"){
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:result.msg, ok:true,});
                         }
                     }
                 });
