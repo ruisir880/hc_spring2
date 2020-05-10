@@ -3,6 +3,7 @@ package com.ray.hc_spring2.web.controller;
 import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.utils.DateUtil;
+import com.ray.hc_spring2.web.dto.OperationLogDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,7 @@ public class OperationLogController {
 
     @RequestMapping(value = "/queryOperationLog",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView queryOperationLog(String page,String operator,String startTime,String endTime) throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
+    public OperationLogDto queryOperationLog(String page,String operator,String startTime,String endTime) throws ParseException {
         int pageInt = StringUtils.isEmpty(page) ? 1:Integer.valueOf(page);
         Calendar calendar = Calendar.getInstance();
         Date startDate = null;
@@ -47,10 +47,7 @@ public class OperationLogController {
         }
 
         Page<OperationLog> operationLogs = pageQueryService.queryOperationLog(pageInt,operator,startDate,endDate);
-        modelAndView.addObject("operationLogPage",operationLogs);
-        modelAndView.addObject("totalCount",operationLogs.getTotalElements());
-        modelAndView.addObject("page",operationLogs.getNumber()+1);
-        modelAndView.setViewName("operationLogList");
-        return modelAndView;
+
+        return new OperationLogDto(operationLogs);
     }
 }

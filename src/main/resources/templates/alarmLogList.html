@@ -10,41 +10,11 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link rel="stylesheet" type="text/css" href="style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
-    <script type="text/javascript"  src="${ctxPath}/scripts/junInputPage.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/alarmLog.js"></script>
     <title>监控系统</title>
     <script type="text/javascript">
-        $(document).ready(function(){
-            /**编辑   **/
-            $("a.edit").fancybox({
-                'width' : 733,
-                'height' : 530,
-                'type' : 'iframe',
-                'hideOnOverlayClick' : false,
-                'showCloseButton' : false,
-                'onClosed' : function() {
-                    window.close();
-                }
-            });
-        });
-
-        function search(){
-            var alarmState = $("#alarmState").val();
-            var startTime = $("#startTime").val();
-            var endTime = $("#endTime").val();
-            var targetUrl = "${ctxPath}/queryAlarmLog?alarmState="+alarmState+"&startTime="+startTime+"&endTime="+endTime;
-            window.location.href=targetUrl;
-        }
-
-        function jumpPage(page){
-            if(page>0){
-                var alarmState = $("#alarmState").val();
-                var startTime = $("#startTime").val();
-                var endTime = $("#endTime").val();
-                var targetUrl = "${ctxPath}/queryAlarmLog?page="+page+"alarmState="+alarmState+"&startTime="+startTime+"&endTime="+endTime;
-                window.location.href=targetUrl;
-            }
-        }
-
+        var currentPage;
+        var totalPage;
     </script>
     <style>
         .alt td{ background:black !important;}
@@ -101,20 +71,20 @@
             </div>
             <div class="ui_tb_h30">
                 <div class="ui_flt" style="height: 30px; line-height: 30px;">
-                    总共${totalCount}
+                    总共
                     <span id="totalCount" class="ui_txt_bold04"></span>
-                    条记录，当前第${page}
+                    条记录，当前第
                     <span id="page" class="ui_txt_bold04">
                     </span>
                     页
                 </div>
                 <div class="ui_frt">
                     <!--    如果是第一页，则只显示下一页、尾页 -->
-                    <input type="button" value="上一页" class="ui_input_btn01" onclick="jumpPage(${page-1})"  />
-                    <input type="button" value="下一页" class="ui_input_btn01" onclick="jumpPage(${page+1})" />
+                    <input type="button" value="上一页" class="ui_input_btn01" onclick="jumpNextPage()"  />
+                    <input type="button" value="下一页" class="ui_input_btn01" onclick="jumpNextPage()" />
 
                     转到第<input type="text" id="jumpNumTxt" class="ui_input_txt01" />页
-                    <input type="button" class="ui_input_btn01" value="跳转" onclick="jumpInputPage();" />
+                    <input type="button" class="ui_input_btn01" value="跳转" onclick="jumpInputPage(9);" />
                 </div>
             </div>
         </div>

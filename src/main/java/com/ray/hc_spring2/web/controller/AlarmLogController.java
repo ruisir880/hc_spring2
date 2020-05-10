@@ -4,6 +4,7 @@ import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.AlarmLog;
 import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.utils.DateUtil;
+import com.ray.hc_spring2.web.dto.AlarmLogDto;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,8 @@ public class AlarmLogController {
 
     @RequestMapping(value = "/queryAlarmLog",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView queryUserPage(String page,String defenseArea,String alarmState,String startTime,String endTime) throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
+    public AlarmLogDto queryUserPage(String page, String defenseArea, String alarmState, String startTime, String endTime) throws ParseException {
         int pageInt = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
-        Calendar calendar = Calendar.getInstance();
         Date startDate = null;
         Date endDate = null;
         if (!StringUtils.isEmpty(startTime)) {
@@ -49,11 +48,6 @@ public class AlarmLogController {
         }
 
         Page<AlarmLog> alarmLogs = pageQueryService.queryAlarmLog(pageInt, alarmState, startDate, endDate);
-        modelAndView.addObject("alarmPage", alarmLogs);
-        modelAndView.addObject("totalCount", alarmLogs.getTotalElements());
-        modelAndView.addObject("page", alarmLogs.getNumber() + 1);
-
-        modelAndView.setViewName("alarmLogList");
-        return modelAndView;
+        return new AlarmLogDto(alarmLogs);
     }
 }

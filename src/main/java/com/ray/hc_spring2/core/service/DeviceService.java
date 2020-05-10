@@ -10,6 +10,8 @@ public interface DeviceService {
     List<HcDevice> findByAll();
 
     void saveDevice(HcDevice hcDevice);
+    void deleteById(long id);
 
     HcDevice findByIp(String ip);
+    HcDevice findById(long id);
 }

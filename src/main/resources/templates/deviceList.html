@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/fancybox/jquery.fancybox-1.3.4.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/deviceList.js"></script>
+    <title>监控系统</title>
+    <script type="text/javascript">
+
+
+    </script>
+    <style>
+        .alt td{ background:black !important;}
+    </style>
+</head>
+<body>
+<form id="submitForm" name="submitForm" action="" method="get">
+    <div id="container">
+        <div class="ui_content">
+            <div class="ui_text_indent">
+                <div id="box_border">
+                    <div id="box_top">搜索</div>
+                    <div id="box_center">
+                        防区&nbsp;： <select name="defenseArea" id="defenseArea" class="ui_select01">
+                        <option value="">--请选择--</option>
+                        <option value="1">防区1</option>
+                        <option value="2">防区2</option>
+                        <option value="3">防区3</option>
+                        <option value="4">防区4</option>
+                    </select>
+                    </div>
+                    <div id="box_bottom">
+                        <input type="button" value="查询" class="ui_input_btn01" onclick="search();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui_content">
+            <div class="ui_tb">
+                <table class="table" id="deviceListTable" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                    <tr>
+                        <th>防区</th>
+                        <th>IP地址</th>
+                        <th>管理员账户</th>
+                        <th>管理员密码</th>
+                        <th>端口</th>
+                        <th>操作</th>
+                    </tr>
+                    @if(!isEmpty(deviceList)){
+                    @for(device in deviceList){
+                    <tr>
+                        </td>
+                        <td>${device.defenseArea}</td>
+                        <td>${device.ip}</td>
+                        <td>${device.account}</td>
+                        <td>${device.password}</td>
+                        <td>${device.port}</td>
+                        <td>
+                            <a href="${ctxPath}/deviceEdit?deviceId=${device.id}" class="edit">编辑</a>
+                            <a href="javascript:deleteDevice(${device.id});">删除</a>
+                        </td>
+                    </tr>
+                    @}
+                    @}
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

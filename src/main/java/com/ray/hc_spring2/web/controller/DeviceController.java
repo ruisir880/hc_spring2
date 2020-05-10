@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 public class DeviceController {
 
@@ -20,14 +22,40 @@ public class DeviceController {
     private HCNetTools tools = new HCNetTools();
 
     @RequestMapping(value ="/deviceEdit")
-    public ModelAndView deviceEdit() {
+    public ModelAndView deviceEdit(String deviceId ) {
         ModelAndView modelAndView = new ModelAndView();
         HcDevice device = new HcDevice();
+        if(StringUtils.isNotEmpty(deviceId)){
+            device = deviceService.findById(Long.valueOf(deviceId));
+        }
         modelAndView.addObject("device",device);
         modelAndView.setViewName("deviceEdit");
         return modelAndView;
     }
 
+    @RequestMapping(value ="/deviceList")
+    public ModelAndView deviceList(String defenseArea) {
+        ModelAndView modelAndView = new ModelAndView();
+        List<HcDevice> hcDevices = deviceService.findByArea(defenseArea);
+        modelAndView.addObject("deviceList",hcDevices);
+        modelAndView.setViewName("deviceList");
+        return modelAndView;
+    }
+
+    @RequestMapping(value ="/queryDevices")
+    @ResponseBody
+    public List<HcDevice> queryDevices(String defenseArea) {
+        ModelAndView modelAndView = new ModelAndView();
+        List<HcDevice> hcDevices = deviceService.findByArea(defenseArea);
+        return hcDevices;
+    }
+
+    @PostMapping(value ="/deleteDevice")
+    @ResponseBody
+    public int deleteDevice(long id) {
+        deviceService.deleteById(id);
+        return 0;
+    }
 
     @PostMapping(value ="/editDevice")
     @ResponseBody

@@ -2,6 +2,7 @@ package com.ray.hc_spring2.core.service;
 
 import com.ray.hc_spring2.core.repository.DeviceRepository;
 import com.ray.hc_spring2.model.HcDevice;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,10 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<HcDevice> findByArea(String defenseArea) {
-        return deviceRepository.findDevicesByDefenseArea(defenseArea);
+        if(StringUtils.isNotEmpty(defenseArea)) {
+            return deviceRepository.findDevicesByDefenseArea(defenseArea);
+        }
+        return deviceRepository.findAll();
     }
 
     @Override
@@ -26,8 +30,18 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public void deleteById(long id) {
+        deviceRepository.delete(id);
+    }
+
+    @Override
     public HcDevice findByIp(String ip) {
         return deviceRepository.findByIp(ip);
+    }
+
+    @Override
+    public HcDevice findById(long id) {
+        return deviceRepository.findById(id);
     }
 
 
