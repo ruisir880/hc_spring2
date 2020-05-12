@@ -2,10 +2,12 @@ package com.ray.hc_spring2.utils;
 
 
 import com.ray.hc_spring2.HCNetSDK;
+import com.ray.hc_spring2.core.HcCache;
 import com.ray.hc_spring2.core.SpringContextUtils;
 import com.ray.hc_spring2.core.repository.AlarmLogRepository;
 import com.ray.hc_spring2.model.AlarmLog;
 import com.ray.hc_spring2.model.HcDevice;
+import com.ray.hc_spring2.web.config.MyWebSocket;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +41,8 @@ public class HCNetTools {
     NativeLong lAlarmHandle;//报警布防句柄
 
     private AlarmLogRepository alarmLogRepository;
+    private MyWebSocket myWebSocket;
+    private HcCache hcCache;
 
     public HCNetTools()
     {
@@ -46,6 +51,8 @@ public class HCNetTools {
         m_lPort = new NativeLongByReference(new NativeLong(-1));
         //fRealDataCallBack= new FRealDataCallBack();
         alarmLogRepository = SpringContextUtils.getApplicationContext().getBean(AlarmLogRepository.class);
+        myWebSocket = SpringContextUtils.getApplicationContext().getBean(MyWebSocket.class);
+        hcCache = SpringContextUtils.getApplicationContext().getBean(HcCache.class);
     }
 
     public int testDevice(HcDevice hcDevice){
@@ -307,7 +314,12 @@ public class HCNetTools {
                     break;
             }
             logger.warn(alarmLog.getDeviceIp()+"报警, 报警类型:"+ alarmLog.getAlarmType());
-           // alarmLogRepository.save(alarmLog);
+            try {
+                myWebSocket.sendMessage(hcCache.getAreaByIp(alarmLog.getDeviceIp()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // alarmLogRepository.save(alarmLog);
         }
     }
 

@@ -28,8 +28,6 @@ public class HCController {
     private Map<String,HCNetTools>  deviceHCNetToolsMap = new HashMap<>();
 
 
-
-
     @PostMapping(value ="/startOrCancelAlarm")
     @ResponseBody
     public AlarmResult startOrCancelAlarm() {

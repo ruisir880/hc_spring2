@@ -36,7 +36,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value ="/manager")
+    @RequestMapping(value ="/websocket")
     public ModelAndView manager() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("result","");

@@ -14,7 +14,10 @@ public class VideoUtilTest {
         hcDevice.setPort("8000");
         VideoUtil videoUtil = new VideoUtil();
         videoUtil.startTranscodeAndGetTasker(hcDevice,hcDevice.getIp().replace(".",""));
+    }
 
+    @Test
+    public void webSocketTest(){
 
     }
 }

@@ -37,8 +37,10 @@
 			for(var i =1;i<5;i++){
 				var area = document.getElementById("areaDiv"+i);
 				area.className="";
+				document.getElementById("areaSpan"+i).className="";
 			}
 			document.getElementById("areaDiv"+index).className="selected";
+			document.getElementById("areaSpan"+index).className="selection";
 		}
 
 	</script>
@@ -323,16 +325,18 @@
 						<li>
 							<div id="areaNode1" class="icon02">
 								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode1');" />
-								<span class="selection" onclick="choseDefenseArea('areaNode1');">防区1</span>
+								<span id="areaSpan1" class="selection" onclick="choseDefenseArea('areaNode1');">防区1</span>
 							</div>
 						</li>
 						<li>
 							<div id="areaNode2" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode2');"/>
-								<span onclick="choseDefenseArea('areaNode2');">防区2</span>
+								<span id="areaSpan2" onclick="choseDefenseArea('areaNode2');">防区2</span>
 							</div>
 						</li>
-						<li><div id="areaNode3" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode3');"/><span onclick="choseDefenseArea('areaNode3');">防区3</span></div></li>
-						<li><div id="areaNode4" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode4');"/><span onclick="choseDefenseArea('areaNode4');">防区4</span></div></li>
+						<li><div id="areaNode3" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode3');"/>
+							<span id="areaSpan3" onclick="choseDefenseArea('areaNode3');">防区3</span></div></li>
+						<li><div id="areaNode4" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode4');"/>
+							<span id="areaSpan4" onclick="choseDefenseArea('areaNode4');">防区4</span></div></li>
 					</ul>
 				</li>
 			</ul>
@@ -349,7 +353,7 @@
 				<li>
 					<img src="${ctxPath}/images/common/community.jpg" />
 					<div id="areaDiv2"></div>
-					<div class="alert selected" id="areaJpg2"></div>
+					<div class="alert" id="areaJpg2"></div>
 				</li>
 				<li>
 					<img src="${ctxPath}/images/common/community.jpg" />

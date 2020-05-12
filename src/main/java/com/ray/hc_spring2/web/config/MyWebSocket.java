@@ -1,6 +1,5 @@
 package com.ray.hc_spring2.web.config;
 
-import com.ray.hc_spring2.utils.CommonKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -75,15 +74,22 @@ public class MyWebSocket {
      @OnError
      */
      public void onError(Session session, Throwable error) {
-         logger.info("websocket: onError");
+         logger.warn("websocket: onError");
          error.printStackTrace();
      }
 
 
 
      public void sendMessage(String message) throws IOException {
-         this.session.getBasicRemote().sendText(message);
-         //this.session.getAsyncRemote().sendText(message);
+         for (MyWebSocket webSocket : webSocketSet) {
+             System.out.println("websocket广播消息：" + message);
+             try {
+                 //服务器主动推送
+                 webSocket.session.getBasicRemote().sendText(message);
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }
      }
 
 
