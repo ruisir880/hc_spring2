@@ -54,7 +54,7 @@ public class PageQueryService {
                 if(StringUtils.isNotEmpty(endDate)) {
                     predicates.add(cb.lessThanOrEqualTo(root.get("generationTime").as(String.class), endDate));
                 }
-                query.orderBy(cb.asc(root.get("generationTime")));
+                query.orderBy(cb.desc(root.get("generationTime")));
                 return cb.and(predicates.toArray(new Predicate[0]));
             }
         };
@@ -84,7 +84,7 @@ public class PageQueryService {
                 if(StringUtils.isNotEmpty(endDate)) {
                     predicates.add(cb.lessThanOrEqualTo(root.get("alarmTime").as(String.class), endDate));
                 }
-                query.orderBy(cb.asc(root.get("alarmTime")));
+                query.orderBy(cb.desc(root.get("alarmTime")));
                 return cb.and(predicates.toArray(new Predicate[0]));
             }
         };

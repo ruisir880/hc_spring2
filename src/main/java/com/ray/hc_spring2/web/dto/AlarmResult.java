@@ -3,8 +3,8 @@ package com.ray.hc_spring2.web.dto;
 import java.io.Serializable;
 
 public class AlarmResult implements Serializable {
-    int code;
-    String msg;
+    private int code;
+    private String msg;
 
     public int getCode() {
         return code;

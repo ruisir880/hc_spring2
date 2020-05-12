@@ -1,11 +1,13 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.HcCache;
 import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.AlarmLog;
-import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.utils.DateUtil;
+import com.ray.hc_spring2.utils.ParseUtil;
 import com.ray.hc_spring2.web.dto.AlarmLogDto;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ray.hc_spring2.web.dto.AlarmLogListDto;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class AlarmLogController {
 
     @Autowired
     private PageQueryService pageQueryService;
+    @Autowired
+    private ParseUtil parseUtil;
 
     @RequestMapping(value ="/alarmLogList")
     public ModelAndView alarmLogList() {
@@ -35,7 +39,7 @@ public class AlarmLogController {
 
     @RequestMapping(value = "/queryAlarmLog",method = RequestMethod.GET)
     @ResponseBody
-    public AlarmLogDto queryUserPage(String page, String defenseArea, String alarmState, String startTime, String endTime) throws ParseException {
+    public AlarmLogListDto queryUserPage(String page, String defenseArea, String alarmState, String startTime, String endTime) throws ParseException {
         int pageInt = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
         Date startDate = null;
         Date endDate = null;
@@ -48,6 +52,15 @@ public class AlarmLogController {
         }
 
         Page<AlarmLog> alarmLogs = pageQueryService.queryAlarmLog(pageInt, alarmState, startDate, endDate);
-        return new AlarmLogDto(alarmLogs);
+
+        return new AlarmLogListDto(getAlarmLogListDto(alarmLogs),alarmLogs.getTotalElements(),alarmLogs.getNumber()+1,alarmLogs.getTotalPages());
+    }
+
+    private List<AlarmLogDto> getAlarmLogListDto(Page<AlarmLog> alarmLogs){
+        List<AlarmLogDto> alarmLogDtoList = new ArrayList();
+        for(AlarmLog log: alarmLogs.getContent()){
+            alarmLogDtoList.add(parseUtil.getAlarmLogDto(log));
+        }
+        return alarmLogDtoList;
     }
 }

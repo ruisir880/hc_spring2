@@ -79,6 +79,7 @@
         id bigint not null auto_increment,
         device_ip varchar(50),
         state varchar(50),
+        alarm_type varchar(50),
         alarm_time datetime default CURRENT_TIMESTAMP,
         end_time datetime,
         PRIMARY KEY (id)

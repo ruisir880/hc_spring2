@@ -9,9 +9,10 @@ public class AlarmLog implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;// 用户id
+    private long id;
     private String deviceIp;
     private String state;
+    private String alarmType;
     private Date alarmTime;
     private Date endTime;
 
@@ -31,6 +32,8 @@ public class AlarmLog implements Serializable {
     public void setDeviceIp(String deviceIp) {
         this.deviceIp = deviceIp;
     }
+
+
 
     public String getState() {
         return state;
@@ -54,5 +57,13 @@ public class AlarmLog implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getAlarmType() {
+        return alarmType;
+    }
+
+    public void setAlarmType(String alarmType) {
+        this.alarmType = alarmType;
     }
 }

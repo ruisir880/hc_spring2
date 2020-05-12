@@ -2,6 +2,9 @@ package com.ray.hc_spring2.utils;
 
 
 import com.ray.hc_spring2.HCNetSDK;
+import com.ray.hc_spring2.core.SpringContextUtils;
+import com.ray.hc_spring2.core.repository.AlarmLogRepository;
+import com.ray.hc_spring2.model.AlarmLog;
 import com.ray.hc_spring2.model.HcDevice;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
@@ -34,12 +37,15 @@ public class HCNetTools {
     FMSGCallBack fMSFCallBack;//报警回调函数实现
     NativeLong lAlarmHandle;//报警布防句柄
 
+    private AlarmLogRepository alarmLogRepository;
+
     public HCNetTools()
     {
         lUserID = new NativeLong(-1);
         lPreviewHandle = new NativeLong(-1);
         m_lPort = new NativeLongByReference(new NativeLong(-1));
         //fRealDataCallBack= new FRealDataCallBack();
+        alarmLogRepository = SpringContextUtils.getApplicationContext().getBean(AlarmLogRepository.class);
     }
 
     public int testDevice(HcDevice hcDevice){
@@ -164,6 +170,9 @@ public class HCNetTools {
                 //布放失败
                 return false;
             }
+        }else {
+            logger.warn(device.getIp() + "注册失败。");
+            return false;
         }
         return true;
     }
@@ -193,13 +202,9 @@ public class HCNetTools {
         {
             String sAlarmType = new String();
             //todo 插入数据库
-            // DefaultTableModel alarmTableModel = ((DefaultTableModel) jTableAlarm.getModel());//获取表格模型
-
-            String[] newRow = new String[3];
-            //报警时间
-            Date today = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String[] sIP = new String[2];
+            AlarmLog alarmLog = new AlarmLog();
+            alarmLog.setAlarmTime(new Date());
+            alarmLog.setDeviceIp(new String(pAlarmer.sDeviceIP).split("\0", 2)[0]);
 
             //lCommand是传的报警类型
             switch (lCommand.intValue())
@@ -242,15 +247,7 @@ public class HCNetTools {
                             sAlarmType = new String("非法访问");
                             break;
                     }
-
-                    newRow[0] = dateFormat.format(today);
-                    //报警类型
-                    newRow[1] = sAlarmType;
-                    //报警设备IP地址
-                    sIP = new String(pAlarmer.sDeviceIP).split("\0", 2);
-                    newRow[2] = sIP[0];
-                    // alarmTableModel.insertRow(0, newRow);
-                    System.out.println("============================");
+                    alarmLog.setAlarmType(sAlarmType);
                     break;
 
                 //8000报警
@@ -292,15 +289,7 @@ public class HCNetTools {
                             sAlarmType = new String("非法访问");
                             break;
                     }
-
-                    newRow[0] = dateFormat.format(today);
-                    //报警类型
-                    newRow[1] = sAlarmType;
-                    //报警设备IP地址
-                    sIP = new String(pAlarmer.sDeviceIP).split("\0", 2);
-                    newRow[2] = sIP[0];
-                    //  alarmTableModel.insertRow(0, newRow);
-                    System.out.println("++++++++++++++++++++++++++++++++++=");
+                    alarmLog.setAlarmType(sAlarmType);
                     break;
 
                 //ATM DVR transaction information
@@ -314,9 +303,11 @@ public class HCNetTools {
                     break;
 
                 default:
-                    logger.error("未知报警类型");
+                    alarmLog.setAlarmType("未知");
                     break;
             }
+            logger.warn(alarmLog.getDeviceIp()+"报警, 报警类型:"+ alarmLog.getAlarmType());
+           // alarmLogRepository.save(alarmLog);
         }
     }
 

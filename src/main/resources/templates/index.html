@@ -8,7 +8,9 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/zTree/jquery.ztree.core-3.2.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <script type="text/javascript">
+        var hasResult =true;
         /**退出系统**/
         function logout(){
             if(confirm("您确定要退出本系统吗？")){
@@ -150,31 +152,48 @@
                 $(document).ajaxStart(onStart).ajaxSuccess(onStop);
                 // 异步加载"系统管理"下的菜单
                 loadMenu('SYSTEM','dleft_tab1')
-            }else  if('left_tab2' == tabid){
-                $(document).ajaxStart(onStart).ajaxSuccess(onStop);
-                // 异步加载"业务模块"下的菜单
-                loadMenu('SYSTEMMOULE', 'dleft_tab1');
-            }else  if('left_tab4' == tabid){
-                left_menu_cnt.hide(10, 'linear');
-                rightMain("${ctxPath}/alarmLogList");
-                $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">告警日志</span>');
-            }
-            else  if('left_tab5' == tabid){
-                left_menu_cnt.hide(10, 'linear');
-                rightMain("${ctxPath}/operationLogList");
-                $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">操作日志</span>');
+            }else {
+                hideLeft();
+                if ('left_tab0' == tabid) {
+                    // 加载主界面
+                    rightMain("${ctxPath}/main");
+                } else if ('left_tab2' == tabid) {
+                    $(document).ajaxStart(onStart).ajaxSuccess(onStop);
+                    // 异步加载"业务模块"下的菜单
+                    loadMenu('SYSTEMMOULE', 'dleft_tab1');
+                } else if ('left_tab4' == tabid) {
+                    left_menu_cnt.hide(10, 'linear');
+                    rightMain("${ctxPath}/alarmLogList");
+                    $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">告警日志</span>');
+                } else if ('left_tab5' == tabid) {
+                    left_menu_cnt.hide(10, 'linear');
+                    rightMain("${ctxPath}/operationLogList");
+                    $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">操作日志</span>');
 
-            }else  if('left_tab7' == tabid){
-                $.ajax({
-                    type:"POST",
-                    url:"${ctxPath}/startOrCancelAlarm",
-                    dataType : "text",
-                    success:function(result){
-                        if(result.code=="0"){
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:result.msg, ok:true,});
-                        }
+                } else if ('left_tab7' == tabid) {
+                    if(hasResult){
+                        hasResult = false;
+                        $.ajax({
+                            type: "POST",
+                            url: "${ctxPath}/startOrCancelAlarm",
+                            success: function (result) {
+                                hasResult = true;
+                                var icon = 'error';
+                                if (result.code == "0") {
+                                     icon='succeed';
+                                }
+                                art.dialog({
+                                    icon: icon,
+                                    title: '友情提示',
+                                    drag: false,
+                                    resize: false,
+                                    content: result.msg,
+                                    ok: true,
+                                });
+                            }
+                        });
                     }
-                });
+                }
             }
         }
 
@@ -256,17 +275,20 @@
         </div>
         <div id="top_close">
             <a href="javascript:void(0);" onclick="logout();" target="_parent">
-                <img alt="退出系统" title="退出系统"  src="${ctxPath}/images/common/close.jpg" style="position: relative; top: 10px; left: 25px;">
+                <img alt="退出系统" title="退出系统"  src="${ctxPath}/images/common/close.jpg" style="position: relative; top: 0px; left: 25px;">
             </a>
         </div>
     </div>
 </div>
 <!-- side menu start -->
-<div id="side">
+<div id="side" style="width:60px">
     <div id="left_menu">
         <ul id="TabPage2" style="height:200px; margin-top:50px;">
+            <li id="left_tab0" class="selected" onClick="javascript:switchTab('TabPage2','left_tab0');" title="主界面">
+                <img alt="主界面" title="主界面"  src="${ctxPath}/images/common/dashboard.jpg" width="33" height="31">
+            </li>
 
-            <li id="left_tab1" class="selected" onClick="javascript:switchTab('TabPage2','left_tab1');" title="系统设置">
+            <li id="left_tab1" onClick="javascript:switchTab('TabPage2','left_tab1');" title="系统设置">
                 <img alt="系统模块" title="系统设置"  src="${ctxPath}/images/common/system.jpg" width="33" height="31">
             </li>
 
@@ -299,7 +321,7 @@
             </a>
         </div>
     </div>
-    <div id="left_menu_cnt">
+    <div id="left_menu_cnt" hidden>
         <div id="nav_module">
             <img  src="${ctxPath}/images/common/module_1.png" width="126" height="35"/>
         </div>
@@ -337,11 +359,7 @@
             $('#main').css({left:'280px'});
         }else{
             if ( left_menu_cnt.is(":visible") ) {
-                left_menu_cnt.hide(10, 'linear');
-                side.css({width:'60px'});
-                $('#top_nav').css({width:'100%', left:'60px', 'padding-left':'28px'});
-                $('#main').css({left:'60px'});
-                $("#show_hide_btn").find('img').attr('src', '${ctxPath}/images/common/nav_show.png');
+              hideLeft();
             } else {
                 left_menu_cnt.show(500, 'linear');
                 side.css({width:'280px'});
@@ -351,12 +369,22 @@
             }
         }
     }
+    
+    function hideLeft() {
+        var side = $('#side');
+        var left_menu_cnt = $('#left_menu_cnt');
+        left_menu_cnt.hide(10, 'linear');
+        side.css({width:'60px'});
+        $('#top_nav').css({width:'100%', left:'60px', 'padding-left':'28px'});
+        $('#main').css({left:'60px'});
+        $("#show_hide_btn").find('img').attr('src', '${ctxPath}/images/common/nav_show.png');
+    }
 </script>
 <!-- side menu start -->
-<div id="top_nav">
+<div id="top_nav0" style="width:100%;left:60px;padding-left:28px">
     <span id="here_area">当前位置：系统&nbsp;>&nbsp;系统介绍</span>
 </div>
-<div id="main">
+<div id="main" style="left: 60px">
     <iframe name="right" id="rightMain"  src="${ctxPath}/main.html" frameborder="no" scrolling="auto" width="100%" height="100%" allowtransparency="true"/>
 </div>
 

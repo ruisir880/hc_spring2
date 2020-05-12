@@ -1,5 +1,7 @@
 package com.ray.hc_spring2.model;
 
+import com.ray.hc_spring2.core.HcCache;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -73,5 +75,11 @@ public class HcDevice implements Serializable {
 
     public void setDefenseArea(DefenseArea defenseArea) {
         this.defenseArea = defenseArea;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof HcDevice && ((HcDevice) obj).getId().equals(this.id) && ((HcDevice) obj).getIp().equals(ip);
     }
 }

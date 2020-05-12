@@ -22,6 +22,7 @@ function search(page){
             for (var i in result.alarmLogs) {
                 elem = result.alarmLogs[i]
                 item = "<tr><td>"+elem.defenseArea
+                    +"</td> <td>"+elem.alarmType
                     +"</td> <td>"+elem.state
                     +"</td> <td>"+elem.alarmTime
                     +"</td> <td>"+elem.endTime
@@ -35,7 +36,7 @@ function search(page){
 }
 
 function initHtml() {
-    $("#operationLogTable tr:not(:first)").empty("");
+    $("#alarmLogListTable tr:not(:first)").empty("");
     $("#totalCount").empty()
     $("#page").empty()
 }
