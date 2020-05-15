@@ -41,6 +41,8 @@
 			}
 			document.getElementById("areaDiv"+index).className="selected";
 			document.getElementById("areaSpan"+index).className="selection";
+			window.location.href = "${ctxPath}/main";
+
 		}
 
 	</script>
@@ -325,18 +327,18 @@
 						<li>
 							<div id="areaNode1" class="icon02">
 								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode1');" />
-								<span id="areaSpan1" class="selection" onclick="choseDefenseArea('areaNode1');">防区1</span>
+								<span id="areaSpan1" class="selection" ondblclick="choseDefenseArea('areaNode1');">防区1</span>
 							</div>
 						</li>
 						<li>
 							<div id="areaNode2" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode2');"/>
-								<span id="areaSpan2" onclick="choseDefenseArea('areaNode2');">防区2</span>
+								<span id="areaSpan2" ondblclick="choseDefenseArea('areaNode2');">防区2</span>
 							</div>
 						</li>
 						<li><div id="areaNode3" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode3');"/>
-							<span id="areaSpan3" onclick="choseDefenseArea('areaNode3');">防区3</span></div></li>
+							<span id="areaSpan3" ondblclick="choseDefenseArea('areaNode3');">防区3</span></div></li>
 						<li><div id="areaNode4" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode4');"/>
-							<span id="areaSpan4" onclick="choseDefenseArea('areaNode4');">防区4</span></div></li>
+							<span id="areaSpan4" ondblclick="choseDefenseArea('areaNode4');">防区4</span></div></li>
 					</ul>
 				</li>
 			</ul>
@@ -373,7 +375,7 @@
 			<ul>
 				<li>
 					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc1' events='false' width="300" height="250">
-						<param name='mrl' value='${url}' />
+						<param name='mrl' value='${url0}' />
 						<param name='volume' value='50' />
 						<param name='autoplay' value='true' />
 						<param name='loop' value='true' />
@@ -383,7 +385,7 @@
 				</li>
 				<li style="left:350px ">
 					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc2' events='false' width="300" height="250">
-						<param name='mrl' value='${url2}' />
+						<param name='mrl' value='${url1}' />
 						<param name='volume' value='50' />
 						<param name='autoplay' value='true' />
 						<param name='loop' value='true' />
@@ -393,7 +395,7 @@
 				</li>
 				<li>
 					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc3' events='false' width="300" height="250">
-						<param name='mrl' value='${url}' />
+						<param name='mrl' value='${url2}' />
 						<param name='volume' value='50' />
 						<param name='autoplay' value='true' />
 						<param name='loop' value='true' />
@@ -403,7 +405,7 @@
 				</li>
 				<li style="left:350px">
 					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc4' events='false' width="300" height="250">
-						<param name='mrl' value='${url2}' />
+						<param name='mrl' value='${url3}' />
 						<param name='volume' value='50' />
 						<param name='autoplay' value='true' />
 						<param name='loop' value='true' />
