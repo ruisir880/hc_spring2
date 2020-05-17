@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.model.DefenseArea;
@@ -73,6 +74,7 @@ public class DeviceController {
         device.setIp(ip);
         device.setPassword(password);
         device.setPort(port);
+        device.setDeviceType(DeviceType.WebCame.toString());
         if(StringUtils.isNotEmpty(defenseArea)){
             DefenseArea area = new DefenseArea();
             area.setId(Long.valueOf(defenseArea));

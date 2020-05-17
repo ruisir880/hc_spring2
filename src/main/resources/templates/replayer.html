@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+
+    <script src="../codebase/webVideoCtrl.js"></script>
+    <script type="text/javascript">
+        var g_iWndIndex = 0; //可以不用设置这个变量，有窗口参数的接口中，不用传值，开发包会默认使用当前选择窗口
+        $(function () {
+            // 检查插件是否已经安装过
+            var iRet = WebVideoCtrl.I_CheckPluginInstall();
+            if (-2 == iRet) {
+                console.log("您的Chrome浏览器版本过高，不支持NPAPI插件！");
+                return;
+            } else if (-1 == iRet) {
+                console.log("您还未安装过插件，双击开发包目录里的WebComponentsKit.exe安装！");
+                return;
+            }
+
+            // 初始化插件参数及插入插件
+            WebVideoCtrl.I_InitPlugin(600, 600, {
+                bWndFull: true,//是否支持单窗口双击全屏，默认支持 true:支持 false:不支持
+                iWndowType: 1
+            });
+            var yq = WebVideoCtrl.I_InsertOBJECTPlugin("divPlugin");
+
+            console.log("容器是否成功"+yq=="0"?"ok":"faile");
+            // 检查插件是否最新
+            if (-1 == WebVideoCtrl.I_CheckPluginVersion()) {
+                console.log("检测到新的插件版本，双击开发包目录里的WebComponentsKit.exe升级！");
+                return;
+            }
+            clickLogout();
+            //登陆
+            var iRet = WebVideoCtrl.I_Login("192.168.1.2", 1, "8000", "admin", "special101", {
+                success: function (xmlDoc) {
+                    console.log(" 登录成功！");
+                    setTimeout(function () {
+                        getChannelInfo();
+                    }, 10);
+                },
+                error: function () {
+                    console.log(szIP + " 登录失败！");
+                }
+            });
+
+            if (-1 == iRet) {
+                console.log(szIP + " 已登录过！");
+            }
+
+
+
+
+
+        });
+
+        //停止回放
+        function clickStopPlayback() {
+
+            var iRet = WebVideoCtrl.I_Stop();
+            if (0 == iRet) {
+                console.log("停止回放成功！");
+            } else {
+                console.log("停止回放失败！");
+            }
+
+        }
+
+        function yl(){
+            //预览
+            var iRet = WebVideoCtrl.I_StartRealPlay("192.168.1.2", {
+                iStreamType: 1,
+                iChannelID: "1",
+                bZeroChannel: false
+            });
+
+            if (0 == iRet) {
+                console.log("开始预览成功！");
+            } else {
+                console.log("开始预览失败！");
+            }
+
+        }
+
+        //回放
+        function hf(){
+            var ip = "192.168.1.2";
+            var iChannelId = 1;
+            var startTime = $("sTime").val();
+            var endTime = $("eTime").val();
+            iRet = -1;
+
+            var oWndInfo = WebVideoCtrl.I_GetWindowStatus(g_iWndIndex);
+            console.log(WebVideoCtrl);
+            // 初始化插件参数及插入插件
+            WebVideoCtrl.I_InitPlugin(600, 600, {
+                bWndFull: true,//是否支持单窗口双击全屏，默认支持 true:支持 false:不支持
+                iWndowType: 1
+            });
+
+            if (oWndInfo != null) {// 已经在播放了，先停止
+                WebVideoCtrl.I_Stop();
+                console.log("已经在播放了，先停止");
+            }else{
+                var iRet = WebVideoCtrl.I_StartPlayback( "192.168.1.2", {
+                    iChannelID: 1,
+                    szStartTime: "2017-09-24 00:30:00",
+                    szEndTime: "2017-09-24 00:40:10"
+                });
+
+
+                if (0 == iRet) {
+                    console.log("开始回放成功！");
+                } else {
+                    console.log("开始回放失败！");
+                    console.log("I_GetLastError()="+I_GetLastError());
+                }
+            }
+        }
+
+
+
+        //获取通道
+        function getChannelInfo() {
+            var szIP = "192.168.5.240";
+            // 模拟通道
+            WebVideoCtrl.I_GetAnalogChannelInfo(szIP, {
+                async: false,
+                success: function (xmlDoc) {
+                    var oChannels = $(xmlDoc).find("VideoInputChannel");
+
+                    $.each(oChannels, function (i) {
+                        console.log(i)
+                    });
+                },
+                error: function () {
+                    console.log(szIP + " 获取模拟通道失败！");
+                }
+            });
+            // 数字通道
+            WebVideoCtrl.I_GetDigitalChannelInfo(szIP, {
+                async: false,
+                success: function (xmlDoc) {
+                    var oChannels = $(xmlDoc).find("InputProxyChannelStatus");
+
+                    $.each(oChannels, function (i) {
+
+                    });
+                    console.log(szIP + " 获取数字通道成功！");
+                },
+                error: function () {
+                    console.log(szIP + " 获取数字通道失败！");
+                }
+            });
+            // 零通道
+            WebVideoCtrl.I_GetZeroChannelInfo(szIP, {
+                async: false,
+                success: function (xmlDoc) {
+                    var oChannels = $(xmlDoc).find("ZeroVideoChannel");
+
+                    $.each(oChannels, function (i) {
+
+                    });
+                    console.log(szIP + " 获取零通道成功！");
+                },
+                error: function () {
+                    console.log(szIP + " 获取零通道失败！");
+                }
+            });
+        }
+
+
+        //退出
+        function clickLogout() {
+            var szIP = "192.168.5.240";
+            szInfo = "";
+
+            if (szIP == "") {
+                return;
+            }
+
+            var iRet = WebVideoCtrl.I_Logout(szIP);
+            if (0 == iRet) {
+                console.log("退出成功！");
+            } else {
+                console.log("退出失败！");
+            }
+        }
+        function test(){
+            console.log(I_GetWindowStatus());
+            console.log("I_GetLastError()="+I_GetLastError());
+        }
+    </script>
+</head>
+<body>
+
+<div id="divPlugin" class="plugin"></div>
+<input type="button" value="预览" onclick="yl()">
+<input type="button" value="回放" onclick="hf()">
+<input type="button" value="stop" onclick="clickStopPlayback()">
+<input type="button" value="show" onclick="test()">
+<input type="text" id="sTime" width="100px" value="2017-09-02 15:22:12">
+<input type="text" id="eTime" width="100px" value="2017-09-02 15:32:12">
+</body>
+</html>

@@ -12,6 +12,7 @@
         account varchar(50) not null,
         password varchar(50) not null,
         defense_area_id bigint,
+        device_type varchar(50),
         PRIMARY KEY (id),
         FOREIGN KEY (defense_area_id) REFERENCES defense_area (id)
     )character set = utf8;
@@ -47,6 +48,8 @@
         primary key (id)
     )character set = utf8;
     alter table privilege_info add constraint uq_privilegename unique (privilege_name);
+
+
 
     create table user_role_map(
       user_id bigint not null,

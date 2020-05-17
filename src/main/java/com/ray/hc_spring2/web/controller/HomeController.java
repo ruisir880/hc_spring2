@@ -45,6 +45,12 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value ="/login")
+    public ModelAndView loginHtml() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
 
 
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
@@ -70,7 +76,7 @@ public class HomeController {
             modelAndView.setViewName("login");
             return modelAndView;
         }
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 

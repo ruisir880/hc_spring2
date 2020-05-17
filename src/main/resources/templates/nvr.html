@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/nvr.js"></script>
+    <title>监控系统</title>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<style>
+    body{
+        margin:0;
+    }
+    .main{
+        position: absolute;
+        top: 60px;
+        left:30px;
+        width:960px;
+        margin:0 auto;
+    }
+    .left{
+        position: absolute;
+        display: block;
+        left: 10px;
+        top: 0px;
+        height:500px;
+        width: 300px;
+        /* line-height:120px; */
+    }
+    .middle{
+        position: absolute;
+        left: 280px;
+        top: 0px;
+        height:500px;
+        width: 440px;
+        display: block;
+
+    }
+    .right{
+        position: absolute;
+        left: 750px;
+        top: 0px;
+        height:500px;
+        width: 820px;
+        display: block;
+    }
+</style>
+<body>
+<div id="nav_links">
+    <div id="page_close">
+        <a href="javascript:parent.$.fancybox.close();">
+            <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+        </a>
+    </div>
+</div>
+<div class="main">
+    <div class="left">
+
+    <td class="ui_content">
+        <form id="editNvr" action="">
+            <h3>录像机设置</h3>
+            <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                <p hidden><input value="${device.id}" id="deviceId" name="deviceId"></p>
+                <tr>
+                    <td class="ui_text_lt" width="80">IP地址</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="deviceIp" name="deviceIp"  class="ui_input_txt02" value="${device.ip}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">管理员账户</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="account" name="account" value="${device.account}"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">管理员密码</td>
+                    <td class="ui_text_lt">
+                        <input type="password" id="password" name="password"  class="ui_input_txt02" value="${device.password}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt" width="6">端口</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="port" name="port" value="${device.port}" class="ui_input_txt02"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+    </div>
+
+    <div class="middle">
+        <div class="ui_content">
+            选中设备IP：  <input type="text" id="selectedDevice" name="selectedDevice" value=""  class="ui_input_txt02" disabled="true"/>
+            <div class="ui_tb">
+                <table class="table" id="deviceListTable" cellspacing="0" cellpadding="0" width="100%" align="center" border="0" onselect="onselectIPC(1)">
+                    <tr>
+                        <th>防区</th>
+                        <th>IP地址</th>
+                        <th>管理员账户</th>
+                        <th>管理员密码</th>
+                        <th>端口</th>
+                        <th>选择</th>
+                    </tr>
+                    @if(!isEmpty(deviceList)){
+                    @for(device in deviceList){
+                    <tr>
+                        <td>${device.defenseArea.defenseName}</td>
+                        <td>${device.ip}</td>
+                        <td>${device.account}</td>
+                        <td>${device.password}</td>
+                        <td>${device.port}</td>
+                        <td>&nbsp;<input type="button" value="选择" onclick="onselectIPC('${device.ip}')" class="ui_input_btn01"/></td>
+                    </tr>
+                    @}
+                    @}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="right">
+        <div class="ui_content">
+            选中通道：  <input type="text" id="selectedChannel" name="selectedChannel" value=""  class="ui_input_txt02" disabled="true"/>
+            &nbsp;<input id="bindIpcChannel" type="button" value="添加" class="ui_input_btn01" onclick="addChannel()"/>
+            &nbsp;<input id="channelDelete" type="button" value="删除" class="ui_input_btn01" onclick="deleteChannel()"/>
+            &nbsp;<input id="refresh" type="button" value="刷新" class="ui_input_btn01" onclick="refreshNvr()"/>
+            <div class="ui_tb">
+                <table class="table" onselect="" id="nvrChannelTable" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                    <tr>
+                        <td>序号</td>
+                        <th>通道号</th>
+                        <th>IP地址</th>
+                        <th>端口号</th>
+                        <th>IP通道号</th>
+                        <th>是否在线</th>
+                        <th>选择</th>
+                    </tr>
+                    @if(!isEmpty(nvrChannels)){
+                    @for(channelInfo in nvrChannels){
+                    <tr>
+                        <td>${channelInfo.no}</td>
+                        <td>${channelInfo.channelNo}</td>
+                        <td>${channelInfo.ipcIp}</td>
+                        <td>${channelInfo.ipcPort}</td>
+                        <td>${channelInfo.ipChannel}</td>
+                        <td>${channelInfo.online}</td>
+                        <td>&nbsp;<input type="button" value="选择" onclick="onselectChannel('${channelInfo.channelNo}')" class="ui_input_btn01"/></td>
+                    </tr>
+                    @}
+                    @}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

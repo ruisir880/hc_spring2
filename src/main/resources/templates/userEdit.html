@@ -121,13 +121,25 @@
                         <input type="text" id="email" name="email"  class="ui_input_txt02" value="${userInfo.email}" />
                     </td>
                 </tr>
-                <!--<tr>-->
-                    <!--<td class="ui_text_lt" width="80">用户权限</td>-->
-                    <!--<td class="ui_text_lt">-->
-                        <!--编辑用户<input type="checkbox" value=""/>-->
-                        <!--&nbsp;添加用户<input type="checkbox" value=""/>-->
-                    <!--</td>-->
-                <!--</tr>-->
+
+                <tr>
+                    <td class="ui_text_lt">用户角色</td>
+                    <td class="ui_text_lt">
+                        <select name="role" id="role" class="ui_select01">
+                            <option value="">--请选择--</option>
+                            <option value="admin"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="admin"){
+                                    selected="true"
+                                    @}
+                            >管理员</option>
+                            <option value="projectManager"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="normalUser"){
+                                    selected="true"
+                                    @}
+                            >普通用户</option>
+                        </select>
+                    </td>
+                </tr>
 
 
                 <tr>

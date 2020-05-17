@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript">
+
+        function assignPriv() {
+            var checkList = $("input[type='checkbox']")
+            var arrayObj = new Array();
+            for(var i in checkList){
+                if(checkList[i].checked) {
+                    if (i > 0) {
+                        arrayObj.push(checkList[i].name.substring(7))
+                    }
+                }
+            }
+            $.ajax({
+                type:"POST",
+                url:"${ctxPath}/updatePrivilege",
+                data:{"roleId":$("#role").val(),
+                "privilegeIds":arrayObj},
+                dataType : "text",
+                success:function(data) {
+                    if(data=="0"){
+                        art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'分配成功', ok:true,});
+                    }else {
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'分配失败', ok:true,});
+                    }
+                }
+            });
+        }
+        
+        function roleChange() {
+            $("input[type='checkbox']").attr("checked", false);
+            $.ajax({
+                type:"GET",
+                url:"${ctxPath}/getPrivilegeByRole",
+                data:{"roleId":$("#role").val()},
+                dataType : "text",
+                success:function(data) {
+                    if (data != "") {
+                        var list = data.split(',')
+                        var item
+                        for (var i in list) {
+                            item = "#IDCheck"+list[i];
+                            $(item).attr("checked", true);
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+    <style>
+        .alt td{ background:black !important;}
+    </style>
+</head>
+<body>
+<form id="submitForm" name="submitForm" action="" method="get">
+    <div id="container">
+        <div class="ui_content">
+            <div class="ui_text_indent">
+                <div id="box_border">
+                    <div id="box_top">搜索</div>
+                    <div id="box_center">
+                        角色：
+                        <select name="role" id="role" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;" onchange="roleChange();">
+                            @if(!isEmpty(roleList)){
+                            @for(role in roleList){
+                            <option value="${role.id}">${role.description}</option>
+                            @}
+                            @}
+                        </select>
+                    </div>
+                    <div id="box_bottom">
+                        <input type="button" value="分配" class="ui_input_btn01" onclick="assignPriv();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui_content">
+            <div class="ui_tb">
+                <table class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                    <tr>
+                        </th>
+                        <th width="30"><input type="checkbox" id="all" onclick="selectOrClearAllCheckbox(this);" />
+                        <th>名称</th>
+                    </tr>
+                    @if(!isEmpty(privileges)){
+                    @for(elem in privileges){
+                    <tr>
+                        </td>
+                        <td><input type="checkbox" id=${"IDCheck"+elem.id} name=${"IDCheck"+elem.id} value="${elem.id}"
+                                   @if(!isEmpty(privilegeIdList)){
+                                   @if(array.contain(privilegeIdList,elem.id)){
+                                   checked="checked"
+                                   @}
+                                   @}
+                                   class="acb" /></td>
+                        <td>${elem.description}</td>
+                    </tr>
+                    @}
+                    @}
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

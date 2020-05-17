@@ -1,6 +1,8 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.repository.PrivilegeRepository;
 import com.ray.hc_spring2.core.service.UserInfoService;
+import com.ray.hc_spring2.model.PrivilegeInfo;
 import com.ray.hc_spring2.model.UserInfo;
 import com.ray.hc_spring2.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserInfoController {
+
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -70,10 +76,10 @@ public class UserInfoController {
     }
 
     @GetMapping("/userEdit")
-    @RequiresPermissions("user.edit")
     public ModelAndView userEdit(long userId) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = userInfoService.findById(userId);
+        List<PrivilegeInfo> privilegeInfos =  privilegeRepository.findAll();
         modelAndView.addObject("userInfo",userInfo);
         modelAndView.setViewName("userEdit");
         return modelAndView;

@@ -2,6 +2,7 @@ insert into user_info(username,password,real_name,mobile,salt) value ('admin','4
 
 
 insert into role_info(role_name,description) values('admin','管理员');
+insert into role_info(role_name,description) values('normalUser','普通用户');
 
 
 insert into privilege_info (privilege_name,description) values('system.management','系统设置');
@@ -12,3 +13,11 @@ insert into privilege_info (privilege_name,description) values('operation.log','
 insert into privilege_info (privilege_name,description) values('terminal.list','终端查询');
 insert into privilege_info (privilege_name,description) values('oneTouch','一键布撤防');
 
+insert into defense_area (defense_name) values(1);
+insert into defense_area (defense_name) values(2);
+insert into defense_area (defense_name) values(3);
+insert into defense_area (defense_name) values(4);
+
+insert into user_role_map values(1,1);
+
+insert into role_privilege_map(role_id,privilege_id) values(1,1);

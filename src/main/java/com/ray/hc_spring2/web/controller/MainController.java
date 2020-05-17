@@ -1,10 +1,13 @@
 package com.ray.hc_spring2.web.controller;
 
 import com.ray.hc_spring2.core.constant.Constants;
+import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.AlarmLog;
+import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.ParseUtil;
 import com.ray.hc_spring2.web.dto.AlarmLogDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,18 +23,36 @@ public class MainController {
 
     private List<AlarmLogDto> latestAlarmLogs = new ArrayList<>();
 
+    public static final String RTSP = "rtsp://%s:%s@%s:554/h264/ch1/main/av_stream";
+
     @Autowired
     private PageQueryService pageQueryService;
     @Autowired
     private ParseUtil parseUtil;
+    @Autowired
+    private DeviceService deviceService;
 
     @RequestMapping(value ="/main")
-    public ModelAndView mainHtml() {
+    public ModelAndView mainHtml(String area) {
         ModelAndView modelAndView = new ModelAndView();
+        area = StringUtils.isBlank(area) ? "1" : area;
+        List<HcDevice> ipcList = deviceService.findByArea(area);
+        /*HcDevice ipc;
+        for (int i = 0; i < 4; i++) {
+            String url = "";
+            if (i + 1 <= ipcList.size()) {
+                ipc = ipcList.get(i);
+                url = String.format("rtsp://%s:%s@%s:%s/h264/ch1/main/av_stream", ipc.getAccount(), ipc.getPassword(), ipc.getIp(), ipc.getPort());
+            }
+            modelAndView.addObject("url" + i, url);
+        }*/
+        List<String> list = new ArrayList<>();
+        for (HcDevice ipc : ipcList) {
+            list.add(String.format(RTSP, ipc.getAccount(), ipc.getPassword(), ipc.getIp()));
+        }
+        modelAndView.addObject("urlList", list);
+        modelAndView.addObject("alarmLogList", getLatestAlarmLogs());
         modelAndView.setViewName("main");
-        modelAndView.addObject("url","rtsp://admin:Special101@192.168.1.64:554/h264/ch1/main/av_stream");
-        modelAndView.addObject("url2","rtsp://admin:Special101@192.168.1.65:554/h264/ch1/main/av_stream");
-        modelAndView.addObject("alarmLogList",getLatestAlarmLogs());
         return modelAndView;
     }
 
@@ -52,4 +73,16 @@ public class MainController {
     }
 
 
+    @RequestMapping(value ="/getVideoList")
+    @ResponseBody
+    public List<String> getVideoList(String area) {
+        List<String> list = new ArrayList<>();
+        area = StringUtils.isBlank(area) ? "1" : area;
+        List<HcDevice> ipcList = deviceService.findByArea(area);
+
+        for (HcDevice ipc : ipcList) {
+            list.add(String.format(RTSP, ipc.getAccount(), ipc.getPassword(), ipc.getIp(), ipc.getPort()));
+        }
+        return list;
+    }
 }

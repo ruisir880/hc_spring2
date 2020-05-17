@@ -14,4 +14,6 @@ public interface DeviceService {
 
     HcDevice findByIp(String ip);
     HcDevice findById(long id);
+
+    HcDevice findNvr();
 }

@@ -1,12 +1,16 @@
 package com.ray.hc_spring2.core.service;
 
 import com.ray.hc_spring2.HcSpring2Application;
+import com.ray.hc_spring2.core.SpringContextUtils;
 import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.repository.OperationLogRepository;
 import com.ray.hc_spring2.model.DefenseArea;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.model.OperationLog;
+import com.ray.hc_spring2.utils.NvrTools;
 import com.ray.hc_spring2.web.controller.HCController;
+import com.ray.hc_spring2.web.controller.NvrController;
+import com.ray.hc_spring2.web.dto.ReturnResultDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,8 @@ public class HCImplTest {
     @Autowired
     private DefenseAreaRepository defenseAreaRepository;
 
+    @Autowired
+    private NvrController nvrController;
 
     @Test
     public void findByUsername() {
@@ -91,6 +97,21 @@ public class HCImplTest {
         operationLogRepository.save(operationLogs);
     }
 
+    @Test
+    public void testSetChannel(){
+        NvrTools nvrTools = new NvrTools();
+        List<HcDevice> hcDevices = deviceService.findByAll();
+        HcDevice nvr = deviceService.findNvr();
+        nvrTools.deleteAllChanel();
+        nvrTools.saveChange();
+
+        int channelIndex =0 ;
+        for(HcDevice ipc : hcDevices){
+            nvrTools.setChannel(channelIndex,ipc);
+            nvrTools.saveChange();
+            nvrTools.release();
+        }
+    }
 
 
 }

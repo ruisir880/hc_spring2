@@ -50,9 +50,9 @@ public class HCNetTools {
         lPreviewHandle = new NativeLong(-1);
         m_lPort = new NativeLongByReference(new NativeLong(-1));
         //fRealDataCallBack= new FRealDataCallBack();
-        alarmLogRepository = SpringContextUtils.getApplicationContext().getBean(AlarmLogRepository.class);
+    /*    alarmLogRepository = SpringContextUtils.getApplicationContext().getBean(AlarmLogRepository.class);
         myWebSocket = SpringContextUtils.getApplicationContext().getBean(MyWebSocket.class);
-        hcCache = SpringContextUtils.getApplicationContext().getBean(HcCache.class);
+        hcCache = SpringContextUtils.getApplicationContext().getBean(HcCache.class);*/
     }
 
     public int testDevice(HcDevice hcDevice){
@@ -321,6 +321,13 @@ public class HCNetTools {
             }
             // alarmLogRepository.save(alarmLog);
         }
+    }
+
+    public void stopRealPlay(){
+        m_strClientInfo = new HCNetSDK.NET_DVR_CLIENTINFO();
+        m_strClientInfo.lChannel = new NativeLong(1);
+        hCNetSDK.NET_DVR_StopRealPlay(lUserID);
+        shutDownDev();
     }
 
 }

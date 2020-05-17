@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.core.service;
 
+import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.repository.DeviceRepository;
 import com.ray.hc_spring2.model.HcDevice;
 import org.apache.commons.lang3.StringUtils;
@@ -15,14 +16,14 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<HcDevice> findByArea(String defenseArea) {
         if(StringUtils.isNotEmpty(defenseArea)) {
-            return deviceRepository.findDevicesByDefenseArea(defenseArea);
+            return deviceRepository.findDevicesByDefenseAreaAndDeviceType(defenseArea, DeviceType.WebCame.toString());
         }
-        return deviceRepository.findAll();
+        return deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
     }
 
     @Override
     public List<HcDevice> findByAll() {
-        return deviceRepository.findAll();
+        return deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
     }
 
     public void saveDevice(HcDevice hcDevice){
@@ -42,6 +43,15 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public HcDevice findById(long id) {
         return deviceRepository.findById(id);
+    }
+
+    @Override
+    public HcDevice findNvr() {
+        List<HcDevice> hcDevices = deviceRepository.findDevicesByDeviceType(DeviceType.NVR.toString());
+        if(hcDevices.size()>0){
+            return hcDevices.get(0);
+        }
+        return null;
     }
 
 

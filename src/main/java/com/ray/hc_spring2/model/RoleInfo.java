@@ -26,19 +26,6 @@ public class RoleInfo implements Serializable {
             @JoinColumn(name = "privilegeId") })
     private List<PrivilegeInfo> permissions;
 
-    // 用户 - 角色关系定义;
-    @ManyToMany
-    @JoinTable(name = "UserRoleMap", joinColumns = { @JoinColumn(name = "roleId") }, inverseJoinColumns = {
-            @JoinColumn(name = "userId") })
-    private List<UserInfo> userInfos;// 一个角色对应多个用户
-
-    public List<UserInfo> getUserInfos() {
-        return userInfos;
-    }
-
-    public void setUserInfos(List<UserInfo> userInfos) {
-        this.userInfos = userInfos;
-    }
 
     public Long getId() {
         return id;

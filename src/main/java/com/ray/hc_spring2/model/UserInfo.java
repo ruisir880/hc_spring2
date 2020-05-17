@@ -3,6 +3,7 @@ package com.ray.hc_spring2.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by rui on 2018/8/12.
@@ -31,7 +32,6 @@ public class UserInfo implements Serializable {
     private String email;
 
     private Date generationTime;
-
 
     @ManyToOne(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
     @JoinTable(name = "UserRoleMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
@@ -78,13 +78,6 @@ public class UserInfo implements Serializable {
         this.salt = salt;
     }
 
-    public RoleInfo getRoleInfo() {
-        return roleInfo;
-    }
-
-    public void setRoleInfo(RoleInfo roleInfo) {
-        this.roleInfo = roleInfo;
-    }
 
     public String getMobile() {
         return mobile;
@@ -114,4 +107,12 @@ public class UserInfo implements Serializable {
         return this.username + this.salt;
     }
 
+
+    public RoleInfo getRoleInfo() {
+        return roleInfo;
+    }
+
+    public void setRoleInfo(RoleInfo roleInfo) {
+        this.roleInfo = roleInfo;
+    }
 }

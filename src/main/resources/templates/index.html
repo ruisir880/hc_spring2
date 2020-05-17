@@ -155,8 +155,11 @@
             }else {
                 hideLeft();
                 if ('left_tab0' == tabid) {
-                    // 加载主界面
+                    left_menu_cnt.hide(10, 'linear');
                     rightMain("${ctxPath}/main");
+                } else if ('left_tab3' == tabid) {
+                    left_menu_cnt.hide(10, 'linear');
+                    rightMain("${ctxPath}/nvr");
                 } else if ('left_tab2' == tabid) {
                     $(document).ajaxStart(onStart).ajaxSuccess(onStop);
                     // 异步加载"业务模块"下的菜单
@@ -164,12 +167,9 @@
                 } else if ('left_tab4' == tabid) {
                     left_menu_cnt.hide(10, 'linear');
                     rightMain("${ctxPath}/alarmLogList");
-                    $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">告警日志</span>');
                 } else if ('left_tab5' == tabid) {
                     left_menu_cnt.hide(10, 'linear');
                     rightMain("${ctxPath}/operationLogList");
-                    $('#here_area').html('当前位置：系统&nbsp;>&nbsp;<span style="color:#1A5CC6">操作日志</span>');
-
                 } else if ('left_tab7' == tabid) {
                     if(hasResult){
                         hasResult = false;

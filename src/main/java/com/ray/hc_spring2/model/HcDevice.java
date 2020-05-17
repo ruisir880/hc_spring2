@@ -21,6 +21,9 @@ public class HcDevice implements Serializable {
     @Column(nullable = false)
     private String port;
 
+    @Column
+    private String deviceType;
+
     @ManyToOne
     @JoinColumn(name = "defense_area_id")
     private DefenseArea defenseArea;
@@ -81,5 +84,13 @@ public class HcDevice implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof HcDevice && ((HcDevice) obj).getId().equals(this.id) && ((HcDevice) obj).getIp().equals(ip);
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 }

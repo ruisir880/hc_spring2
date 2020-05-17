@@ -1,23 +1,43 @@
 package com.ray.hc_spring2.utils;
 
+import com.ray.hc_spring2.HCNetSDK;
 import com.ray.hc_spring2.model.HcDevice;
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
 import org.junit.Test;
 
 public class VideoUtilTest {
 
-    @Test
-    public void startTranscodeAndGetTasker() {
-        HcDevice hcDevice = new HcDevice();
-        hcDevice.setAccount("admin");
-        hcDevice.setPassword("Special101");
-        hcDevice.setIp("192.168.1.64");
-        hcDevice.setPort("8000");
-        VideoUtil videoUtil = new VideoUtil();
-        videoUtil.startTranscodeAndGetTasker(hcDevice,hcDevice.getIp().replace(".",""));
-    }
 
     @Test
     public void webSocketTest(){
+        HCNetSDK hCNetSDK = HCNetSDK.INSTANCE;
+        NativeLong lUserID = new NativeLong(-1);
+        hCNetSDK.NET_DVR_Init();
 
+        HCNetSDK.NET_DVR_DEVICEINFO_V30 m_strDeviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V30();
+        lUserID = hCNetSDK.NET_DVR_Login_V30("192.168.1.2", Short.valueOf("8000"), "admin", "special101", m_strDeviceInfo);
+
+        HCNetSDK.NET_DVR_FILECOND m_strFilecond = new HCNetSDK.NET_DVR_FILECOND();
+        m_strFilecond.struStartTime = new HCNetSDK.NET_DVR_TIME();
+        m_strFilecond.struStopTime = new HCNetSDK.NET_DVR_TIME();
+        m_strFilecond.struStartTime.dwYear = 2020;
+        m_strFilecond.struStartTime.dwMonth = 5;
+        m_strFilecond.struStartTime.dwDay = 16;
+        m_strFilecond.struStartTime.dwHour = 0;
+        m_strFilecond.struStartTime.dwMinute = 0;
+        m_strFilecond.struStartTime.dwSecond = 0;
+        m_strFilecond.struStopTime.dwYear = 2020;//结束时间
+        m_strFilecond.struStopTime.dwMonth = 5;
+        m_strFilecond.struStopTime.dwDay = 16;
+        m_strFilecond.struStopTime.dwHour = 22;
+        m_strFilecond.lChannel = new NativeLong(1);//通道号
+
+        NativeLong lFindFile = hCNetSDK.NET_DVR_FindFile_V30(lUserID, m_strFilecond);
+
+        //setDVRConfigSuc是true，但是nvr并没有改变；
+        hCNetSDK.NET_DVR_Logout(lUserID);
+        hCNetSDK.NET_DVR_Cleanup();
     }
 }
