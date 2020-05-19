@@ -49,14 +49,17 @@ public class VideoUtilTest {
 
 
     @Test
-    public void testSocket() throws IOException {
+    public void testSocket() throws IOException, InterruptedException {
         Socket s = new Socket(InetAddress.getLocalHost(),10010);
         //获取输出流对象
         OutputStream os = s.getOutputStream();
-        //发送数据
-        String str = "10009,变电站,2010-05-14 10:09:00,防区3";
-        os.write(str.getBytes());
-        //释放
+
+        for(int i =0;i<3;i++) {
+            String str = "10009,变电站,2010-05-14 10:09:00,防区"+i;
+            os.write(str.getBytes());
+            os.flush();
+            Thread.sleep(500);
+        }
         s.close();
 
         System.out.println("防区1".substring(2));
