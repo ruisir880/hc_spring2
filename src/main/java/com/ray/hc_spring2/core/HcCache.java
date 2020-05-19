@@ -64,5 +64,10 @@ public class HcCache {
     }
 
 
+    public void clearIpDefenseAreaCache(String ip){
+        ipDefenseAreaCache.invalidate(ip);
+
+    }
+
 
 }

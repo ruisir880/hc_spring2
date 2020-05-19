@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.model.HcDevice;
@@ -22,6 +23,8 @@ import java.util.List;
 public class NvrController {
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private OperationLogComponent operationLogComponent;
     private NvrTools nvrTools = new NvrTools();
 
     @RequestMapping(value ="/nvr")
@@ -60,6 +63,7 @@ public class NvrController {
     @PostMapping(value ="/editNvr")
     @ResponseBody
     public int editNvr(String id,String ip,String account,String password, String port ) {
+        operationLogComponent.operate("编辑NVR");
         HcDevice device = new HcDevice();
         device.setId(StringUtils.isNoneBlank(id) ? Long.valueOf(id) : null);
         device.setAccount(account);

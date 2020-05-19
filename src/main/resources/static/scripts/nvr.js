@@ -85,7 +85,7 @@ function refreshNvr(){
                     + "</td> <td>" + channelInfo.ipcPort
                     + "</td> <td>" + channelInfo.ipChannel
                     + "</td> <td>" + channelInfo.online
-                    + "</td> <td> <input type=\"button\" value=\"选择\" onclick=\"onselectChannel("+channelInfo.channelNo+")\" class=\"ui_input_btn01\"/>"
+                    + "</td> <td> <input type=\"button\" value=\"选择\" onclick=\"onselectChannel('"+channelInfo.channelNo+"')\" class=\"ui_input_btn01\"/>"
                     + "</td> </tr>";
                 $("#nvrChannelTable").append(item);
             }

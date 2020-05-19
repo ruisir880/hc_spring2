@@ -1,5 +1,8 @@
 package com.ray.hc_spring2.model;
 
+import com.intelligt.modbus.jlibmodbus.utils.DataUtils;
+import com.ray.hc_spring2.utils.DateUtil;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -50,5 +53,10 @@ public class OperationLog implements Serializable {
 
     public void setGenerationTime(Date generationTime) {
         this.generationTime = generationTime;
+    }
+
+
+    public String getTimeFormat(){
+        return DateUtil.formatDate(this.generationTime);
     }
 }

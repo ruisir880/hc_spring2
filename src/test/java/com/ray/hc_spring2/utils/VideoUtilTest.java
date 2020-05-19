@@ -7,6 +7,12 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 public class VideoUtilTest {
 
 
@@ -39,5 +45,20 @@ public class VideoUtilTest {
         //setDVRConfigSuc是true，但是nvr并没有改变；
         hCNetSDK.NET_DVR_Logout(lUserID);
         hCNetSDK.NET_DVR_Cleanup();
+    }
+
+
+    @Test
+    public void testSocket() throws IOException {
+        Socket s = new Socket(InetAddress.getLocalHost(),10010);
+        //获取输出流对象
+        OutputStream os = s.getOutputStream();
+        //发送数据
+        String str = "10009,变电站,2010-05-14 10:09:00,防区3";
+        os.write(str.getBytes());
+        //释放
+        s.close();
+
+        System.out.println("防区1".substring(2));
     }
 }

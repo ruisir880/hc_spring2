@@ -19,9 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = HcSpring2Application.class)
+@SpringBootTest(classes = HcSpring2Application.class)*/
 public class HCImplTest {
 
     @Autowired

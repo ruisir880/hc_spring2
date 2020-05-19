@@ -4,12 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoader;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -69,8 +65,16 @@ public class CommonKit {
     public static String getWebPath() {
         String path = null;
         try {
-            path =  Paths.get(Thread.currentThread().getContextClassLoader().getResource("hclib").toURI()).toString();
-            path.replaceAll("/","\\");
+            URI uri = Thread.currentThread().getContextClassLoader().getResource("hclib").toURI();
+            logger.info("====================="+uri);
+            logger.info("====================="+uri.toString());
+            if(uri.toString().startsWith("jar:file:")){
+                path = uri.toString().split("jar:file:/")[1].split("hc.jar")[0]+"hclib";
+                logger.info("====================="+path);
+            }else {
+                path = Paths.get(Thread.currentThread().getContextClassLoader().getResource("hclib").toURI()).toString();
+            }
+            path =path.replace("/", "\\");
         } catch (URISyntaxException e) {
             logger.error("Error occurs when get hclib path",e);
         }

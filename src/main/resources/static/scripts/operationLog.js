@@ -23,7 +23,7 @@ function search(page){
                 elem = result.operationLogList[i]
                 item = "<tr><td>"+elem.user
                     +"</td> <td>"+elem.operation
-                    +"</td> <td>"+elem.generationTime
+                    +"</td> <td>"+elem.timeFormat
                     +"</td> </tr>";
                 $('.table').append(item);
             }

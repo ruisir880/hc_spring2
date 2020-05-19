@@ -1,6 +1,7 @@
 package com.ray.hc_spring2.web.controller;
 
 import com.google.common.base.Joiner;
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.HCNetTools;
@@ -20,6 +21,8 @@ public class HCController {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private OperationLogComponent operationLogComponent;
 
     private List<String> failedIpList = new ArrayList<>();
 
@@ -33,24 +36,22 @@ public class HCController {
     public AlarmResult startOrCancelAlarm() {
         failedIpList.clear();
         if (isAlarm) {
+            operationLogComponent.operate("撤防");
             cancelAlarmHandler();
             int code = failedIpList.size();
             AlarmResult alarmResult = new AlarmResult();
             alarmResult.setCode(code);
             alarmResult.setMsg(code == 0 ? "撤防成功" : Joiner.on(",").join(failedIpList) + "撤防失败");
-            if(code == 0){
-                isAlarm = false;
-            }
+            isAlarm = false;
             return alarmResult;
         }
+        operationLogComponent.operate("布防");
         startAlarmHandler();
         int code = failedIpList.size();
         AlarmResult alarmResult = new AlarmResult();
         alarmResult.setCode(code);
         alarmResult.setMsg(code == 0 ? "布防成功" : Joiner.on(",").join(failedIpList) + "布防失败");
-        if(code == 0){
-            isAlarm = true;
-        }
+        isAlarm = true;
         return alarmResult;
     }
 

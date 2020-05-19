@@ -12,7 +12,7 @@ public class CommonKitTest {
 
     @Test
     public void getWebPath() {
-        System.out.println(CommonKit.getWebPath());
-        HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary(CommonKit.getWebPath()+"\\HCNetSDK", HCNetSDK.class);
+
+        System.out.println("D:/workspace/hc_spring2/hc_spring2/target/hclib".replace("/", "\\"));
     }
 }

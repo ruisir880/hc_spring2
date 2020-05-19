@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.repository.PrivilegeRepository;
 import com.ray.hc_spring2.core.service.UserInfoService;
 import com.ray.hc_spring2.model.PrivilegeInfo;
@@ -25,6 +26,9 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Autowired
+    private OperationLogComponent operationLogComponent;
+
     @RequestMapping(value ="/userAdd")
     public ModelAndView userAdd() {
         ModelAndView modelAndView = new ModelAndView();
@@ -44,6 +48,7 @@ public class UserInfoController {
     @RequestMapping(value = {"/editUser","/addUser"}, method = RequestMethod.POST )
     @ResponseBody
     public int userInfoAdd(String uid,String username,String password,String realName,String mobile,String email) throws ExecutionException {
+        operationLogComponent.operate("编辑用户");
         UserInfo user = new UserInfo();
         if(StringUtils.isNotEmpty(uid)){
             user.setUid(Long.valueOf(uid));

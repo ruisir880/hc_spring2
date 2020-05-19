@@ -25,7 +25,7 @@ public class HomeController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("result","");
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 
@@ -52,6 +52,12 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = { "/oneTouch"})
+    public ModelAndView oneTouch() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("oneTouch");
+        return modelAndView;
+    }
 
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {

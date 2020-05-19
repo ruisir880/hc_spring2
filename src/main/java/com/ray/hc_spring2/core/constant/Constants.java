@@ -19,4 +19,6 @@ public class Constants {
     public static final String[] resultNames = {"成功", "初始化失败", "注册前请关闭预览", "注册失败", "通道获取失败"};
 
     public static final String UNKNOWN = "unknown";
+    public static final String SYSTEM_LOCAL = "LOCAL";
+    public static final String SYSTEM_REMOTE = "REMOTE";
 }

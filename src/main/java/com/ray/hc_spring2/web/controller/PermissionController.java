@@ -1,6 +1,7 @@
 package com.ray.hc_spring2.web.controller;
 
 import com.google.common.base.Joiner;
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.repository.PrivilegeRepository;
 import com.ray.hc_spring2.core.repository.RoleRepository;
 import com.ray.hc_spring2.model.PrivilegeInfo;
@@ -26,6 +27,8 @@ public class PermissionController {
     private PrivilegeRepository privilegeRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private OperationLogComponent operationLogComponent;
 
     @GetMapping(value = "/privilegeList" )
     public ModelAndView monitorPointEdit(){
@@ -45,6 +48,7 @@ public class PermissionController {
     @PostMapping(value = "/updatePrivilege" )
     @ResponseBody
     public int updatePrivilege(long roleId, @RequestParam(required = false, value = "privilegeIds[]") List<Long> idList){
+        operationLogComponent.operate("编辑权限");
         List<PrivilegeInfo> permissions = (List<PrivilegeInfo>) privilegeRepository.findAll(idList);
         RoleInfo roleInfo = roleRepository.findById(roleId);
         roleInfo.setPermissions(permissions);

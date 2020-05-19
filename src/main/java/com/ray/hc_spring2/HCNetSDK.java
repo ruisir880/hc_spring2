@@ -16,6 +16,7 @@
 
 package com.ray.hc_spring2;
 
+import com.ray.hc_spring2.utils.CommonKit;
 import com.sun.jna.*;
 import com.sun.jna.examples.win32.GDI32.RECT;
 import com.sun.jna.examples.win32.W32API;
@@ -29,7 +30,7 @@ import com.sun.jna.win32.StdCallLibrary;
 //SDK接口说明,HCNetSDK.dll
 public interface HCNetSDK extends StdCallLibrary {
 
-    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary("D:\\workspace\\hc_spring2\\hc_spring2\\target\\classes\\hclib\\HCNetSDK",
+    HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary(CommonKit.getWebPath()+"\\HCNetSDK",
             HCNetSDK.class);
     /***宏定义***/
     //常量
@@ -3056,7 +3057,7 @@ public static class RECV_ALARM extends Structure {
 //播放库函数声明,PlayCtrl.dll
 interface PlayCtrl extends StdCallLibrary
 {
-    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary("D:\\workspace\\hc_spring2\\hc_spring2\\target\\classes\\hclib\\PlayCtrl",
+    PlayCtrl INSTANCE = (PlayCtrl) Native.loadLibrary(CommonKit.getWebPath()+"\\PlayCtrl",
             PlayCtrl.class);
 
     public static final int STREAME_REALTIME = 0;

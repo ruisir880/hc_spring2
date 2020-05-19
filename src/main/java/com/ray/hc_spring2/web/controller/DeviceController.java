@@ -1,5 +1,7 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.HcCache;
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.service.DeviceService;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import sun.swing.StringUIClientPropertyKey;
 
 import java.util.List;
 
@@ -24,6 +25,10 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private DefenseAreaRepository defenseAreaRepository;
+    @Autowired
+    private HcCache hcCache;
+    @Autowired
+    private OperationLogComponent operationLogComponent;
 
     private HCNetTools tools = new HCNetTools();
 
@@ -68,6 +73,7 @@ public class DeviceController {
     @PostMapping(value ="/editDevice")
     @ResponseBody
     public int editDevice(String id,String ip,String account,String password, String port ,String defenseArea) {
+        operationLogComponent.operate("编辑摄像设备");
         HcDevice device = new HcDevice();
         device.setId(StringUtils.isNoneBlank(id) ? Long.valueOf(id) : null);
         device.setAccount(account);
@@ -89,6 +95,7 @@ public class DeviceController {
         int result= tools.testDevice(device);
         if( result== 0) {
             deviceService.saveDevice(device);
+            hcCache.clearIpDefenseAreaCache(device.getIp());
         }
         return result;
     }

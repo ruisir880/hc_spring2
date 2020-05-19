@@ -32,6 +32,7 @@
 		}
 
 		function choseDefenseArea(node){
+			 $("#videoListUl").empty();
 			var areaNode = document.getElementById(node);
 			var index = areaNode.getAttribute("id").substr(8);
 			for(var i =1;i<5;i++){
@@ -45,7 +46,8 @@
 			$.ajax({
 				type: "GET",
 				url: "${ctxPath}/getVideoList",
-				data: {"area":index},
+				data: {"area":index,
+					"time":new Date().getTime()},
 				success: function (result) {
 					$("#videoListUl li").empty("");
 					var item;
@@ -400,12 +402,13 @@
 				@if(!isEmpty(urlList)){
 				@for(url in urlList){
 				<li>
-					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" events='false' width="300" height="250">
+					<object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" events='false' width="400" height="350">
 						<param name='mrl' value='${url}' />
 						<param name='volume' value='50' />
 						<param name='autoplay' value='true' />
 						<param name='loop' value='true' />
 						<param name='fullscreen' value='true' />
+						<param name='toolbar' value='true'>
 						<param name='controls' value='true' />
 					</object>
 				</li>

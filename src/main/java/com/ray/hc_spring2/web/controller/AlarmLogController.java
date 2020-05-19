@@ -1,6 +1,7 @@
 package com.ray.hc_spring2.web.controller;
 
 import com.ray.hc_spring2.core.HcCache;
+import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.AlarmLog;
 import com.ray.hc_spring2.utils.DateUtil;
@@ -29,6 +30,8 @@ public class AlarmLogController {
     private PageQueryService pageQueryService;
     @Autowired
     private ParseUtil parseUtil;
+    @Autowired
+    private OperationLogComponent operationLogComponent;
 
     @RequestMapping(value ="/alarmLogList")
     public ModelAndView alarmLogList() {
@@ -40,6 +43,7 @@ public class AlarmLogController {
     @RequestMapping(value = "/queryAlarmLog",method = RequestMethod.GET)
     @ResponseBody
     public AlarmLogListDto queryUserPage(String page, String defenseArea, String alarmState, String startTime, String endTime) throws ParseException {
+        operationLogComponent.operate("查询警告记录");
         int pageInt = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
         Date startDate = null;
         Date endDate = null;
