@@ -1,36 +1,27 @@
 package com.ray.hc_spring2.core;
 
-import com.google.common.base.Splitter;
-import com.ray.hc_spring2.core.constant.Constants;
-import com.ray.hc_spring2.execptions.MsgReadException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import groovy.grape.GrapeIvy;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.charset.Charset;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
-/**
- * nio socket服务端
- */
-public class SocketServer {
+public class SockTest {
+    private static int LISTEN_PORT = 10010;
 
-    private static Logger log = LoggerFactory.getLogger(SocketServer.class);
-    private static final String CONTENT_PATTERN = ".+,.+";
-
-    private static Pattern pattern = Pattern.compile(CONTENT_PATTERN,Pattern.DOTALL);
+    //解码buffer
+    private Charset cs = Charset.forName("UTF-8");
     private static ByteBuffer rBuffer = ByteBuffer.allocate(1024);
-    private WarnComponent warnComponent  = SpringContextUtils.getApplicationContext().getBean(WarnComponent.class);
+    public static void main(String[] args) {
+        SockTest sockTest = new SockTest();
+
+        sockTest.startSocketServer(10010);
+    }
 
 
     public void startSocketServer(int port){
@@ -55,7 +46,7 @@ public class SocketServer {
                         newSocket(key,selector);
                     }
                     if (key.isReadable()) {
-
+                        // 有请求进来
                         SocketChannel sc = (SocketChannel) key.channel();
                         int bytesEchoed = 0;
                         rBuffer.clear();
@@ -65,7 +56,7 @@ public class SocketServer {
                             byte[] content = new byte[rBuffer.limit()];
                             rBuffer.get(content);
                             String result = new String(content, "utf-8");
-                            dealMsg(result);
+                            System.out.println("bytesEchoed:" + result);
                         }
                         if (bytesEchoed == -1) {
                             System.out.println("connect finish!over!");
@@ -96,24 +87,6 @@ public class SocketServer {
         sc.configureBlocking(false);
         SelectionKey newKey = sc.register(selector, SelectionKey.OP_READ);
         System.out.println("Got connection from " + sc);
-    }
-
-
-
-    private void dealMsg(String msg){
-        try {
-            log.info("接受到光纤系统的信息：" + msg);
-            if (!pattern.matcher(msg).matches()) {
-                throw new MsgReadException(String.format("Message %s content is not legal.",msg));
-            }
-            List<String> stringList = Splitter.on(",").splitToList(msg);
-            String defenseArea = stringList.get(3).substring(2);
-            log.info("防区："+defenseArea);
-            warnComponent.addWarn(defenseArea, Constants.SYSTEM_REMOTE);
-        }catch (Exception e){
-            log.error("Error occurs when receive msg from other system.",e);
-        }
-
     }
 
 }

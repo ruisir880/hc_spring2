@@ -1,6 +1,5 @@
 package com.ray.hc_spring2.model;
 
-import com.intelligt.modbus.jlibmodbus.utils.DataUtils;
 import com.ray.hc_spring2.utils.DateUtil;
 
 import javax.persistence.*;
