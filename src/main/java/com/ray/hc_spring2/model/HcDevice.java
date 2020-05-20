@@ -1,6 +1,9 @@
 package com.ray.hc_spring2.model;
 
 import com.ray.hc_spring2.core.HcCache;
+import com.ray.hc_spring2.core.constant.Constants;
+import com.ray.hc_spring2.core.constant.DeviceType;
+import org.aspectj.apache.bcel.classfile.Constant;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -92,5 +95,18 @@ public class HcDevice implements Serializable {
 
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public String getArea(){
+        return defenseArea == null?"":defenseArea.getDefenseName();
+    }
+
+    public String getType(){
+        if(deviceType.equalsIgnoreCase(DeviceType.WebCame.toString())){
+            return "摄像头";
+        }else if(deviceType.equalsIgnoreCase(DeviceType.Controller.toString())){
+            return "控制器";
+        }
+        return "";
     }
 }

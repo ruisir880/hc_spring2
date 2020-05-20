@@ -21,6 +21,25 @@
                 }
             });
 
+            $("#openController").click(function() {
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/openController",
+                    dataType : "text",
+                    success:function(data){
+                    }
+                });
+            });
+            $("#closeController").click(function() {
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/closeController",
+                    dataType : "text",
+                    success:function(data){
+                    }
+                });
+            });
+
             /*
              * 取消
              */
@@ -46,13 +65,14 @@
             var password = $('#password').val();
             var port = $("#port").val();
             var defenseArea = $("#defenseArea").val();
+            var type = $("#type").val();
 
-            if(deviceIp!="" && account!="" && password!=""&& port!=""&& defenseArea!=""){
+            if(deviceIp!="" && port!="" && type!=""){
                 $.ajax({
                     type:"POST",
                     url:"${ctxPath}/editDevice",
                     data:{"id":deviceId,"ip":deviceIp,"account":account, "password":password,
-                        "port":port, "defenseArea":defenseArea},
+                        "port":port, "defenseArea":defenseArea,"type":type},
                     dataType : "text",
                     success:function(data){
                        if(data=="0"){
@@ -108,6 +128,7 @@
                     <td class="ui_text_lt">
                         <input type="text" id="port" name="port" value="${device.port}" class="ui_input_txt02"/>
                     </td>
+                    控制器端口502
                 </tr>
 
                 <tr>
@@ -130,10 +151,37 @@
                 </tr>
 
                 <tr>
+                    <td class="ui_text_lt">类型</td>
+                    <td class="ui_text_lt">
+                        <select name="type" id="type" class="ui_select01">
+                            <option value="">--请选择--</option>
+                            <option value="WebCame"
+                                    @if(!isEmpty(device.deviceType) && device.deviceType=="WebCame"){
+                                    selected="true"
+                                    @}
+                            >摄像头</option>
+                            <option value="Controller"
+                                    @if(!isEmpty(device.deviceType) && device.deviceType=="Controller"){
+                                    selected="true"
+                                    @}
+                            >控制器</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
                     <td>&nbsp;</td>
                     <td class="ui_text_lt">
                         &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
                         &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="openController" type="button" value="打开测试控制器" class="ui_input_btn01"/>
+                        &nbsp;<input id="closeController" type="button" value="关闭测试控制器" class="ui_input_btn01"/>
                     </td>
                 </tr>
             </table>

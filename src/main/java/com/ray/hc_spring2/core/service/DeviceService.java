@@ -16,4 +16,6 @@ public interface DeviceService {
     HcDevice findById(long id);
 
     HcDevice findNvr();
+
+    HcDevice findController();
 }

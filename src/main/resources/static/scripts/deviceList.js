@@ -26,7 +26,8 @@ function search(){
             var elem;
             for (var i in result) {
                 elem = result[i]
-                item = "<tr><td>"+elem.defenseArea.defenseName
+                item = "<tr><td>"+elem.area
+                    +"</td> <td>"+elem.type
                     +"</td> <td>"+elem.ip
                     +"</td> <td>"+elem.account
                     +"</td> <td>"+elem.password

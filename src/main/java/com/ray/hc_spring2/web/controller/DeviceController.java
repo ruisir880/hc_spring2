@@ -1,6 +1,7 @@
 package com.ray.hc_spring2.web.controller;
 
 import com.ray.hc_spring2.core.HcCache;
+import com.ray.hc_spring2.core.ModbusComponent;
 import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
@@ -29,6 +30,8 @@ public class DeviceController {
     private HcCache hcCache;
     @Autowired
     private OperationLogComponent operationLogComponent;
+    @Autowired
+    private ModbusComponent modbusComponent;
 
     private HCNetTools tools = new HCNetTools();
 
@@ -72,31 +75,59 @@ public class DeviceController {
 
     @PostMapping(value ="/editDevice")
     @ResponseBody
-    public int editDevice(String id,String ip,String account,String password, String port ,String defenseArea) {
-        operationLogComponent.operate("编辑摄像设备");
+    public int editDevice(String id,String ip,String account,String password, String port ,String defenseArea,String type) {
+        operationLogComponent.operate("编辑设备");
+        boolean isWebCam = type.equals(DeviceType.WebCame.toString());
         HcDevice device = new HcDevice();
         device.setId(StringUtils.isNoneBlank(id) ? Long.valueOf(id) : null);
-        device.setAccount(account);
+        device.setAccount(isWebCam ? account : "*");
         device.setIp(ip);
-        device.setPassword(password);
+        device.setPassword(isWebCam ? password : "*");
         device.setPort(port);
-        device.setDeviceType(DeviceType.WebCame.toString());
-        if(StringUtils.isNotEmpty(defenseArea)){
+        device.setDeviceType(type);
+        if (StringUtils.isNotEmpty(defenseArea)) {
             DefenseArea area = new DefenseArea();
             area.setId(Long.valueOf(defenseArea));
             device.setDefenseArea(area);
         }
-
-        if(StringUtils.isEmpty(id)) {
+        //新添加查询是否已经存在
+        if (StringUtils.isEmpty(id)) {
             if (deviceService.findByIp(ip) != null) {
                 return -1;
             }
         }
-        int result= tools.testDevice(device);
-        if( result== 0) {
+        int result = 0;
+        if (isWebCam) {
+            result = tools.testDevice(device);
+        }
+
+        if (result == 0) {
             deviceService.saveDevice(device);
             hcCache.clearIpDefenseAreaCache(device.getIp());
         }
         return result;
     }
+
+    @PostMapping(value ="/openController")
+    @ResponseBody
+    public int openController() {
+        HcDevice conDevice = deviceService.findController();
+        modbusComponent.startWarnArea(conDevice.getIp(),1);
+        modbusComponent.startWarnArea(conDevice.getIp(),2);
+        modbusComponent.startWarnArea(conDevice.getIp(),3);
+        modbusComponent.startWarnArea(conDevice.getIp(),4);
+        return 0;
+    }
+
+    @PostMapping(value ="/closeController")
+    @ResponseBody
+    public int closeController() {
+        HcDevice conDevice = deviceService.findController();
+        modbusComponent.stopWarn(conDevice.getIp(),1);
+        modbusComponent.stopWarn(conDevice.getIp(),2);
+        modbusComponent.stopWarn(conDevice.getIp(),3);
+        modbusComponent.stopWarn(conDevice.getIp(),4);
+        return 0;
+    }
+
 }

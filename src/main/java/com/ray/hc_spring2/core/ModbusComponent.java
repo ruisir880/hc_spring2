@@ -14,21 +14,21 @@ import java.net.InetAddress;
 @Component
 public class ModbusComponent {
     private static Logger log = LoggerFactory.getLogger(ModbusComponent.class);
-    public void startWarnArea(int area){
-
+    public void startWarnArea(String ip ,int area){
+        sendOrder(ip,area,true);
     }
 
-    public void stopWarn(int area){
-
+    public void stopWarn(String ip ,int area){
+        sendOrder(ip,area,false);
     }
 
-    private void dd(int area, boolean open){
+    private void sendOrder(String ip ,int area, boolean open){
         try {
             // 设置主机TCP参数
             TcpParameters tcpParameters = new TcpParameters();
 
             // 设置TCP的ip地址
-            InetAddress adress = InetAddress.getByName("127.0.0.1");
+            InetAddress adress = InetAddress.getByName(ip);
 
             // TCP参数设置ip地址
             // tcpParameters.setHost(InetAddress.getLocalHost());

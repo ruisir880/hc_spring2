@@ -18,12 +18,14 @@ public class DeviceServiceImpl implements DeviceService {
         if(StringUtils.isNotEmpty(defenseArea)) {
             return deviceRepository.findDevicesByDefenseAreaAndDeviceType(defenseArea, DeviceType.WebCame.toString());
         }
-        return deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
+        return findByAll();
     }
 
     @Override
     public List<HcDevice> findByAll() {
-        return deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
+        List<HcDevice> devices = deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
+        devices.addAll(deviceRepository.findDevicesByDeviceType(DeviceType.Controller.toString())) ;
+        return devices;
     }
 
     public void saveDevice(HcDevice hcDevice){
@@ -53,6 +55,16 @@ public class DeviceServiceImpl implements DeviceService {
         }
         return null;
     }
+
+    @Override
+    public HcDevice findController() {
+        List<HcDevice> hcDevices = deviceRepository.findDevicesByDeviceType(DeviceType.Controller.toString());
+        if(hcDevices.size()>0){
+            return hcDevices.get(0);
+        }
+        return null;
+    }
+
 
 
 }
