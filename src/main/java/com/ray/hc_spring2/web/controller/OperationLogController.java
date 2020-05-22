@@ -4,6 +4,7 @@ import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.OperationLog;
 import com.ray.hc_spring2.utils.DateUtil;
 import com.ray.hc_spring2.web.dto.OperationLogDto;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class OperationLogController {
 
 
     @RequestMapping(value ="/operationLogList")
+    @RequiresPermissions("operation.log")//权限管理;
     public ModelAndView operationLogList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("operationLogList");
@@ -32,6 +34,7 @@ public class OperationLogController {
     }
 
     @RequestMapping(value = "/queryOperationLog",method = RequestMethod.GET)
+    @RequiresPermissions("operation.log")//权限管理;
     @ResponseBody
     public OperationLogDto queryOperationLog(String page,String operator,String startTime,String endTime) throws ParseException {
         int pageInt = StringUtils.isEmpty(page) ? 1:Integer.valueOf(page);

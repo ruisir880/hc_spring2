@@ -28,6 +28,12 @@ public class DeviceServiceImpl implements DeviceService {
         return devices;
     }
 
+    @Override
+    public List<HcDevice> findByAllWebCam() {
+        List<HcDevice> devices = deviceRepository.findDevicesByDeviceType(DeviceType.WebCame.toString());
+        return devices;
+    }
+
     public void saveDevice(HcDevice hcDevice){
         deviceRepository.save(hcDevice);
     }

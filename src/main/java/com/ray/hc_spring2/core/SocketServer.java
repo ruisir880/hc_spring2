@@ -57,20 +57,27 @@ public class SocketServer {
                     if (key.isReadable()) {
 
                         SocketChannel sc = (SocketChannel) key.channel();
-                        int bytesEchoed = 0;
+                        int count = 0;
                         rBuffer.clear();
 
-                        while ((bytesEchoed = sc.read(rBuffer)) > 0) {
-                            rBuffer.flip();
-                            byte[] content = new byte[rBuffer.limit()];
-                            rBuffer.get(content);
-                            String result = new String(content, "utf-8");
-                            dealMsg(result);
-                        }
-                        if (bytesEchoed == -1) {
-                            System.out.println("connect finish!over!");
+                        try {
+                            while ((count = sc.read(rBuffer)) > 0) {
+                                rBuffer.flip();
+                                byte[] content = new byte[rBuffer.limit()];
+                                rBuffer.get(content);
+                                String result = new String(content, "utf-8");
+                                dealMsg(result);
+                            }
+                            if (count == -1) {
+                                System.out.println("connect finish!over!");
+                                sc.close();
+                                break;
+                            }
+                        }catch (Exception e){
+                            log.warn("光纤系统关闭连接.",e);
+                            key.cancel();
+                            sc.socket().close();
                             sc.close();
-                            break;
                         }
                     }
                 }

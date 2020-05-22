@@ -52,13 +52,6 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value = { "/oneTouch"})
-    public ModelAndView oneTouch() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("oneTouch");
-        return modelAndView;
-    }
-
     @RequestMapping(value = { "login" }, method = RequestMethod.POST)
     public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {
         ModelAndView modelAndView = new ModelAndView();

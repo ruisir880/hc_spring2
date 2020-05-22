@@ -10,4 +10,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface AlarmLogRepository extends CrudRepository<AlarmLog, Long> {
 
     Page<AlarmLog> findAll(Specification<AlarmLog> spec, Pageable pageable);
+    AlarmLog findById(long id);
 }

@@ -3,6 +3,7 @@ package com.ray.hc_spring2.web.controller;
 import com.ray.hc_spring2.core.HcCache;
 import com.ray.hc_spring2.core.ModbusComponent;
 import com.ray.hc_spring2.core.OperationLogComponent;
+import com.ray.hc_spring2.core.WarnComponent;
 import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.service.DeviceService;
@@ -10,6 +11,9 @@ import com.ray.hc_spring2.model.DefenseArea;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.HCNetTools;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class DeviceController {
+    private static Logger log = LoggerFactory.getLogger(DeviceController.class);
 
     @Autowired
     private DeviceService deviceService;
@@ -30,12 +36,12 @@ public class DeviceController {
     private HcCache hcCache;
     @Autowired
     private OperationLogComponent operationLogComponent;
-    @Autowired
-    private ModbusComponent modbusComponent;
+
 
     private HCNetTools tools = new HCNetTools();
 
     @RequestMapping(value ="/deviceEdit")
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView deviceEdit(String deviceId ) {
         ModelAndView modelAndView = new ModelAndView();
         HcDevice device = new HcDevice();
@@ -49,6 +55,7 @@ public class DeviceController {
     }
 
     @RequestMapping(value ="/deviceList")
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView deviceList(String defenseArea) {
         ModelAndView modelAndView = new ModelAndView();
         List<HcDevice> hcDevices = deviceService.findByArea(defenseArea);
@@ -59,6 +66,7 @@ public class DeviceController {
     }
 
     @RequestMapping(value ="/queryDevices")
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public List<HcDevice> queryDevices(String defenseArea) {
         ModelAndView modelAndView = new ModelAndView();
@@ -67,6 +75,7 @@ public class DeviceController {
     }
 
     @PostMapping(value ="/deleteDevice")
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public int deleteDevice(long deviceId) {
         deviceService.deleteById(Long.valueOf(deviceId));
@@ -74,6 +83,7 @@ public class DeviceController {
     }
 
     @PostMapping(value ="/editDevice")
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public int editDevice(String id,String ip,String account,String password, String port ,String defenseArea,String type) {
         operationLogComponent.operate("编辑设备");
@@ -106,28 +116,6 @@ public class DeviceController {
             hcCache.clearIpDefenseAreaCache(device.getIp());
         }
         return result;
-    }
-
-    @PostMapping(value ="/openController")
-    @ResponseBody
-    public int openController() {
-        HcDevice conDevice = deviceService.findController();
-        modbusComponent.startWarnArea(conDevice.getIp(),1);
-        modbusComponent.startWarnArea(conDevice.getIp(),2);
-        modbusComponent.startWarnArea(conDevice.getIp(),3);
-        modbusComponent.startWarnArea(conDevice.getIp(),4);
-        return 0;
-    }
-
-    @PostMapping(value ="/closeController")
-    @ResponseBody
-    public int closeController() {
-        HcDevice conDevice = deviceService.findController();
-        modbusComponent.stopWarn(conDevice.getIp(),1);
-        modbusComponent.stopWarn(conDevice.getIp(),2);
-        modbusComponent.stopWarn(conDevice.getIp(),3);
-        modbusComponent.stopWarn(conDevice.getIp(),4);
-        return 0;
     }
 
 }

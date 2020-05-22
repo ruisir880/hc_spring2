@@ -7,10 +7,9 @@ insert into role_info(role_name,description) values('normalUser','普通用户')
 
 insert into privilege_info (privilege_name,description) values('system.management','系统设置');
 insert into privilege_info (privilege_name,description) values('defence.management','防区设置');
-insert into privilege_info (privilege_name,description) values('video.management','防区');
+insert into privilege_info (privilege_name,description) values('video.management','视频设置');
 insert into privilege_info (privilege_name,description) values('alarm.log','报警日志');
 insert into privilege_info (privilege_name,description) values('operation.log','操作日志');
-insert into privilege_info (privilege_name,description) values('terminal.list','终端查询');
 insert into privilege_info (privilege_name,description) values('oneTouch','一键布撤防');
 
 insert into defense_area (defense_name) values(1);

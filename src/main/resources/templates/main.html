@@ -2,76 +2,13 @@
 <html>
 <head>
 	<script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
-	<script type="text/javascript"  src="${ctxPath}/scripts/websocket.js"></script>
+	<script type="text/javascript"  src="${ctxPath}/scripts/main.js"></script>
+	<script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+
 	<meta charset="utf-8"/>
 	<title>监控系统</title>
 
-	<script type="text/javascript">
-		function load() {
-			var tr = $("#latestLogTable tr:not(:first)");
-			tr.empty("");
-			$.ajax({
-				type: "GET",
-				url: "${ctxPath}/latestLog",
-				success: function (result) {
-					var item;
-					var elem;
-					for (var i in result) {
-						elem = result[i]
-						item = "<tr><td>"+ ++i
-								+"</td> <td>"+elem.defenseArea
-								+"</td> <td>"+elem.alarmType
-								+"</td> <td>"+elem.state
-								+"</td> <td>"+elem.alarmTime
-								+"</td> <td>"+elem.endTime
-								+"</td> </tr>";
-						$('.table').append(item);
-					}
-				}
-			});
-		}
 
-		function choseDefenseArea(node){
-			 $("#videoListUl").empty();
-			var areaNode = document.getElementById(node);
-			var index = areaNode.getAttribute("id").substr(8);
-			for(var i =1;i<5;i++){
-				var area = document.getElementById("areaDiv"+i);
-				area.className="";
-				document.getElementById("areaSpan"+i).className="";
-			}
-			document.getElementById("areaDiv"+index).className="selected";
-			document.getElementById("areaSpan"+index).className="selection";
-			//window.location.href = "${ctxPath}/main?area="+index;
-			$.ajax({
-				type: "GET",
-				url: "${ctxPath}/getVideoList",
-				data: {"area":index,
-					"time":new Date().getTime()},
-				success: function (result) {
-					$("#videoListUl li").empty("");
-					var item;
-					var elem;
-					for (var i in result) {
-						elem = result[i]
-								item = "<li style=\"left:350px\">\n" +
-								"<object type='application/x-vlc-plugin' pluginspage=\"http://www.videolan.org/\" id='vlc'"+i +
-										" events='false' width=\"300\" height=\"250\">\n" +
-								"<param name='mrl' value='" +elem+ "' />\n" +
-								"<param name='volume' value='50' />\n" +
-								"<param name='autoplay' value='true' />\n" +
-								"<param name='loop' value='true' />\n" +
-								"<param name='fullscreen' value='true' />\n" +
-								"<param name='controls' value='true' />\n" +
-								"</object>\n" +
-								"</li>";
-						$('#videoListUl').append(item);
-					}
-				}
-			});
-		}
-
-	</script>
 </head>
 <style>
 	body{
@@ -247,7 +184,7 @@
 		border:1px solid red;
 	}
 	.meetting-icon{
-        	background-image: url(${ctxPath}/images/common/icon01.jpg);
+        background-image: url(${ctxPath}/images/common/icon01.jpg);
 		background-repeat: no-repeat;
 		/*background-color: red;*/
 		/*background:url(icon01.jpg) -980px -70px no-repeat; */
@@ -326,11 +263,11 @@
 		padding: 5px;
 	}
 	.btn_rectangle {
-		width: 164px;
+		width: 120px;
 		height: 40px;
 		background: blue;
 		position: absolute;
-		left: 88px;
+
 		top: 149px;
 		cursor: pointer;
 		text-align: center;
@@ -428,39 +365,47 @@
 			<ul>
 				<li>
 					<span>灯1</span>
-					<img src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light1" src="${ctxPath}/images/common/light-icon.jpg" />
 				</li>
 				<li>
 					<span>灯2</span>
-					<img src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light2" src="${ctxPath}/images/common/light-icon.jpg" />
 				</li>
 				<li>
 					<span>灯3</span>
-					<img src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light3"  src="${ctxPath}/images/common/light-icon.jpg" />
 				</li>
 				<li>
 					<span>灯4</span>
-					<img src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light4"  src="${ctxPath}/images/common/light-icon.jpg" />
 				</li>
 			</ul>
 		</div>
 		<div class="buzzer_area">
 			<div class="buzzer01">蜂鸣器</div>
-			<img src="${ctxPath}/images/common/buzzer-icon.jpg" />
+			<img id="buzzer" src="${ctxPath}/images/common/buzzer-icon.jpg" />
 		</div>
-		<div class="btn_rectangle">
-			<span>一键消除报警></span>
+		<div class="btn_rectangle"  style="left: 40px;" onclick="startAlarm()">
+			<span>一键打开报警</span>
 		</div>
+		<div class="btn_rectangle" style="right: 40px;" onclick="stopAlarm()">
+			<span>一键消除报警</span>
+		</div>
+
 	</div>
 	<div class="record_area">
 		<table id="latestLogTable">
-			<tr>
-				<th>序号</th>
-				<th>防区</th>
-				<th>报警状态</th>
-				<th>报警时间</th>
-				<th>结束时间</th>
-			</tr>
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>防区</th>
+					<th>报警状态</th>
+					<th>报警时间</th>
+					<th>结束时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
 			@if(!isEmpty(alarmLogList)){
 			@for(alarm in alarmLogList){
 			<tr>
@@ -470,9 +415,11 @@
 				<td>${alarm.state}</td>
 				<td>${alarm.alarmTime}</td>
 				<td>${alarm.endTime}</td>
+				<td><input type="button" value="处理" onclick="dealWarn('${alarm.id}')" class="ui_input_btn01"/></td>
 			</tr>
 			@}
 			@}
+			</tbody>
 		</table>
 	</div>
 </div>

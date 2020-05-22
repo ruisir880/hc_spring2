@@ -21,24 +21,6 @@
                 }
             });
 
-            $("#openController").click(function() {
-                $.ajax({
-                    type:"POST",
-                    url:"${ctxPath}/openController",
-                    dataType : "text",
-                    success:function(data){
-                    }
-                });
-            });
-            $("#closeController").click(function() {
-                $.ajax({
-                    type:"POST",
-                    url:"${ctxPath}/closeController",
-                    dataType : "text",
-                    success:function(data){
-                    }
-                });
-            });
 
             /*
              * 取消
@@ -128,7 +110,6 @@
                     <td class="ui_text_lt">
                         <input type="text" id="port" name="port" value="${device.port}" class="ui_input_txt02"/>
                     </td>
-                    控制器端口502
                 </tr>
 
                 <tr>
@@ -177,13 +158,6 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td>&nbsp;</td>
-                    <td class="ui_text_lt">
-                        &nbsp;<input id="openController" type="button" value="打开测试控制器" class="ui_input_btn01"/>
-                        &nbsp;<input id="closeController" type="button" value="关闭测试控制器" class="ui_input_btn01"/>
-                    </td>
-                </tr>
             </table>
             </form>
         </div>

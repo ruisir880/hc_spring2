@@ -8,6 +8,7 @@ import com.ray.hc_spring2.utils.DateUtil;
 import com.ray.hc_spring2.utils.ParseUtil;
 import com.ray.hc_spring2.web.dto.AlarmLogDto;
 import com.ray.hc_spring2.web.dto.AlarmLogListDto;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class AlarmLogController {
     private OperationLogComponent operationLogComponent;
 
     @RequestMapping(value ="/alarmLogList")
+    @RequiresPermissions("alarm.log")//权限管理;
     public ModelAndView alarmLogList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("alarmLogList");
@@ -41,6 +43,7 @@ public class AlarmLogController {
     }
 
     @RequestMapping(value = "/queryAlarmLog",method = RequestMethod.GET)
+    @RequiresPermissions("alarm.log")//权限管理;
     @ResponseBody
     public AlarmLogListDto queryUserPage(String page, String defenseArea, String alarmState, String startTime, String endTime) throws ParseException {
         operationLogComponent.operate("查询警告记录");

@@ -6,6 +6,7 @@ import com.ray.hc_spring2.core.repository.PrivilegeRepository;
 import com.ray.hc_spring2.core.repository.RoleRepository;
 import com.ray.hc_spring2.model.PrivilegeInfo;
 import com.ray.hc_spring2.model.RoleInfo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ public class PermissionController {
     private OperationLogComponent operationLogComponent;
 
     @GetMapping(value = "/privilegeList" )
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView monitorPointEdit(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("privilegeList");
@@ -46,6 +48,7 @@ public class PermissionController {
     }
 
     @PostMapping(value = "/updatePrivilege" )
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public int updatePrivilege(long roleId, @RequestParam(required = false, value = "privilegeIds[]") List<Long> idList){
         operationLogComponent.operate("编辑权限");
@@ -58,7 +61,7 @@ public class PermissionController {
 
 
     @GetMapping(value = "/getPrivilegeByRole" )
-    //@RequiresPermissions("privilege.management")//权限管理;
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public String getRolePrivileges(long roleId){
         RoleInfo roleInfo  = roleRepository.findById(roleId);

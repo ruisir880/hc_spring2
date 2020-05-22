@@ -315,7 +315,7 @@ public class HCNetTools {
                     break;
             }
             logger.warn(alarmLog.getDeviceIp()+"报警, 报警类型:"+ alarmLog.getAlarmType());
-             warnComponent.addWarn(hcCache.getAreaByIp(alarmLog.getDeviceIp()), Constants.SYSTEM_LOCAL);
+            warnComponent.addWarn(hcCache.getAreaByIp(alarmLog.getDeviceIp()), Constants.SYSTEM_LOCAL);
 
             // alarmLogRepository.save(alarmLog);
         }

@@ -18,4 +18,6 @@ public interface DeviceService {
     HcDevice findNvr();
 
     HcDevice findController();
+
+    List<HcDevice> findByAllWebCam();
 }

@@ -14,7 +14,8 @@ public class ParseUtil {
 
     public AlarmLogDto getAlarmLogDto(AlarmLog log){
         AlarmLogDto alarmLogDto = new AlarmLogDto();
-        alarmLogDto.setDefenseArea(hcCache.getAreaByIp(log.getDeviceIp()));
+        alarmLogDto.setId(log.getId());
+        alarmLogDto.setDefenseArea(log.getDefenseArea());
         alarmLogDto.setAlarmType(log.getAlarmType());
         alarmLogDto.setState(log.getState());
         alarmLogDto.setAlarmTime(DateUtil.formatDate(log.getAlarmTime()));

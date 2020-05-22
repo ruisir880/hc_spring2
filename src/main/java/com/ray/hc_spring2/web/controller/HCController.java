@@ -6,6 +6,7 @@ import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.HCNetTools;
 import com.ray.hc_spring2.web.dto.AlarmResult;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ public class HCController {
 
 
     @PostMapping(value ="/startOrCancelAlarm")
+    @RequiresPermissions("oneTouch")//权限管理;
     @ResponseBody
     public AlarmResult startOrCancelAlarm() {
         failedIpList.clear();
@@ -57,7 +59,7 @@ public class HCController {
 
 
     public void startAlarmHandler() {
-        List<HcDevice> devices = deviceService.findByAll();
+        List<HcDevice> devices = deviceService.findByAllWebCam();
         HCNetTools hcNetTools;
         String key;
         for (HcDevice device : devices) {
@@ -74,7 +76,7 @@ public class HCController {
     }
 
     public void cancelAlarmHandler() {
-        List<HcDevice> devices = deviceService.findByAll();
+        List<HcDevice> devices = deviceService.findByAllWebCam();
         HCNetTools hcNetTools;
         String key;
         for (HcDevice device : devices) {

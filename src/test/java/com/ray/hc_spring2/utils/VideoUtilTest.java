@@ -54,14 +54,14 @@ public class VideoUtilTest {
         //获取输出流对象
         OutputStream os = s.getOutputStream();
 
-        for(int i =0;i<3;i++) {
-            String str = "10009,变电站,2010-05-14 10:09:00,防区"+i;
+     /*   for(int i =0;i<3;i++) {*/
+            String str = "10009,变电站,2010-05-14 10:09:00,防区3";
             os.write(str.getBytes());
             os.flush();
-            Thread.sleep(500);
-        }
+            Thread.sleep(5000);
+      /*  }
         s.close();
 
-        System.out.println("防区1".substring(2));
+        System.out.println("防区1".substring(2));*/
     }
 }

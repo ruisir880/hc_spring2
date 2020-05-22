@@ -11,6 +11,7 @@ public class AlarmLog implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String deviceIp;
+    private String defenseArea;
     private String state;
     private String alarmType;
     private Date alarmTime;
@@ -32,7 +33,6 @@ public class AlarmLog implements Serializable {
     public void setDeviceIp(String deviceIp) {
         this.deviceIp = deviceIp;
     }
-
 
 
     public String getState() {
@@ -65,5 +65,14 @@ public class AlarmLog implements Serializable {
 
     public void setAlarmType(String alarmType) {
         this.alarmType = alarmType;
+    }
+
+
+    public String getDefenseArea() {
+        return defenseArea;
+    }
+
+    public void setDefenseArea(String defenseArea) {
+        this.defenseArea = defenseArea;
     }
 }

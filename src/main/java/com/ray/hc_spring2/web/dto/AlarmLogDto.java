@@ -4,12 +4,15 @@ import java.io.Serializable;
 
 public class AlarmLogDto implements Serializable {
 
+    private long id;
     private int index;
     private String defenseArea;
     private String state;
     private String alarmType;
     private String alarmTime;
     private String endTime;
+
+
 
 
     public String getDefenseArea() {
@@ -58,5 +61,13 @@ public class AlarmLogDto implements Serializable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

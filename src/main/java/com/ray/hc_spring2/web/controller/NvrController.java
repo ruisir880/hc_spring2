@@ -8,6 +8,7 @@ import com.ray.hc_spring2.utils.NvrTools;
 import com.ray.hc_spring2.web.dto.NvrChannelInfoDto;
 import com.ray.hc_spring2.web.dto.ReturnResultDto;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,10 @@ public class NvrController {
     private NvrTools nvrTools = new NvrTools();
 
     @RequestMapping(value ="/nvr")
+    @RequiresPermissions("video.management")//权限管理;
     public ModelAndView nvr() {
         ModelAndView modelAndView = new ModelAndView();
-        List<HcDevice> hcDevices = deviceService.findByAll();
+        List<HcDevice> hcDevices = deviceService.findByAllWebCam();
         modelAndView.addObject("deviceList",hcDevices);
         HcDevice nvr = deviceService.findNvr();
         if (nvr == null) {
@@ -45,6 +47,7 @@ public class NvrController {
     }
 
     @RequestMapping(value ="/replayer")
+    @RequiresPermissions("video.management")//权限管理;
     public ModelAndView replayer() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("replayer");
@@ -61,6 +64,7 @@ public class NvrController {
      * @return
      */
     @PostMapping(value ="/editNvr")
+    @RequiresPermissions("video.management")//权限管理;
     @ResponseBody
     public int editNvr(String id,String ip,String account,String password, String port ) {
         operationLogComponent.operate("编辑NVR");
@@ -80,6 +84,7 @@ public class NvrController {
     }
 
     @PostMapping(value = "/addChannel")
+    @RequiresPermissions("video.management")//权限管理;
     @ResponseBody
     public ReturnResultDto addChannel(String selectedDevice,String selectedChannel){
         HcDevice ipc = deviceService.findByIp(selectedDevice);
@@ -96,6 +101,7 @@ public class NvrController {
     }
 
     @PostMapping(value = "/deleteChannel")
+    @RequiresPermissions("video.management")//权限管理;
     @ResponseBody
     public ReturnResultDto deleteChannel(String selectedChannel){
         HcDevice nvr = deviceService.findNvr();

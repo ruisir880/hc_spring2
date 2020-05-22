@@ -30,6 +30,7 @@ public class UserInfoController {
     private OperationLogComponent operationLogComponent;
 
     @RequestMapping(value ="/userAdd")
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView userAdd() {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = new UserInfo();
@@ -39,6 +40,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value ="/userList")
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("userList");
@@ -46,6 +48,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = {"/editUser","/addUser"}, method = RequestMethod.POST )
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public int userInfoAdd(String uid,String username,String password,String realName,String mobile,String email) throws ExecutionException {
         operationLogComponent.operate("编辑用户");
@@ -74,6 +77,7 @@ public class UserInfoController {
     }
 
     @PostMapping("/deleteUser")
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public int userDel(long userId){
         userInfoService.deleteUser(userId);
@@ -81,6 +85,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/userEdit")
+    @RequiresPermissions("system.management")//权限管理;
     public ModelAndView userEdit(long userId) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = userInfoService.findById(userId);
@@ -91,6 +96,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/queryUserList",method = RequestMethod.GET)
+    @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
     public List<UserInfo> queryUserPage(String username,String realName,String mobile){
         List<UserInfo> userInfoList = userInfoService.findByCondition(username,realName,mobile);

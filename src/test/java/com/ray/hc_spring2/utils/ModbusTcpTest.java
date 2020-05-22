@@ -7,13 +7,19 @@ import com.intelligt.modbus.jlibmodbus.exception.ModbusProtocolException;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMaster;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMasterFactory;
 import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
+import com.ray.hc_spring2.core.ModbusComponent;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 
 public class ModbusTcpTest {
 
     public static void main(String[] args) {
-        try {
+        ModbusComponent modbusComponent = new ModbusComponent();
+        modbusComponent.startWarnArea(Arrays.asList(16));
+
+        /*try {
             // 设置主机TCP参数
             TcpParameters tcpParameters = new TcpParameters();
 
@@ -71,6 +77,6 @@ public class ModbusTcpTest {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
