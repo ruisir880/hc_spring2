@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -72,7 +73,7 @@ public class MainController {
     @RequestMapping(value = "/latestLog")
     @ResponseBody
     public List<AlarmLogDto> getLatestAlarmLogs() {
-        Page<AlarmLog> logs = pageQueryService.queryAlarmLog(1, null, null, null);
+        Page<AlarmLog> logs = pageQueryService.queryAlarmLog(1, null,null, null, null);
         latestAlarmLogs.clear();
         AlarmLogDto logDto;
         for (int i = 0; i < 5 && i < logs.getTotalElements(); i++) {
@@ -133,6 +134,7 @@ public class MainController {
         operationLogComponent.operate("处理报警");
         AlarmLog alarmLog = alarmLogRepository.findById(id);
         alarmLog.setState("已处理");
+        alarmLog.setEndTime(new Date());
         alarmLogRepository.save(alarmLog);
         return 0;
     }

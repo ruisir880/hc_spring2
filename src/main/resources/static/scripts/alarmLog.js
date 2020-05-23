@@ -3,13 +3,16 @@ function search(page){
     var alarmState = $("#alarmState").val();
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
+    var defenseArea = $("#defenseArea").val();
     $.ajax({
         type: "GET",
+        cache: false,
         url: "/hc/queryAlarmLog",
         data: {"page":page,
             "alarmState":alarmState,
             "startTime":startTime,
             "endTime":endTime,
+            "defenseArea":defenseArea
         },
         success: function (result) {
             initHtml();

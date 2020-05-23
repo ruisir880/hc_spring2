@@ -26,6 +26,7 @@ function search(){
     var mobile = $("#mobile").val();
     $.ajax({
         type: "GET",
+        cache: false,
         url: "/hc/queryUserList",
         data: {"username":username,
             "realName":realName,

@@ -1,19 +1,19 @@
-var websocket = null;
+var ws = null;
 
 var ipHost = window.location.host;
 
 if('WebSocket' in window){
-    websocket = new WebSocket("ws:"+ipHost+"/hc/websocket");
+    ws = new WebSocket("ws:"+ipHost+"/hc/websocket");
 }
 else{
     alert('Not support websocket')
 }
 window.onclose=function () {
-    websocket.close();
+    ws.close();
 }
 
 //接收到消息的回调方法
-websocket.onmessage = function(event){
+ws.onmessage = function(event){
     document.getElementById("areaJpg" + event.data).className = "alert selected";
     document.getElementById("buzzer").src = "images/common/buzzer_red.png";
     document.getElementById("light" + event.data).src = "images/common/light_red.jpg";
@@ -25,6 +25,7 @@ function load() {
     $("#latestLogTable>tbody").html("");
     $.ajax({
         type: "GET",
+        cache: false,
         url: "latestLog",
         success: function (result) {
             var item;
@@ -58,6 +59,7 @@ function choseDefenseArea(node){
     //window.location.href = "main?area="+index;
     $.ajax({
         type: "GET",
+        cache: false,
         url: "getVideoList",
         data: {"area":index,
             "time":new Date().getTime()},

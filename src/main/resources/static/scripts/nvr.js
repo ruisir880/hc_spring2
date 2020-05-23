@@ -72,6 +72,7 @@ function deleteChannel(){
 function refreshNvr(){
     $.ajax({
         type: "get",
+        cache: false,
         url: "refreshNvr",
         success: function (result) {
             $("#nvrChannelTable tr:not(:first)").empty("");

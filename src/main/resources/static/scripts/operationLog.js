@@ -5,6 +5,7 @@ function search(page){
     var endTime = $("#endTime").val();
     $.ajax({
         type: "GET",
+        cache: false,
         url: "/hc/queryOperationLog",
         data: {"page":page,
             "operator":operator,

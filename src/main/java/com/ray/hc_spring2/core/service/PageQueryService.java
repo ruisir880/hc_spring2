@@ -62,19 +62,22 @@ public class PageQueryService {
     }
 
 
-    public Page<AlarmLog> queryAlarmLog(int page , String state, Date startTime, Date endTime){
+    public Page<AlarmLog> queryAlarmLog(int page ,String area, String state, Date startTime, Date endTime){
         Pageable pageable = new PageRequest(page-1, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
-        Specification<AlarmLog> alarmLogSpecification = getAlarmLogSpecification(state,startTime,endTime);
+        Specification<AlarmLog> alarmLogSpecification = getAlarmLogSpecification(area,state,startTime,endTime);
         return this.alarmLogRepository.findAll(alarmLogSpecification,pageable);
     }
 
-    private Specification<AlarmLog> getAlarmLogSpecification(String state, Date startTime, Date endTime){
+    private Specification<AlarmLog> getAlarmLogSpecification(String area,String state, Date startTime, Date endTime){
         String startDate = DateUtil.formatDate(startTime);
         String endDate = DateUtil.formatDate(endTime);
         Specification<AlarmLog> specification = new Specification<AlarmLog>() {
             @Override
             public Predicate toPredicate(Root<AlarmLog> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>(); //所有的断言
+                if(StringUtils.isNotEmpty(area)){
+                    predicates.add(cb.equal(root.get("defenseArea"), area));
+                }
                 if(StringUtils.isNotEmpty(state)){
                     predicates.add(cb.equal(root.get("state"), state));
                 }

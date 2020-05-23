@@ -58,7 +58,7 @@ public class AlarmLogController {
             endDate = DateUtil.parseDate(endTime);
         }
 
-        Page<AlarmLog> alarmLogs = pageQueryService.queryAlarmLog(pageInt, alarmState, startDate, endDate);
+        Page<AlarmLog> alarmLogs = pageQueryService.queryAlarmLog(pageInt,defenseArea, alarmState, startDate, endDate);
 
         return new AlarmLogListDto(getAlarmLogListDto(alarmLogs),alarmLogs.getTotalElements(),alarmLogs.getNumber()+1,alarmLogs.getTotalPages());
     }
