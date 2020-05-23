@@ -69,9 +69,9 @@ function choseDefenseArea(node){
             var elem;
             for (var i in result) {
                 elem = result[i]
-                item = "<li style=\"left:350px\">\n" +
-                    "<object type='application/x-vlc-plugin' pluginspage=\"http://www.videolan.org/\" id='vlc'"+i +
-                    " events='false' width=\"300\" height=\"250\">\n" +
+                item = "<li>\n" +
+                    "<object style='' type='application/x-vlc-plugin' pluginspage='http://www.videolan.org/' id='vlc'"+i +
+                    " events='false' width='400' height='350'>\n" +
                     "<param name='mrl' value='" +elem+ "' />\n" +
                     "<param name='volume' value='50' />\n" +
                     "<param name='autoplay' value='true' />\n" +
@@ -80,7 +80,13 @@ function choseDefenseArea(node){
                     "<param name='controls' value='true' />\n" +
                     "</object>\n" +
                     "</li>";
+
                 $('#videoListUl').append(item);
+            }
+            var veidos = document.getElementsByTagName("object");
+            for(var i=0;i<veidos.length;i++){
+               veidos[i].setAttribute("style","");
+
             }
         }
     });
