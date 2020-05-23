@@ -3,7 +3,7 @@ var ws = null;
 var ipHost = window.location.host;
 
 if('WebSocket' in window){
-    ws = new WebSocket("ws:"+ipHost+"/hc/websocket");
+    ws = new WebSocket("ws://"+ipHost+"/hc/websocket");
 }
 else{
     alert('Not support websocket')
