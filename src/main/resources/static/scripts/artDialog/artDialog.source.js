@@ -1866,7 +1866,7 @@ artDialog.defaults = {
 	opacity: .7,				// 遮罩透明度
 	duration: 300,				// 遮罩透明度渐变动画速度
 	fixed: false,				// 是否静止定位
-	left: '50%',				// X轴坐标
+	left: '30%',				// X轴坐标
 	top: '38.2%',				// Y轴坐标
 	zIndex: 1987,				// 对话框叠加高度值(重要：此值不能超过浏览器最大限制)
 	resize: true,				// 是否允许用户调节尺寸

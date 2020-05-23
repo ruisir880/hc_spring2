@@ -519,7 +519,7 @@
         opacity: .7,
         duration: 300,
         fixed: !1,
-        left: "50%",
+        left: "28%",
         top: "38.2%",
         zIndex: 1987,
         resize: !0,
