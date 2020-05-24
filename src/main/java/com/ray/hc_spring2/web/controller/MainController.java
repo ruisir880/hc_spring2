@@ -136,4 +136,13 @@ public class MainController {
         return 0;
     }
 
+    @RequestMapping(value = "/demo")
+    @ResponseBody
+    public ModelAndView demo() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("demo");
+        return modelAndView;
+    }
+
+
 }

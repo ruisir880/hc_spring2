@@ -38,16 +38,16 @@ public class WarnComponent {
                 AlarmLog alarmLog = new AlarmLog();
                 alarmLog.setAlarmTime(warnDate);
                 alarmLog.setState("未处理");
-                alarmLog.setDefenseArea(defenseArea);
+                alarmLog.setDefenseArea(da);
                 alarmLogRepository.save(alarmLog);
             }
 
 
-            if (ifInTime(remoteDate, localDate) && notOccursIn10Secs(LAST_WARN_MAP.get(defenseArea), warnDate)) {
-                LAST_WARN_MAP.put(defenseArea, warnDate);
+            if (ifInTime(remoteDate, localDate) && notOccursIn10Secs(LAST_WARN_MAP.get(da), warnDate)) {
+                LAST_WARN_MAP.put(da, warnDate);
                 log.warn("开始联合报警==============================");
-                myWebSocket.sendMessage(defenseArea);
-                modbusComponent.startWarnArea(Arrays.asList(Integer.valueOf(defenseArea)));
+                myWebSocket.sendMessage(da);
+                modbusComponent.startWarnArea(Arrays.asList(Integer.valueOf(da)));
             }
         } catch (Exception e) {
             log.error("error occurs in WarnComponent", e);
