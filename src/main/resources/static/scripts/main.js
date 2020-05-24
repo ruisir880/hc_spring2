@@ -49,7 +49,8 @@ function choseDefenseArea(node){
     $("#videoListUl").empty();
     var areaNode = document.getElementById(node);
     var index = areaNode.getAttribute("id").substr(8);
-    for(var i =1;i<5;i++){
+    var num = document.getElementById("defenseAreaUl").childElementCount;
+    for(var i =1;i<num+1;i++){
         var area = document.getElementById("areaDiv"+i);
         area.className="";
         document.getElementById("areaSpan"+i).className="";

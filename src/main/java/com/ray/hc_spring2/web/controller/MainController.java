@@ -3,9 +3,11 @@ package com.ray.hc_spring2.web.controller;
 import com.ray.hc_spring2.core.ModbusComponent;
 import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.repository.AlarmLogRepository;
+import com.ray.hc_spring2.core.repository.DefenseAreaRepository;
 import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.core.service.PageQueryService;
 import com.ray.hc_spring2.model.AlarmLog;
+import com.ray.hc_spring2.model.DefenseArea;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.ParseUtil;
 import com.ray.hc_spring2.web.dto.AlarmLogDto;
@@ -45,26 +47,21 @@ public class MainController {
     private OperationLogComponent operationLogComponent;
     @Autowired
     private AlarmLogRepository alarmLogRepository;
+    @Autowired
+    private DefenseAreaRepository defenseAreaRepository;
 
     @RequestMapping(value ="/main")
     public ModelAndView mainHtml(String area) {
         ModelAndView modelAndView = new ModelAndView();
         area = StringUtils.isBlank(area) ? "1" : area;
         List<HcDevice> ipcList = deviceService.findByArea(area);
-        /*HcDevice ipc;
-        for (int i = 0; i < 4; i++) {
-            String url = "";
-            if (i + 1 <= ipcList.size()) {
-                ipc = ipcList.get(i);
-                url = String.format("rtsp://%s:%s@%s:%s/h264/ch1/main/av_stream", ipc.getAccount(), ipc.getPassword(), ipc.getIp(), ipc.getPort());
-            }
-            modelAndView.addObject("url" + i, url);
-        }*/
         List<String> list = new ArrayList<>();
         for (HcDevice ipc : ipcList) {
             list.add(String.format(RTSP, ipc.getAccount(), ipc.getPassword(), ipc.getIp()));
         }
+        List<DefenseArea> defenseAreas = defenseAreaRepository.findAll();
         modelAndView.addObject("urlList", list);
+        modelAndView.addObject("defenseAreas", defenseAreas);
         modelAndView.addObject("alarmLogList", getLatestAlarmLogs());
         modelAndView.setViewName("main");
         return modelAndView;

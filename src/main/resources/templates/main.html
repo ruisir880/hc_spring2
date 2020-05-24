@@ -4,7 +4,7 @@
 	<script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
 	<script type="text/javascript"  src="${ctxPath}/scripts/main.js"></script>
 	<script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
-
+	<meta http-equiv="X-UA-Compatible"content="IE=10">
 	<meta charset="utf-8"/>
 	<title>监控系统</title>
 
@@ -287,21 +287,17 @@
 					<div class="icon01"><img src="${ctxPath}/images/common/icon01.jpg" /><!--${ctxPath}/images/common/-->
 						主机</div>
 					<ul>
+						@if(!isEmpty(defenseAreas)){
+						@for(area in defenseAreas){
 						<li>
-							<div id="areaNode1" class="icon02">
-								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode1');" />
-								<span id="areaSpan1" class="selection" ondblclick="choseDefenseArea('areaNode1');">防区1</span>
+							<div id="areaNode${area.defenseName}" class="icon02">
+								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode${area.defenseName}');" />
+								<span id="areaSpan${area.defenseName}" ondblclick="choseDefenseArea('areaNode${area.defenseName}');">防区${area.defenseName}</span>
 							</div>
 						</li>
-						<li>
-							<div id="areaNode2" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode2');"/>
-								<span id="areaSpan2" ondblclick="choseDefenseArea('areaNode2');">防区2</span>
-							</div>
-						</li>
-						<li><div id="areaNode3" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode3');"/>
-							<span id="areaSpan3" ondblclick="choseDefenseArea('areaNode3');">防区3</span></div></li>
-						<li><div id="areaNode4" class="icon02"><img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode4');"/>
-							<span id="areaSpan4" ondblclick="choseDefenseArea('areaNode4');">防区4</span></div></li>
+						@}
+						@}
+
 					</ul>
 				</li>
 			</ul>
@@ -309,27 +305,17 @@
 	</div>
 	<div class="middle">
 		<div class="mycity">
-			<ul>
+			<ul id="defenseAreaUl">
+				@if(!isEmpty(defenseAreas)){
+				@for(area in defenseAreas){
 				<li>
 					<img src="${ctxPath}/images/common/community.jpg" />
-					<div id="areaDiv1" class="selected"></div>
-					<div class="alert" id="areaJpg1"></div>
+					<div id="areaDiv${area.defenseName}"></div>
+					<div class="alert" ></div>
 				</li>
-				<li>
-					<img src="${ctxPath}/images/common/community.jpg" />
-					<div id="areaDiv2"></div>
-					<div class="alert" id="areaJpg2"></div>
-				</li>
-				<li>
-					<img src="${ctxPath}/images/common/community.jpg" />
-					<div id="areaDiv3"></div>
-					<div class="alert" id="areaJpg3"></div>
-				</li>
-				<li>
-					<img src="${ctxPath}/images/common/community.jpg" />
-					<div id="areaDiv4"></div>
-					<div class="alert" id="areaJpg4"></div>
-				</li>
+				@}
+				@}
+
 			</ul>
 		</div>
 	</div>
