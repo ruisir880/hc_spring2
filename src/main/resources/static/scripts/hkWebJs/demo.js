@@ -940,7 +940,7 @@ function clickRecordSearch(iType) {
                     objTd.innerHTML = (szEndTime.replace("T", " ")).replace("Z", "");
                     objTd = objTr.insertCell(4);
                     objTd.width = "10%";
-                    objTd.innerHTML = "<a href='javascript:;' onclick='clickStartDownloadRecord(" + (i + g_iSearchTimes * 40) + ");'>下载</a>";
+                   /* objTd.innerHTML = "<a href='javascript:;' onclick='clickStartDownloadRecord(" + (i + g_iSearchTimes * 40) + ");'>下载</a>";*/
                     $("#downloadTd" + (i + g_iSearchTimes * 40)).data("fileName", szFileName);
                     $("#downloadTd" + (i + g_iSearchTimes * 40)).data("playbackURI", szPlaybackURI);
                 }
@@ -973,7 +973,7 @@ function clickRecordSearch(iType) {
                     objTd.innerHTML = (szEndTime.replace("T", " ")).replace("Z", "");
                     objTd = objTr.insertCell(4);
                     objTd.width = "10%";
-                    objTd.innerHTML = "<a href='javascript:;' onclick='clickStartDownloadRecord(" + (i + g_iSearchTimes * 40) + ");'>下载</a>";
+                    /*objTd.innerHTML = "<a href='javascript:;' onclick='clickStartDownloadRecord(" + (i + g_iSearchTimes * 40) + ");'>下载</a>";*/
                     $("#downloadTd" + (i + g_iSearchTimes * 40)).data("fileName", szFileName);
                     $("#downloadTd" + (i + g_iSearchTimes * 40)).data("playbackURI", szPlaybackURI);
                 }
