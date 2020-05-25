@@ -282,6 +282,73 @@
 		color: white;
 		line-height: 40px;
 	}
+	.link-top {
+		width: 100%;
+		height: 1px;
+		border-top: solid #ffdf02 5px;
+		top: 0px;
+		position: absolute;
+	}
+	.warn-top {
+		width: 100%;
+		height: 1px;
+		border-top: solid red 5px;
+		top: 0px;
+		position: absolute;
+	}
+
+	.link-bottom {
+		width: 100%;
+		top: 400px;
+		height: 1px;
+		border-bottom: solid #ffdf02 5px;
+		bottom: 0px;
+		position: absolute;
+	}
+	.warn-bottom {
+		width: 100%;
+		top: 400px;
+		height: 1px;
+		border-bottom: solid red 5px;
+		bottom: 0px;
+		position: absolute;
+	}
+
+	.link-left {
+		 width: 1px;
+		 height: 402px;
+		 border-left: solid #ffdf02 5px;
+		 left: 0px;
+		 top: 0px;
+		 position: absolute;
+	 }
+
+	.warn-left {
+		width: 1px;
+		height: 402px;
+		border-left: solid red 5px;
+		left: 0px;
+		top: 0px;
+		position: absolute;
+	}
+
+	.link-right {
+		width: 0px;
+		height: 402px;
+		border-right: solid #ffdf02 5px;
+		top: 0px;
+		right: 0px;
+		position: absolute;
+	}
+
+	.warn-right {
+		width: 0px;
+		height: 402px;
+		border-right: solid red 5px;
+		top: 0px;
+		right: 0px;
+		position: absolute;
+	}
 </style>
 
 <body>
@@ -311,19 +378,12 @@
 		</div>
 	</div>
 	<div class="middle">
-		<div class="mycity">
-			<ul id="defenseAreaUl">
-				@if(!isEmpty(defenseAreas)){
-				@for(area in defenseAreas){
-				<li>
-					<img src="${ctxPath}/images/common/community.jpg" />
-					<div id="areaDiv${area.defenseName}"></div>
-					<div class="alert" id="areaJpg${area.defenseName}"></div>
-				</li>
-				@}
-				@}
-
-			</ul>
+		<div>
+			<img src="${ctxPath}/images/common/community.jpg" style="position:absolute;height: 400px;width: 430px;top: 5px;left:5px" />
+			<div id="areaDiv1" class="link-left"></div>
+			<div id="areaDiv2" class=""></div>
+			<div id="areaDiv3" class=""></div>
+			<div id="areaDiv4" class=""></div>
 		</div>
 	</div>
 	<div class="right">

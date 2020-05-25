@@ -14,11 +14,40 @@ window.onclose=function () {
 
 //接收到消息的回调方法
 ws.onmessage = function(event){
-    document.getElementById("areaJpg" + event.data).className = "alert selected";
+    areaWarn(event.data);
     document.getElementById("buzzer").src = "images/common/buzzer_red.png";
     document.getElementById("light" + event.data).src = "images/common/light_red.jpg";
     art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'有警报', ok:true,});
     load();
+}
+
+
+function areaWarn(index) {
+    if(index=="1"){
+        document.getElementById("areaDiv1").className="warn-left";
+    }else if(index=="2"){
+        document.getElementById("areaDiv2").className="warn-top";
+    }else if(index=="3"){
+        document.getElementById("areaDiv3").className="warn-right";
+    }else if(index=="4"){
+        document.getElementById("areaDiv4").className="warn-bottom";
+    }
+}
+
+function areaSelect(index) {
+    for(var i =1;i<5;i++){
+        var area = document.getElementById("areaDiv"+i);
+        area.className="";
+    }
+    if(index=="1"){
+        document.getElementById("areaDiv1").className="link-left";
+    }else if(index=="2"){
+        document.getElementById("areaDiv2").className="link-top";
+    }else if(index=="3"){
+        document.getElementById("areaDiv3").className="link-right";
+    }else if(index=="4"){
+        document.getElementById("areaDiv4").className="link-bottom";
+    }
 }
 
 function load() {
@@ -49,14 +78,12 @@ function choseDefenseArea(node){
     $("#videoListUl").empty();
     var areaNode = document.getElementById(node);
     var index = areaNode.getAttribute("id").substr(8);
-    var num = document.getElementById("defenseAreaUl").childElementCount;
-    for(var i =1;i<num+1;i++){
-        var area = document.getElementById("areaDiv"+i);
-        area.className="";
+    for(var i =1;i<5;i++){
         document.getElementById("areaSpan"+i).className="";
     }
-    document.getElementById("areaDiv"+index).className="selected";
     document.getElementById("areaSpan"+index).className="selection";
+    areaSelect(index);
+
     //window.location.href = "main?area="+index;
     $.ajax({
         type: "GET",
@@ -102,7 +129,7 @@ function startAlarm() {
                 for (i = 1; i < 5; i++) {
                     document.getElementById("light" + i).src = "images/common/light_red.jpg";
                 }
-                document.getElementById("buzzer").src = "images/common/buzzer_red.jpg";
+                document.getElementById("buzzer").src = "images/common/buzzer_red.png";
                 art.dialog({icon: 'succeed', title: '友情提示', drag: false, resize: false, content: '操作成功', ok: true,});
             } else {
                 art.dialog({icon: 'error', title: '友情提示', drag: false, resize: false, content: '操作失败', ok: true,});
@@ -120,9 +147,9 @@ function stopAlarm() {
         success: function (result) {
             if (result == "0") {
                 for (i = 1; i < 5; i++) {
-                    document.getElementById("areaJpg" + i).className = "alert";
                     document.getElementById("light" + i).src = "images/common/light-icon.jpg";
                 }
+                areaSelect(0);
                 document.getElementById("buzzer").src = "images/common/buzzer-icon.jpg";
                 art.dialog({icon: 'succeed', title: '友情提示', drag: false, resize: false, content: '操作成功', ok: true,});
             } else {
