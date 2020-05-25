@@ -1,5 +1,6 @@
 package com.ray.hc_spring2.web.controller;
 
+import com.ray.hc_spring2.core.HcCache;
 import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.constant.DeviceType;
 import com.ray.hc_spring2.core.service.DeviceService;
@@ -22,10 +23,14 @@ import java.util.List;
 
 @Controller
 public class NvrController {
+    private static final int SUB_INDEX =6;
+
     @Autowired
     private DeviceService deviceService;
     @Autowired
     private OperationLogComponent operationLogComponent;
+    @Autowired
+    private HcCache hcCache;
     private NvrTools nvrTools = new NvrTools();
 
     @RequestMapping(value ="/nvr")
@@ -89,7 +94,7 @@ public class NvrController {
     public ReturnResultDto addChannel(String selectedDevice,String selectedChannel){
         HcDevice ipc = deviceService.findByIp(selectedDevice);
         HcDevice nvr = deviceService.findNvr();
-        int channelIndex = Integer.valueOf(selectedChannel.substring(8));
+        int channelIndex = Integer.valueOf(selectedChannel.substring(SUB_INDEX));
 
         if(nvrTools.register(nvr.getIp(),nvr.getPort(),nvr.getAccount(),nvr.getPassword())) {
             nvrTools.setChannel(channelIndex,ipc);
@@ -105,7 +110,7 @@ public class NvrController {
     @ResponseBody
     public ReturnResultDto deleteChannel(String selectedChannel){
         HcDevice nvr = deviceService.findNvr();
-        int channelIndex = Integer.valueOf(selectedChannel.substring(8));
+        int channelIndex = Integer.valueOf(selectedChannel.substring(SUB_INDEX));
 
         if(nvrTools.register(nvr.getIp(),nvr.getPort(),nvr.getAccount(),nvr.getPassword())) {
             nvrTools.deleteChannel(channelIndex);
@@ -119,13 +124,15 @@ public class NvrController {
     @RequestMapping(value ="/refreshNvr")
     @ResponseBody
     public List<NvrChannelInfoDto> refresh() {
+        List<NvrChannelInfoDto> nvrChannelInfoDtos = new ArrayList<>();
         HcDevice device = deviceService.findNvr();
         if (device != null) {
             if(nvrTools.register(device.getIp(),device.getPort(),device.getAccount(),device.getPassword())) {
-                return nvrTools.getNvrChannelInfo();
+                nvrChannelInfoDtos = nvrTools.getNvrChannelInfo();
+                nvrTools.release();
             }
         }
-        return new ArrayList<>();
+        return nvrChannelInfoDtos;
     }
 
     private void setNvrChannelInfo(HcDevice device, ModelAndView modelAndView){

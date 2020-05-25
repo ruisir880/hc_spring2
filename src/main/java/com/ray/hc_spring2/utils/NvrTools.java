@@ -199,7 +199,7 @@ public class NvrTools {
                 dwChanNum = dwIPChanIndex + struDeviceInfo.byStartChan;
                 dwID = m_strIpparaCfg.struIPChanInfo[dwIPChanIndex].byIPID;
                 newRow.setNo(String.format("%02d", iIndex + 1));
-                newRow.setChannelNo("IPCamera" + dwChanNum);
+                newRow.setChannelNo("Camera" + dwChanNum);
 
                 if (m_strIpparaCfg.struIPChanInfo[dwIPChanIndex].byIPID != 0) {
                     newRow.setIpcIp(toIPString(new String(m_strIpparaCfg.struIPDevInfo[dwID - 1].struIP.sIpV4)));

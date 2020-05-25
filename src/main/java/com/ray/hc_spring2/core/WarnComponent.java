@@ -45,7 +45,7 @@ public class WarnComponent {
 
             if (ifInTime(remoteDate, localDate) && notOccursIn10Secs(LAST_WARN_MAP.get(da), warnDate)) {
                 LAST_WARN_MAP.put(da, warnDate);
-                log.warn("开始联合报警==============================");
+                log.warn("开始联合报警============================防区:"+da);
                 myWebSocket.sendMessage(da);
                 modbusComponent.startWarnArea(Arrays.asList(Integer.valueOf(da)));
             }

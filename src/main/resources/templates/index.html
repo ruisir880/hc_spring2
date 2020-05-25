@@ -162,9 +162,7 @@
                     left_menu_cnt.hide(10, 'linear');
                     rightMain("${ctxPath}/nvr");
                 } else if ('left_tab2' == tabid) {
-                    $(document).ajaxStart(onStart).ajaxSuccess(onStop);
-                    // 异步加载"业务模块"下的菜单
-                    loadMenu('SYSTEMMOULE', 'dleft_tab1');
+                    window.open("${ctxPath}/replay");
                 } else if ('left_tab4' == tabid) {
                     left_menu_cnt.hide(10, 'linear');
                     rightMain("${ctxPath}/alarmLogList");
@@ -290,9 +288,8 @@
             </li>
 
             <li id="left_tab1" onClick="javascript:switchTab('TabPage2','left_tab1');" title="系统设置">
-                <img alt="系统模块" title="系统设置"  src="${ctxPath}/images/common/system.jpg" width="33" height="31">
+                <img alt="系统设置" title="系统设置"  src="${ctxPath}/images/common/system.jpg" width="33" height="31">
             </li>
-
             <li id="left_tab3" onClick="javascript:switchTab('TabPage2','left_tab3');" title="视频设置">
                 <img alt="视频设置" title="视频设置"  src="${ctxPath}/images/common/cam.jpg" width="33" height="31">
             </li>

@@ -1,5 +1,5 @@
 ﻿// 初始化插件
-
+document.readyState
 // 全局保存当前选中窗口
 var g_iWndIndex = 0; //可以不用设置这个变量，有窗口参数的接口中，不用传值，开发包会默认使用当前选择窗口
 $(function () {
@@ -11,7 +11,7 @@ $(function () {
     }
 
     // 初始化插件参数及插入插件
-    WebVideoCtrl.I_InitPlugin(500, 300, {
+    WebVideoCtrl.I_InitPlugin(800, 600, {
         bWndFull: true,     //是否支持单窗口双击全屏，默认支持 true:支持 false:不支持
         iPackageType: 2,    //2:PS 11:MP4
         iWndowType: 1,
@@ -200,7 +200,6 @@ function changeWndNum(iType) {
     WebVideoCtrl.I_ChangeWndNum(iType);
 }
 
-// 登录
 function clickLogin() {
     var szIP = $("#loginip").val(),
         szPort = $("#port").val(),
@@ -214,7 +213,7 @@ function clickLogin() {
     var szDeviceIdentify = szIP + "_" + szPort;
 
     var iRet = WebVideoCtrl.I_Login(szIP, 1, szPort, szUsername, szPassword, {
-        success: function (xmlDoc) {            
+        success: function (xmlDoc) {
             showOPInfo(szDeviceIdentify + " 登录成功！");
 
             $("#ip").prepend("<option value='" + szDeviceIdentify + "'>" + szDeviceIdentify + "</option>");
@@ -274,7 +273,7 @@ function clickGetDeviceInfo() {
             arrStr.push("MAC地址：" + $(xmlDoc).find("macAddress").eq(0).text() + "\r\n");
             arrStr.push("主控版本：" + $(xmlDoc).find("firmwareVersion").eq(0).text() + " " + $(xmlDoc).find("firmwareReleasedDate").eq(0).text() + "\r\n");
             arrStr.push("编码版本：" + $(xmlDoc).find("encoderVersion").eq(0).text() + " " + $(xmlDoc).find("encoderReleasedDate").eq(0).text() + "\r\n");
-            
+
             showOPInfo(szDeviceIdentify + " 获取设备信息成功！");
             alert(arrStr.join(""));
         },
@@ -342,7 +341,7 @@ function getChannelInfo() {
         async: false,
         success: function (xmlDoc) {
             var oChannels = $(xmlDoc).find("ZeroVideoChannel");
-            
+
             $.each(oChannels, function (i) {
                 var id = $(this).find("id").eq(0).text(),
                     name = $(this).find("name").eq(0).text();

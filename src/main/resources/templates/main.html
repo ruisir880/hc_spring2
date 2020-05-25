@@ -51,6 +51,13 @@
 		border:1px solid #00f;
 		line-height:100px;
 	}
+	.replay{
+		position: absolute;
+		left: 1450px;
+		width: 150px;
+		top: 0px;
+
+	}
 	ul.domtree,
 	ul.domtree ul {
 		margin: 0;
@@ -291,7 +298,7 @@
 						@for(area in defenseAreas){
 						<li>
 							<div id="areaNode${area.defenseName}" class="icon02">
-								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode${area.defenseName}');" />
+								<img src="${ctxPath}/images/common/icon02.jpg" onclick="choseDefenseArea('areaNode${area.defenseName}');"/>
 								<span id="areaSpan${area.defenseName}" ondblclick="choseDefenseArea('areaNode${area.defenseName}');">防区${area.defenseName}</span>
 							</div>
 						</li>
@@ -339,6 +346,14 @@
 				@}
 			</ul>
 		</div>
+	</div>
+	<div class="replay">
+		<ul>
+			<li>
+				<span>查看回放</span>
+				<img id="replay" src="${ctxPath}/images/common/replay.jpg" onclick=" window.open('${ctxPath}/replay');" />
+			</li>
+		</ul>
 	</div>
 </div>
 <!-- =================== End Main =================== -->

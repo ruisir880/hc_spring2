@@ -136,11 +136,15 @@ public class MainController {
         return 0;
     }
 
-    @RequestMapping(value = "/demo")
+    @RequestMapping(value = "/replay")
     @ResponseBody
     public ModelAndView demo() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("demo");
+        HcDevice nvr = deviceService.findNvr();
+        modelAndView.addObject("nvrIp",nvr.getIp());
+        modelAndView.addObject("nvrAccount",nvr.getAccount());
+        modelAndView.addObject("nvrPassword",nvr.getPassword());
+        modelAndView.setViewName("replay");
         return modelAndView;
     }
 

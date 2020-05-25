@@ -3,20 +3,17 @@ package com.ray.hc_spring2.core;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ray.hc_spring2.core.constant.Constants;
-import com.ray.hc_spring2.core.repository.AlarmLogRepository;
 import com.ray.hc_spring2.core.repository.DeviceRepository;
+import com.ray.hc_spring2.core.service.DeviceService;
 import com.ray.hc_spring2.core.service.PageQueryService;
-import com.ray.hc_spring2.model.AlarmLog;
 import com.ray.hc_spring2.model.HcDevice;
 import com.ray.hc_spring2.utils.HCNetTools;
-import com.ray.hc_spring2.web.dto.AlarmLogDto;
-import groovy.lang.Singleton;
-import org.apache.commons.collections.list.FixedSizeList;
+import com.ray.hc_spring2.utils.NvrTools;
+import com.ray.hc_spring2.web.dto.NvrChannelInfoDto;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,12 +25,17 @@ import java.util.concurrent.ExecutionException;
 public class HcCache {
     private static Logger logger = LoggerFactory.getLogger(HCNetTools.class);
     private Cache<String,String> ipDefenseAreaCache = CacheBuilder.newBuilder().softValues().build();
+    private List<NvrChannelInfoDto> ipChannelCache = new ArrayList<>();
+
     private static HcCache hcCache;
 
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
     private PageQueryService pageQueryService;
+    @Autowired
+    private DeviceService deviceService;
+    private NvrTools nvrTools = new NvrTools();
 
     public static HcCache getInstance(){
         if(hcCache == null){
@@ -69,5 +71,21 @@ public class HcCache {
 
     }
 
+    public List<NvrChannelInfoDto> getIpChannelCache(){
+      /*  if(ipChannelCache.size()>0){
+            return ipChannelCache;
+        }*/
+        HcDevice device = deviceService.findNvr();
+        if (device != null) {
+            if(nvrTools.register(device.getIp(),device.getPort(),device.getAccount(),device.getPassword())) {
+                ipChannelCache = nvrTools.getNvrChannelInfo();
+                nvrTools.release();
+            }
+        }
+        return ipChannelCache;
+    }
 
+    public void updateIpChannelCache(List<NvrChannelInfoDto> channelInfoDtos){
+        ipChannelCache=channelInfoDtos;
+    }
 }

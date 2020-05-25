@@ -110,12 +110,12 @@ public class SocketServer {
     private void dealMsg(String msg){
         try {
             log.info("接受到光纤系统的信息：" + msg);
-            if (!pattern.matcher(msg).matches()) {
+            if (!msg.contains("防区")) {
                 throw new MsgReadException(String.format("Message %s content is not legal.",msg));
             }
-            List<String> stringList = Splitter.on(",").splitToList(msg);
-            String defenseArea = stringList.get(3).substring(2);
-            log.info("防区："+defenseArea);
+            int index = msg.indexOf("防区");
+            String defenseArea = msg.substring(index+2,index+3);
+            log.info("解析得到的防区："+defenseArea);
             warnComponent.addWarn(defenseArea, Constants.SYSTEM_REMOTE);
         }catch (Exception e){
             log.error("Error occurs when receive msg from other system.",e);

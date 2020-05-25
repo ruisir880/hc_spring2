@@ -14,67 +14,51 @@
     <meta http-equiv="Expires" content="0" />
     <script>
         document.write("<link type='text/css' href='${ctxPath}/scripts/demo.css?version=" + new Date().getTime() + "' rel='stylesheet' />");
+        window.onload=function(){
+            clickLogin();
+            getChannelInfo();
+        }
     </script>
 </head>
-<body>
+<body onbeforeunload="clickLogout()">
 <div class="left">
     <div id="divPlugin" class="plugin"></div>
+
     <fieldset class="login">
         <legend>登录</legend>
         <table cellpadding="0" cellspacing="3" border="0">
             <tr>
                 <td class="tt">IP地址</td>
-                <td><input id="loginip" type="text" class="txt" value="192.168.1.2" /></td>
+                <td><input id="loginip" type="text" class="txt" value="${nvrIp}" /></td>
                 <td class="tt">端口号</td>
                 <td><input id="port" type="text" class="txt" value="80" /></td>
             </tr>
             <tr>
                 <td class="tt">用户名</td>
-                <td><input id="username" type="text" class="txt" value="admin" /></td>
+                <td><input id="username" type="text" class="txt" value="${nvrAccount}" /></td>
                 <td class="tt">密码</td>
-                <td><input id="password" type="password" class="txt" value="special101" /></td>
-            </tr>
-            <tr>
-                <td class="tt">设备端口</td>
-                <td colspan="2"><input id="deviceport" type="text" class="txt" />（可选参数）</td>
-                <td>
-                    窗口分割数&nbsp;
-                    <select class="sel2" onchange="changeWndNum(this.value);">
-                        <option value="1" selected>1x1</option>
-                        <option value="2" >2x2</option>
-           
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="tt">RTSP端口</td>
-                <td colspan="3"><input id="rtspport" type="text" class="txt" />（可选参数）</td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <input type="button" class="btn" value="登录" onclick="clickLogin();" />
-                    <input type="button" class="btn" value="退出" onclick="clickLogout();" />
-                    <input type="button" class="btn2" value="获取基本信息" onclick="clickGetDeviceInfo();" />
-                </td>
+                <td><input id="password" type="password" class="txt" value="${nvrPassword}" /></td>
             </tr>
             <tr>
                 <td class="tt">已登录设备</td>
                 <td>
-                    <select id="ip" class="sel" onchange="getChannelInfo();getDevicePort();"></select>
+                    <select id="ip" class="sel"></select>
                 </td>
-                <td class="tt">通道列表</td>
-                <td>
-                    <select id="channels" class="sel"></select>
-                </td>
+
+
             </tr>
+           <!-- <tr>
+                <td class="tt">回放下载保存路径</td>
+                <td colspan="3"><input id="downloadPath" type="text" class="txt" />&nbsp;<input type="button" class="btn" value="浏览" onclick="clickOpenFileDlg('downloadPath', 0);" /></td>
+            </tr>-->
         </table>
     </fieldset>
 
-   
+
 </div>
 <div class="left">
-    
-   
+
+
     <fieldset class="playback">
         <legend>回放</legend>
         <table width="100%" cellpadding="0" cellspacing="3" border="0">
@@ -86,6 +70,10 @@
                         <option value="2">子码流</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <td class="tt">通道列表</td>
+                <td><select id="channels" class="sel"></select></td>
             </tr>
             <tr>
                 <td class="tt">开始时间</td>
