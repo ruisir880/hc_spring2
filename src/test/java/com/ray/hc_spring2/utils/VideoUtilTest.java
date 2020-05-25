@@ -55,7 +55,7 @@ public class VideoUtilTest {
         OutputStream os = s.getOutputStream();
 
      /*   for(int i =0;i<3;i++) {*/
-            String str = "10009,变电站,2010-05-14 10:09:00,防区3";
+            String str = "10009,变电站,2010-05-14 10:09:00,防区1";
             os.write(str.getBytes());
             os.flush();
             Thread.sleep(5000);
