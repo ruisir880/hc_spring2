@@ -41,6 +41,7 @@ public class WarnComponent {
     @Autowired
     private Environment env;
 
+    private IoSession session = null;
     private String SERIAL_PORT;
     private int BAUD_RATE;
 
@@ -110,29 +111,30 @@ public class WarnComponent {
     public void sendCommand(String command) {
         if (StringUtils.isNotBlank(command)) {
             IoBuffer buffer = IoBuffer.wrap(command.getBytes());
-            IoSession session = null;
             try {
-                log.info("开始写串口："+command);
+                log.info("开始写串口：" + command);
                 //创建串口连接
                 SerialConnector connector = new SerialConnector();
                 //绑定处理handler
                 connector.setHandler(new IoHandlerAdapter());
                 //设置过滤器
-                connector.getFilterChain().addLast("logger", new LoggingFilter());
+                connector.getFilterChain().addLast("log", new LoggingFilter());
                 //配置串口连接
-                SerialAddress address = new SerialAddress(SERIAL_PORT, BAUD_RATE, SerialAddress.DataBits.DATABITS_8, SerialAddress.StopBits.BITS_1 , SerialAddress.Parity.NONE, SerialAddress.FlowControl.NONE);
-                ConnectFuture future = connector.connect(address);
-                log.info("连接串口成功========================");
-                future.await();
-                session = future.getSession();
+                SerialAddress address = new SerialAddress(SERIAL_PORT, BAUD_RATE, SerialAddress.DataBits.DATABITS_8, SerialAddress.StopBits.BITS_1, SerialAddress.Parity.NONE, SerialAddress.FlowControl.NONE);
+                if(session ==null || !session.isConnected()) {
+                    log.info("连接串口========================");
+                    ConnectFuture future = connector.connect(address);
+                    future.await();
+                    session = future.getSession();
+                }
                 session.write(buffer);
                 connector.dispose();
             } catch (Exception e) {
-                log.warn("写串口失败",e);
+                log.warn("写串口失败", e);
             } finally {
-                if (session != null) {
+                /*if (session != null) {
                     session.close(true);
-                }
+                }*/
             }
         }
     }
