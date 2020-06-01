@@ -107,11 +107,12 @@ public class WarnComponent {
      * 发送指令至串口
      * @param command
      */
-    private void sendCommand(String command) {
+    public void sendCommand(String command) {
         if (StringUtils.isNotBlank(command)) {
             IoBuffer buffer = IoBuffer.wrap(command.getBytes());
             IoSession session = null;
             try {
+                log.info("开始写串口："+command);
                 //创建串口连接
                 SerialConnector connector = new SerialConnector();
                 //绑定处理handler
@@ -121,9 +122,11 @@ public class WarnComponent {
                 //配置串口连接
                 SerialAddress address = new SerialAddress(SERIAL_PORT, BAUD_RATE, SerialAddress.DataBits.DATABITS_8, SerialAddress.StopBits.BITS_1 , SerialAddress.Parity.NONE, SerialAddress.FlowControl.NONE);
                 ConnectFuture future = connector.connect(address);
+                log.info("连接串口成功========================");
                 future.await();
                 session = future.getSession();
                 session.write(buffer);
+                connector.dispose();
             } catch (Exception e) {
                 log.warn("写串口失败",e);
             } finally {
