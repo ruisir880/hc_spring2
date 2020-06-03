@@ -117,7 +117,8 @@ public class ModbusComponent {
         try {
            return connect();
         }catch (Exception e) {
-            throw new HCRuntimeException("连接控制错误.",e);
+            log.error("连接控制错误.",e);
+            return new boolean[5];
         }finally {
             try {
                 master.disconnect();

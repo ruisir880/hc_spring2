@@ -426,25 +426,55 @@
 			<ul>
 				<li>
 					<span>灯1</span>
-					<img id="light1" src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light1"
+						 @if(area1){
+						 src="${ctxPath}/images/common/light_red.jpg"
+						 @}else{
+						 src="${ctxPath}/images/common/light-icon.jpg"
+						 @}
+					/>
 				</li>
 				<li>
 					<span>灯2</span>
-					<img id="light2" src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light2"
+						 @if(area2){
+						 src="${ctxPath}/images/common/light_red.jpg"
+						 @}else{
+						 src="${ctxPath}/images/common/light-icon.jpg"
+						 @}
+					/>
 				</li>
 				<li>
 					<span>灯3</span>
-					<img id="light3"  src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light3"
+						 @if(area3){
+						 src="${ctxPath}/images/common/light_red.jpg"
+						 @}else{
+						 src="${ctxPath}/images/common/light-icon.jpg"
+						 @}
+					/>
 				</li>
 				<li>
 					<span>灯4</span>
-					<img id="light4"  src="${ctxPath}/images/common/light-icon.jpg" />
+					<img id="light4"
+						 @if(area4){
+						 src="${ctxPath}/images/common/light_red.jpg"
+						 @}else{
+						 src="${ctxPath}/images/common/light-icon.jpg"
+						 @}
+					/>
 				</li>
 			</ul>
 		</div>
 		<div class="buzzer_area">
 			<div class="buzzer01">蜂鸣器</div>
-			<img id="buzzer" src="${ctxPath}/images/common/buzzer-icon.jpg" />
+			<img id="buzzer"
+				 @if(buzzer){
+				 src="${ctxPath}/images/common/buzzer_red.png"
+				 @}else{
+				 src="${ctxPath}/images/common/buzzer-icon.jpg"
+				 @}
+			/>
 		</div>
 		<div class="btn_rectangle"  style="left: 40px;" onclick="startAlarm()">
 			<span>一键打开报警</span>

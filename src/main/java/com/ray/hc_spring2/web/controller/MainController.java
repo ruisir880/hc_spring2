@@ -63,6 +63,7 @@ public class MainController {
         modelAndView.addObject("urlList", list);
         modelAndView.addObject("defenseAreas", defenseAreas);
         modelAndView.addObject("alarmLogList", getLatestAlarmLogs());
+        setWarnArea(modelAndView);
         modelAndView.setViewName("main");
         return modelAndView;
     }
@@ -148,5 +149,13 @@ public class MainController {
         return modelAndView;
     }
 
+    private void setWarnArea(ModelAndView modelAndView) {
+        boolean[] results = modbusComponent.getStatus();
+        modelAndView.addObject("area1", results[0]);
+        modelAndView.addObject("area2", results[1]);
+        modelAndView.addObject("area3", results[2]);
+        modelAndView.addObject("area4", results[3]);
+        modelAndView.addObject("buzzer", results[4]);
+    }
 
 }
