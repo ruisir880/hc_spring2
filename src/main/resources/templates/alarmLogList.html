@@ -52,20 +52,20 @@
 
                         </th>
                         <th>防区</th>
-                        <th>类型</th>
                         <th>报警状态</th>
                         <th>报警时间</th>
                         <th>结束时间</th>
+                        <th>操作</th>
                     </tr>
                     @if(!isEmpty(alarmPage)){
                     @for(alarm in alarmPage){
                     <tr>
                         </td>
                         <td>${alarm.defenseArea}</td>
-                        <th>${alarm.alarmType}</th>
                         <td>${alarm.state}</td>
                         <td>${alarm.alarmTime}</td>
                         <td>${alarm.endTime}</td>
+                        <td><input type="button" value="处理" onclick="dealWarn('${alarm.id}')" class="ui_input_btn01"/></td>
                     </tr>
                     @}
                     @}
@@ -82,7 +82,7 @@
                 </div>
                 <div class="ui_frt">
                     <!--    如果是第一页，则只显示下一页、尾页 -->
-                    <input type="button" value="上一页" class="ui_input_btn01" onclick="jumpNextPage()"  />
+                    <input type="button" value="上一页" class="ui_input_btn01" onclick="jumpLastPage()"  />
                     <input type="button" value="下一页" class="ui_input_btn01" onclick="jumpNextPage()" />
 
                     转到第<input type="text" id="jumpNumTxt" class="ui_input_txt01" />页

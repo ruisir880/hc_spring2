@@ -66,7 +66,7 @@ function load() {
                     + "</td> <td>" + elem.state
                     + "</td> <td>" + elem.alarmTime
                     + "</td> <td>" + elem.endTime
-                    + "</td><td><input type='button' value='选择' onclick=\"dealWarn(\'" + elem.id + "\')\" class='ui_input_btn01'/>"
+                    + "</td><td><input type='button' value='处理' onclick=\"dealWarn(\'" + elem.id + "\')\" class='ui_input_btn01'/>"
                     + "</td> </tr>";
                 $("#latestLogTable").append(item);
             }

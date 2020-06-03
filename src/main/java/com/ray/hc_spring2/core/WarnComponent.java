@@ -58,16 +58,16 @@ public class WarnComponent {
             WARN_MAP.put(da + "|" + system, new Date());
             Date remoteDate = WARN_MAP.get(da + "|" + Constants.SYSTEM_REMOTE);
             Date localDate = WARN_MAP.get(da + "|" + Constants.SYSTEM_LOCAL);
-            if (system.equals(Constants.SYSTEM_LOCAL) && remoteDate != null) {
+            /*if (system.equals(Constants.SYSTEM_LOCAL) && remoteDate != null) {
+
+            }*/
+            if (ifInTime(remoteDate, localDate) && notOccursIn10Secs(LAST_WARN_MAP.get(da), warnDate)) {
                 AlarmLog alarmLog = new AlarmLog();
                 alarmLog.setAlarmTime(warnDate);
                 alarmLog.setState("未处理");
                 alarmLog.setDefenseArea(da);
                 alarmLogRepository.save(alarmLog);
-            }
 
-
-            if (ifInTime(remoteDate, localDate) && notOccursIn10Secs(LAST_WARN_MAP.get(da), warnDate)) {
                 LAST_WARN_MAP.put(da, warnDate);
                 log.warn("开始联合报警============================防区:"+da);
                 sendCommand(String.format("防区%s报警，时间:%s",da, DateUtil.formatDate(warnDate)));

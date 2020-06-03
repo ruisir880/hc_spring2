@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class ModbusComponent {
 
     private String controllerIp;
     //private List<DefenseArea> defenseAreas;
+    private  ModbusMaster master;
+    private int slaveId = 1;//从机地址
+    private int offset = 16;//寄存器读取开始地址
+    private int quantity = 5;//读取的寄存器数量
 
 
     public void startWarnArea(List<Integer> area){
@@ -41,50 +46,16 @@ public class ModbusComponent {
     }
 
     private void sendOrder(List<Integer> areas, boolean isOpen){
-        initParams();
         try {
-            // 设置主机TCP参数
-            TcpParameters tcpParameters = new TcpParameters();
-
-            // 设置TCP的ip地址
-            InetAddress adress = InetAddress.getByName(controllerIp);
-
-            // TCP参数设置ip地址
-            // tcpParameters.setHost(InetAddress.getLocalHost());
-            tcpParameters.setHost(adress);
-
-            // TCP设置长连接
-            tcpParameters.setKeepAlive(true);
-            // TCP设置端口，这里设置是默认端口502
-            tcpParameters.setPort(Modbus.TCP_PORT);
-
-            // 创建一个主机
-            ModbusMaster master = ModbusMasterFactory.createModbusMasterTCP(tcpParameters);
-            Modbus.setAutoIncrementTransactionId(true);
-
-            int slaveId = 1;//从机地址
-            int offset = 16;//寄存器读取开始地址
-            int quantity = 8;//读取的寄存器数量
-
+            connect();
             try {
-                if (!master.isConnected()) {
-                    master.connect();// 开启连接
-                }
-                // 读取对应从机的数据，readInputRegisters读取的写寄存器，功能码04
-                boolean[] registerValues = master.readCoils(slaveId, offset, quantity);
-                StringBuilder stringBuilder = new StringBuilder();
-                for(boolean registerValue:registerValues){
-                    stringBuilder.append(String.valueOf(registerValue));
-                }
-                log.info("控制器信息："+ stringBuilder);
-
                 for(int area:areas) {
                     master.writeSingleCoil(slaveId, offset + area - 1, isOpen);//灯光1亮
                 }
                 master.writeSingleCoil(slaveId, offset + 4, isOpen);//蜂蜜器开
             } catch (Exception e) {
                 throw new HCRuntimeException("操作控制器发生错误.",e);
-            }  finally {
+            }finally {
                 try {
                     master.disconnect();
                 } catch (ModbusIOException e) {
@@ -104,5 +75,56 @@ public class ModbusComponent {
         }
         controllerIp =controller.getIp();
        // defenseAreas = defenseAreaRepository.findAll();
+    }
+
+    private boolean[] connect() throws Exception {
+        initParams();
+
+        // 设置主机TCP参数
+        TcpParameters tcpParameters = new TcpParameters();
+
+        // 设置TCP的ip地址
+        InetAddress adress = InetAddress.getByName(controllerIp);
+
+        // TCP参数设置ip地址
+        // tcpParameters.setHost(InetAddress.getLocalHost());
+        tcpParameters.setHost(adress);
+
+        // TCP设置长连接
+        tcpParameters.setKeepAlive(true);
+        // TCP设置端口，这里设置是默认端口502
+        tcpParameters.setPort(Modbus.TCP_PORT);
+
+        // 创建一个主机
+        master = ModbusMasterFactory.createModbusMasterTCP(tcpParameters);
+        Modbus.setAutoIncrementTransactionId(true);
+
+        if (!master.isConnected()) {
+            master.connect();// 开启连接
+        }
+        // 读取对应从机的数据，readInputRegisters读取的写寄存器，功能码04
+        boolean[] registerValues = master.readCoils(slaveId, offset, quantity);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (boolean registerValue : registerValues) {
+            stringBuilder.append(String.valueOf(registerValue));
+        }
+        log.info("控制器信息：" + stringBuilder);
+        return registerValues;
+
+    }
+
+    public boolean[] getStatus(){
+        try {
+           return connect();
+        }catch (Exception e) {
+            throw new HCRuntimeException("连接控制错误.",e);
+        }finally {
+            try {
+                master.disconnect();
+            } catch (ModbusIOException e) {
+                log.warn("关闭控制连接异常.",e);
+            }
+        }
+
     }
 }

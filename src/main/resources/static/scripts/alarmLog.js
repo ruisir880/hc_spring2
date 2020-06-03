@@ -1,5 +1,6 @@
 
 function search(page){
+    currentPage=page;
     var alarmState = $("#alarmState").val();
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
@@ -25,11 +26,11 @@ function search(page){
             for (var i in result.alarmLogs) {
                 elem = result.alarmLogs[i]
                 item = "<tr><td>"+elem.defenseArea
-                    +"</td> <td>"+elem.alarmType
                     +"</td> <td>"+elem.state
                     +"</td> <td>"+elem.alarmTime
                     +"</td> <td>"+elem.endTime
-                    +"</td> </tr>";
+                    + "</td><td><input type='button' value='处理' onclick=\"dealWarn(\'" + elem.id + "\')\" class='ui_input_btn01'/>"
+                    + "</td> </tr>";
                 $('.table').append(item);
             }
 
@@ -73,4 +74,19 @@ function jumpInputPage(pageNumber){
         art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'请输入合适的页数', ok:true,});
         $("#submitForm").attr("action", "house_list.html?page=" + 1).submit();
     }
+}
+
+function dealWarn(id) {
+    $.ajax({
+        type: "POST",
+        url: "dealWarn",
+        data: {"id":id},
+        dataType: "text",
+        success: function (result) {
+            if (result == "0") {
+                art.dialog({icon: 'succeed', title: '友情提示', drag: false, resize: false, content: '操作成功', ok: true,});
+                search(currentPage);
+            }
+        }
+    });
 }

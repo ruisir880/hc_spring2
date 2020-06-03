@@ -30,6 +30,7 @@
                 $("#realName").val('');
                 $("#mobile").val('');
                 $("#email").val('');
+                $("#role").val('');
             });
 
             var result = 'null';
@@ -46,11 +47,12 @@
             var realName = $("#realName").val();
             var mobile = $("#mobile").val();
             var email = $("#email").val();
+            var role = $("#role").val();
             if(username!="" && password!=""){
                 $.ajax({
                     type:"POST",
                     url:"${ctxPath}/addUser",
-                    data:{"uid":uid,"username":username,"password":password,"realName":realName, "mobile":mobile,"email":email},
+                    data:{"uid":uid,"username":username,"password":password,"realName":realName, "mobile":mobile,"email":email,"role":role},
                     dataType : "text",
                     success:function(data){
 // 					alert(data);
@@ -132,7 +134,7 @@
                                     selected="true"
                                     @}
                             >管理员</option>
-                            <option value="projectManager"
+                            <option value="normalUser"
                                     @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="normalUser"){
                                     selected="true"
                                     @}

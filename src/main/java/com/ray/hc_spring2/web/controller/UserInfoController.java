@@ -2,8 +2,10 @@ package com.ray.hc_spring2.web.controller;
 
 import com.ray.hc_spring2.core.OperationLogComponent;
 import com.ray.hc_spring2.core.repository.PrivilegeRepository;
+import com.ray.hc_spring2.core.repository.RoleRepository;
 import com.ray.hc_spring2.core.service.UserInfoService;
 import com.ray.hc_spring2.model.PrivilegeInfo;
+import com.ray.hc_spring2.model.RoleInfo;
 import com.ray.hc_spring2.model.UserInfo;
 import com.ray.hc_spring2.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class UserInfoController {
 
     @Autowired
-    private PrivilegeRepository privilegeRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -50,7 +52,7 @@ public class UserInfoController {
     @RequestMapping(value = {"/editUser","/addUser"}, method = RequestMethod.POST )
     @RequiresPermissions("system.management")//权限管理;
     @ResponseBody
-    public int userInfoAdd(String uid,String username,String password,String realName,String mobile,String email) throws ExecutionException {
+    public int userInfoAdd(String uid,String username,String password,String realName,String mobile,String email,String role) throws ExecutionException {
         operationLogComponent.operate("编辑用户");
         UserInfo user = new UserInfo();
         if(StringUtils.isNotEmpty(uid)){
@@ -71,6 +73,8 @@ public class UserInfoController {
         String encryptPassword = UserUtil.encryptPassword(user.getUsername(), user.getPassword(), salt);
         user.setSalt(salt);
         user.setPassword(encryptPassword);
+        RoleInfo roleInfo = roleRepository.findByRoleName(role);
+        user.setRoleInfo(roleInfo);
 
         userInfoService.saveUser(user);
         return 0;
@@ -89,7 +93,6 @@ public class UserInfoController {
     public ModelAndView userEdit(long userId) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = userInfoService.findById(userId);
-        List<PrivilegeInfo> privilegeInfos =  privilegeRepository.findAll();
         modelAndView.addObject("userInfo",userInfo);
         modelAndView.setViewName("userEdit");
         return modelAndView;
